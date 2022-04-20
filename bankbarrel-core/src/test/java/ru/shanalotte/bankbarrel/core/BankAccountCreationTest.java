@@ -4,6 +4,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import org.junit.jupiter.api.Test;
 import static ru.shanalotte.bankbarrel.core.CustomerCreationData.validName;
 import static ru.shanalotte.bankbarrel.core.CustomerCreationData.validSurname;
+import ru.shanalotte.bankbarrel.core.config.DefaultCurrenciesConfig;
 
 public class BankAccountCreationTest {
 
@@ -67,8 +68,26 @@ public class BankAccountCreationTest {
   }
 
   @Test
+  public void bankAccount_shouldBeDollarCurrencyByDefault() {
+    BankAccount account = DummyService.createDummyCheckingBankAccount();
+    assertThat(account.getCurrency()).isEqualTo(new DefaultCurrenciesConfig().defaultBankAccountCurrency());
+  }
+
+  @Test
   public void bankAccount_shouldHaveDescription() {
       BankAccount bankAccount = DummyService.createDummyCheckingBankAccount();
       assertThat(bankAccount.getDescription()).isNotBlank();
   }
+
+  @Test
+  public void customer_CanOpenRublesAccount() {
+    BankAccount account = new BankAccount.Builder()
+        .withOwner(DummyService.createDummyCustomer())
+        .withType(BankAccountType.CHECKING)
+        .withAdditionalType(BankAccountAdditionalType.PREMIUM)
+        .withCurrency("RUB")
+        .build();
+    assertThat(account.getCurrency()).isEqualTo("RUB");
+  }
+
 }

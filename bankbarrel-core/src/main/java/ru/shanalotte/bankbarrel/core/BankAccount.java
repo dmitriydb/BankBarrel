@@ -1,7 +1,9 @@
 package ru.shanalotte.bankbarrel.core;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
+import ru.shanalotte.bankbarrel.core.config.DefaultCurrenciesConfig;
 
 /**
  * Class represents a single bank account.
@@ -12,6 +14,8 @@ public class BankAccount {
   protected BankAccountType bankAccountType;
   protected BankAccountAdditionalType additionalType;
   protected String description;
+  protected BigDecimal value = BigDecimal.valueOf(0L);
+  protected String currency;
 
   private BankAccount(Customer owner) {
     this.owner = owner;
@@ -38,6 +42,14 @@ public class BankAccount {
     return description;
   }
 
+  public BigDecimal balance() {
+    return value;
+  }
+
+  public void setValue(BigDecimal value) {
+    this.value = value;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -58,12 +70,27 @@ public class BankAccount {
   @Override
   public String toString() {
     final StringBuilder sb = new StringBuilder("BankAccount{");
-    sb.append("identifier='").append(identifier).append('\'');
+    sb.append("owner=").append(owner);
+    sb.append(", identifier='").append(identifier).append('\'');
     sb.append(", bankAccountType=").append(bankAccountType);
     sb.append(", additionalType=").append(additionalType);
     sb.append(", description='").append(description).append('\'');
+    sb.append(", value=").append(value);
+    sb.append(", currency='").append(currency).append('\'');
     sb.append('}');
     return sb.toString();
+  }
+
+  public BigDecimal getValue() {
+    return value;
+  }
+
+  public String getCurrency() {
+    return currency;
+  }
+
+  public MonetaryAmount toMonetaryAmount() {
+    return new MonetaryAmount(value, currency);
   }
 
   /**
@@ -73,6 +100,7 @@ public class BankAccount {
     private Customer owner;
     private BankAccountAdditionalType additionalType;
     private BankAccountType bankAccountType;
+    private String currency;
 
     public Builder() {
 
@@ -109,6 +137,11 @@ public class BankAccount {
       return this;
     }
 
+    public Builder withCurrency(String currency) {
+      this.currency = currency;
+      return this;
+    }
+
     /**
      * Validates all build parameters, such as: bank account type, additional type etc.
      * Throws exception if some mandatory parameters are not present or in case if
@@ -124,7 +157,13 @@ public class BankAccount {
       account.bankAccountType = bankAccountType;
       account.additionalType = additionalType;
       account.description = bankAccountType + " " + additionalType;
+      if (currency == null) {
+        account.currency = new DefaultCurrenciesConfig().defaultBankAccountCurrency();
+      } else {
+        account.currency = currency;
+      }
       return account;
     }
   }
+
 }

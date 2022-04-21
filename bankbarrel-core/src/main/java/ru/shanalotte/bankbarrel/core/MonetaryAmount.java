@@ -2,7 +2,7 @@ package ru.shanalotte.bankbarrel.core;
 
 import java.math.BigDecimal;
 import java.util.Objects;
-import ru.shanalotte.bankbarrel.core.config.DefaultCurrenciesConfig;
+import ru.shanalotte.bankbarrel.core.misc.PropertiesLoader;
 
 /**
  * Class that represents a quantity of money of some defined currency.
@@ -28,17 +28,17 @@ public class MonetaryAmount {
 
   public MonetaryAmount(long value) {
     this.value = new BigDecimal(value);
-    this.currency = new DefaultCurrenciesConfig().defaultMonetaryAmountCurrency();
+    this.currency = PropertiesLoader.get("bank.monetaryAmount.defaultCurrency");
   }
 
   public MonetaryAmount(double value) {
     this.value = new BigDecimal(String.valueOf(value));
-    this.currency = new DefaultCurrenciesConfig().defaultMonetaryAmountCurrency();
+    this.currency = PropertiesLoader.get("bank.monetaryAmount.defaultCurrency");
   }
 
   public MonetaryAmount(int value) {
     this.value = new BigDecimal(value);
-    this.currency = new DefaultCurrenciesConfig().defaultMonetaryAmountCurrency();
+    this.currency = PropertiesLoader.get("bank.monetaryAmount.defaultCurrency");
   }
 
   public MonetaryAmount(BigDecimal value, String currency) {

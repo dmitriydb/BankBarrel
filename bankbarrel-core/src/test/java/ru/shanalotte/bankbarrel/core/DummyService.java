@@ -36,7 +36,7 @@ public class DummyService {
         .currency("KZT")
         .is(112.34)
         .perOneUnitOfDefaultCurrency();
-    CurrencyRateService currencyRateService = new CurrencyRateService();
+    CurrencyRateService currencyRateService = new CurrencyRateService("USD");
     currencyRateService.addRule(dollarRule);
     currencyRateService.addRule(tengeRule);
     currencyRateService.addRule(rubleRule);
@@ -44,7 +44,7 @@ public class DummyService {
   }
 
   public static BankService dummyBankService() {
-    BankService bankService = new BankService(defaultCurrencyRateService(), new CurrencyConverterService());
+    BankService bankService = new BankService(defaultCurrencyRateService(), new CurrencyConverterService(10), "USD");
     return bankService;
   }
 }

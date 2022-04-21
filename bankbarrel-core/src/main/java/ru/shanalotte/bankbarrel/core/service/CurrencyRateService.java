@@ -2,26 +2,29 @@ package ru.shanalotte.bankbarrel.core.service;
 
 import java.util.HashSet;
 import java.util.Set;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import ru.shanalotte.bankbarrel.core.CurrencyRateRule;
-import ru.shanalotte.bankbarrel.core.config.DefaultCurrenciesConfig;
 
 /**
  * Class that stores all actual currency rate rules for the current bank service.
  */
+@Service
 public class CurrencyRateService {
 
-  /**
-   * Constructor that adds base rule: 1 unit of default currency = 1 unit of default currency.
-   */
-  public CurrencyRateService() {
+
+  private String defaultRateCurrency;
+  private Set<CurrencyRateRule> currencyRateRules = new HashSet<>();
+
+  public CurrencyRateService(@Value("${bank.currency.defaultRateCurrency}")
+                                 String defaultRateCurrency) {
+    this.defaultRateCurrency = defaultRateCurrency;
     CurrencyRateRule defaultRule = new CurrencyRateRule.Builder()
-        .currency(new DefaultCurrenciesConfig().defaultCurrencyRateCurrency())
+        .currency(defaultRateCurrency)
         .is(1)
         .perOneUnitOfDefaultCurrency();
     this.currencyRateRules.add(defaultRule);
   }
-
-  private Set<CurrencyRateRule> currencyRateRules = new HashSet<>();
 
   public void addRule(CurrencyRateRule rule) {
     currencyRateRules.add(rule);

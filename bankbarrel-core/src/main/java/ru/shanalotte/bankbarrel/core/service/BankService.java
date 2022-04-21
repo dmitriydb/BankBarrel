@@ -1,10 +1,12 @@
 package ru.shanalotte.bankbarrel.core.service;
 
 import java.math.BigDecimal;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import ru.shanalotte.bankbarrel.core.BankAccount;
 import ru.shanalotte.bankbarrel.core.CurrencyRateRule;
 import ru.shanalotte.bankbarrel.core.MonetaryAmount;
-import ru.shanalotte.bankbarrel.core.config.DefaultCurrenciesConfig;
 import ru.shanalotte.bankbarrel.core.exception.CurrencyNotFoundException;
 import ru.shanalotte.bankbarrel.core.exception.InsufficientFundsException;
 import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRate;
@@ -13,31 +15,25 @@ import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRate;
  * Main class that performs common banking operations with banking accounts,
  * such as deposit, withdraw, transfer etc.
  */
+@Service
 public class BankService {
 
+  @Autowired
   private CurrencyRateService currencyRateService;
+
+  @Autowired
   private CurrencyConverterService currencyConverterService;
 
+
+  private String defaultMonetaryAmountCurrency;
+
   public BankService(CurrencyRateService currencyRateService,
-                     CurrencyConverterService currencyConverterService) {
+                     CurrencyConverterService currencyConverterService,
+                     @Value("${bank.monetaryAmount.defaultCurrency}")
+                         String defaultMonetaryAmountCurrency) {
     this.currencyRateService = currencyRateService;
     this.currencyConverterService = currencyConverterService;
-  }
-
-  /**
-   * Default BankService constructor.
-   * Creates an empty CurrencyRateService
-   * and populates it with single CurrencyRateRule (that is: 1$ USD = 1 unit of default currency).
-   */
-  public BankService() {
-    this.currencyConverterService = new CurrencyConverterService();
-    this.currencyRateService = new CurrencyRateService();
-    this.currencyRateService.addRule(
-        new CurrencyRateRule.Builder()
-            .currency(new DefaultCurrenciesConfig().defaultMonetaryAmountCurrency())
-            .is(1)
-            .perOneUnitOfDefaultCurrency()
-    );
+    this.defaultMonetaryAmountCurrency = defaultMonetaryAmountCurrency;
   }
 
   /**

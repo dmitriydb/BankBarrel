@@ -3,7 +3,7 @@ package ru.shanalotte.bankbarrel.core;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
-import ru.shanalotte.bankbarrel.core.config.DefaultCurrenciesConfig;
+import ru.shanalotte.bankbarrel.core.misc.PropertiesLoader;
 
 /**
  * Class represents a single bank account.
@@ -158,7 +158,7 @@ public class BankAccount {
       account.additionalType = additionalType;
       account.description = bankAccountType + " " + additionalType;
       if (currency == null) {
-        account.currency = new DefaultCurrenciesConfig().defaultBankAccountCurrency();
+        account.currency = PropertiesLoader.get("bank.account.defaultCurrency");
       } else {
         account.currency = currency;
       }

@@ -1,7 +1,7 @@
 package ru.shanalotte.bankbarrel.core;
 
 import java.math.BigDecimal;
-import ru.shanalotte.bankbarrel.core.config.DefaultCurrenciesConfig;
+import ru.shanalotte.bankbarrel.core.misc.PropertiesLoader;
 
 /**
  * Class that establishes the rule for currency rate.
@@ -79,10 +79,10 @@ public class CurrencyRateRule {
 
     if (more) {
       return "One " + currency + " is "
-          + rate + " " + new DefaultCurrenciesConfig().defaultCurrencyRateCurrency();
+          + rate + " " + PropertiesLoader.get("bank.currency.defaultRateCurrency");
     } else {
-      return "One " +  new DefaultCurrenciesConfig()
-          .defaultCurrencyRateCurrency() + " is " + rate + " " + currency;
+      return "One " +  PropertiesLoader.get("bank.currency.defaultRateCurrency")
+           + " is " + rate + " " + currency;
     }
   }
 }

@@ -2,10 +2,11 @@ package ru.shanalotte.bankbarrel.core;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.TestPropertySource;
 import static ru.shanalotte.bankbarrel.core.CustomerCreationData.validName;
 import static ru.shanalotte.bankbarrel.core.CustomerCreationData.validSurname;
-import ru.shanalotte.bankbarrel.core.config.DefaultCurrenciesConfig;
 
+@TestPropertySource("classpath:application.properties")
 public class BankAccountCreationTest {
 
   @Test
@@ -70,7 +71,7 @@ public class BankAccountCreationTest {
   @Test
   public void bankAccount_shouldBeDollarCurrencyByDefault() {
     BankAccount account = DummyService.createDummyCheckingBankAccount();
-    assertThat(account.getCurrency()).isEqualTo(new DefaultCurrenciesConfig().defaultBankAccountCurrency());
+    assertThat(account.getCurrency()).isEqualTo("USD");
   }
 
   @Test

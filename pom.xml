@@ -10,6 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>bankbarrel-core</module>
+        <module>bankbarrel-webapp</module>
     </modules>
 
     <properties>

@@ -26,11 +26,11 @@ public class MonetaryAmountTest {
         .is(1000)
         .defaultCurrencyUnits();
 
-    CurrencyRateService currencyRateService = new CurrencyRateService();
+    CurrencyRateService currencyRateService = new CurrencyRateService("USD");
     currencyRateService.addRule(rule);
     currencyRateService.addRule(rule2);
     BankAccount bankAccount = DummyService.createDummyCheckingBankAccount();
-    BankService bankService = new BankService(currencyRateService, new CurrencyConverterService());
+    BankService bankService = new BankService(currencyRateService, new CurrencyConverterService(10), "USD");
     bankService.deposit(bankAccount, new MonetaryAmount(1, "USD"));
     bankService.deposit(bankAccount, new MonetaryAmount(20, "RUB"));
     assertThat(bankAccount.toMonetaryAmount()).isEqualTo(new MonetaryAmount(2, "USD"));

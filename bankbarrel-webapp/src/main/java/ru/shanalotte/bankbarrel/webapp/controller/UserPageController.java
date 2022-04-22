@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import ru.shanalotte.bankbarrel.webapp.dao.WebAppUserDao;
+import ru.shanalotte.bankbarrel.webapp.dto.AccountOpeningDto;
 import ru.shanalotte.bankbarrel.webapp.exception.WebAppUserNotFound;
 
 /**
@@ -23,6 +24,7 @@ public class UserPageController {
       throw new WebAppUserNotFound(username);
     }
     model.addAttribute("username", username);
+    model.addAttribute("accountOpeningDto", new AccountOpeningDto());
     return "user-page";
   }
 }

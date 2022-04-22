@@ -14,7 +14,6 @@ import org.springframework.context.annotation.ComponentScan;
 public class WebAppLauncher {
 
   private static final Logger logger = LoggerFactory.getLogger(WebAppLauncher.class);
-
   public static void main(String[] args) {
     logger.info("Web app started");
     SpringApplication.run(WebAppLauncher.class, args);

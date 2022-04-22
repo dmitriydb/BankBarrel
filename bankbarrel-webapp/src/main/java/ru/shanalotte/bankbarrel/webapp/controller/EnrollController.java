@@ -1,9 +1,13 @@
 package ru.shanalotte.bankbarrel.webapp.controller;
 
+import java.util.Locale;
 import javax.validation.Valid;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,19 +23,24 @@ public class EnrollController {
 
   private WebAppUserDao webAppUserDao;
   private BankClientsEnrollingService bankClientsEnrollingService;
+  private MessageSource messageSource;
 
-  public EnrollController(WebAppUserDao webAppUserDao, BankClientsEnrollingService bankClientsEnrollingService) {
+  public EnrollController(WebAppUserDao webAppUserDao, BankClientsEnrollingService bankClientsEnrollingService, MessageSource messageSource) {
     this.webAppUserDao = webAppUserDao;
     this.bankClientsEnrollingService = bankClientsEnrollingService;
+    this.messageSource = messageSource;
   }
 
   @PostMapping("/enroll")
   public String processEnroll(RedirectAttributes redirectAttributes, @RequestParam("username") String username, @Valid @ModelAttribute("dto") BankClientInfoDto dto, BindingResult bindingResult) {
+    if (StringUtils.isBlank(dto.getEmail()) && StringUtils.isBlank(dto.getTelephone())) {
+      String error = messageSource.getMessage("webapp.validation.error.bothemailandtelephonemissing", null, Locale.ENGLISH);
+      bindingResult.addError(new FieldError("dto", "telephone", error));
+    }
+
     if (bindingResult.hasErrors()) {
       return "index";
     }
-
-
 
     if (!webAppUserDao.isUserExists(username)) {
       BankClient bankClient = bankClientsEnrollingService.enrollClient(dto);

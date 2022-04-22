@@ -1,11 +1,15 @@
 package ru.shanalotte.bankbarrel.webapp.dto;
 
+import javax.validation.constraints.NotEmpty;
+
 /**
  * DTO for the login process (creating a bank customer).
  */
 public class BankClientInfoDto {
 
+  @NotEmpty
   private String firstName;
+  @NotEmpty
   private String lastName;
   private String telephone;
   private String email;

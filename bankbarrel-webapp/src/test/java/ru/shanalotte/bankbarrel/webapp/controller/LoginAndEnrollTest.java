@@ -66,7 +66,7 @@ public class LoginAndEnrollTest {
         .param("firstName", "NotExisting")
         .param("lastName", "NotExisting")
         .param("email", "a@NotExisting"));
-    verify(webAppUserDao,times(1)).addUser(any());
+    verify(webAppUserDao, times(1)).addUser(any());
   }
 
   @Test
@@ -125,7 +125,7 @@ public class LoginAndEnrollTest {
     );
 
     mockMvc.perform(post("/login")
-        .param("username", "FullPledgeClient3"))
+            .param("username", "FullPledgeClient3"))
         .andExpect(status().is3xxRedirection())
         .andExpect(MockMvcResultMatchers.redirectedUrl("/user/FullPledgeClient3"));
 
@@ -134,7 +134,7 @@ public class LoginAndEnrollTest {
   @Test
   public void cantLoginBeforeEnroll() throws Exception {
     mockMvc.perform(post("/login")
-        .param("username", "I_SURE_CANT_LOGIN_YET"))
+            .param("username", "I_SURE_CANT_LOGIN_YET"))
         .andExpect(status().isUnauthorized());
   }
 
@@ -163,7 +163,8 @@ public class LoginAndEnrollTest {
         .param("email", "a@xcyz")
     );
 
-    int usersAfter = webAppUserDao.count();;
+    int usersAfter = webAppUserDao.count();
+    ;
     int customersAfter = bankClientDao.count();
     assertThat(usersAfter - usersBefore).isEqualTo(1);
     assertThat(customersAfter - customersBefore).isEqualTo(1);
@@ -171,12 +172,11 @@ public class LoginAndEnrollTest {
     //enrolling with the same username again
 
     mockMvc.perform(post("/enroll")
-        .param("username", "FullPledgeClient5")
-        .param("firstName", "FullPledgeClient5name")
-        .param("lastName", "a")
-        .param("email", "a@xcyz")
-    )
-
+            .param("username", "FullPledgeClient5")
+            .param("firstName", "FullPledgeClient5name")
+            .param("lastName", "a")
+            .param("email", "a@xcyz")
+        )
         .andExpect(MockMvcResultMatchers.flash().attribute("message", containsString("already exists")))
         .andExpect(MockMvcResultMatchers.flash().attributeExists("dto"));
 
@@ -185,7 +185,29 @@ public class LoginAndEnrollTest {
 
     assertThat(usersAfterAfter - usersAfter).isEqualTo(0);
     assertThat(customersAfterAfter - customersAfter).isEqualTo(0);
+  }
 
+  @Test
+  public void dtoValidationTestOnEnrollProcess() throws Exception {
+    mockMvc.perform(post("/enroll")
+        .param("username", "a132")
+        .param("firstName", "")
+        .param("lastName", "a")
+        .param("email", "a@xcyz")
+    ).andExpect(MockMvcResultMatchers.model().hasErrors());
+
+    mockMvc.perform(post("/enroll")
+        .param("username", "a132")
+        .param("firstName", "a")
+        .param("lastName", "")
+        .param("email", "a@xcyz")
+    ).andExpect(MockMvcResultMatchers.model().hasErrors());
+
+    mockMvc.perform(post("/enroll")
+        .param("username", "a132")
+        .param("firstName", "a")
+        .param("lastName", "b")
+    ).andExpect(MockMvcResultMatchers.model().hasErrors());
   }
 
 }

@@ -9,7 +9,7 @@ import ru.shanalotte.bankbarrel.core.misc.PropertiesLoader;
  * Class represents a single bank account.
  */
 public class BankAccount {
-  protected final Customer owner;
+  protected final BankClient owner;
   protected final String identifier;
   protected BankAccountType bankAccountType;
   protected BankAccountAdditionalType additionalType;
@@ -17,7 +17,7 @@ public class BankAccount {
   protected BigDecimal value = BigDecimal.valueOf(0L);
   protected String currency;
 
-  private BankAccount(Customer owner) {
+  private BankAccount(BankClient owner) {
     this.owner = owner;
     identifier = UUID.randomUUID().toString();
   }
@@ -26,7 +26,7 @@ public class BankAccount {
     return identifier;
   }
 
-  public Customer getOwner() {
+  public BankClient getOwner() {
     return owner;
   }
 
@@ -97,7 +97,7 @@ public class BankAccount {
    * Builder for the BankAccount class.
    */
   public static class Builder {
-    private Customer owner;
+    private BankClient owner;
     private BankAccountAdditionalType additionalType;
     private BankAccountType bankAccountType;
     private String currency;
@@ -122,7 +122,7 @@ public class BankAccount {
       }
     }
 
-    public Builder withOwner(Customer owner) {
+    public Builder withOwner(BankClient owner) {
       this.owner = owner;
       return this;
     }

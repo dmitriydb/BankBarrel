@@ -6,13 +6,13 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * Class that represents a single bank customer.
  */
-public class Customer {
+public class BankClient {
   private String givenName;
   private String familyName;
   private String telephone;
   private String email;
 
-  private Customer(String givenName, String familyName) {
+  private BankClient(String givenName, String familyName) {
     if (StringUtils.isBlank(givenName)) {
       throw new IllegalArgumentException("Customer givenName is blank");
     }
@@ -46,30 +46,30 @@ public class Customer {
    * For example, throws exception if both email and telephone are not present
    */
   public static class Builder {
-    private final Customer customer;
+    private final BankClient bankClient;
 
     public Builder(String givenName, String familyName) {
-      this.customer = new Customer(givenName, familyName);
+      this.bankClient = new BankClient(givenName, familyName);
     }
 
     public Builder withEmail(String email) {
-      customer.email = email;
+      bankClient.email = email;
       return this;
     }
 
     public Builder withTelephone(String telephone) {
-      customer.telephone = telephone;
+      bankClient.telephone = telephone;
       return this;
     }
 
     /**
      * Build the Customer instance.
      */
-    public Customer build() {
-      if (StringUtils.isBlank(customer.email) && StringUtils.isBlank(customer.telephone)) {
+    public BankClient build() {
+      if (StringUtils.isBlank(bankClient.email) && StringUtils.isBlank(bankClient.telephone)) {
         throw new IllegalStateException("Customer creation error: should fill email or telephone.");
       }
-      return customer;
+      return bankClient;
     }
   }
 
@@ -81,10 +81,10 @@ public class Customer {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Customer customer = (Customer) o;
-    return givenName.equals(customer.givenName) && familyName.equals(customer.familyName)
-        && Objects.equals(telephone, customer.telephone)
-        && Objects.equals(email, customer.email);
+    BankClient bankClient = (BankClient) o;
+    return givenName.equals(bankClient.givenName) && familyName.equals(bankClient.familyName)
+        && Objects.equals(telephone, bankClient.telephone)
+        && Objects.equals(email, bankClient.email);
   }
 
   @Override

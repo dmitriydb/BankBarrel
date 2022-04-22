@@ -5,6 +5,7 @@ import ru.shanalotte.bankbarrel.webapp.user.WebAppUser;
 
 public interface WebAppUserDao {
   WebAppUser findByUsername(String username);
-  void addUser(String username);
+  void addUser(WebAppUser webAppUser);
   boolean isUserExists(String username);
+  int count();
 }

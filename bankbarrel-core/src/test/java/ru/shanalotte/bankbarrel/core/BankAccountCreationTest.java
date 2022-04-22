@@ -11,22 +11,22 @@ public class BankAccountCreationTest {
 
   @Test
   public void should_AssignOwnerToBankAccount_WhenCreated(){
-    Customer customer = new Customer.Builder(validName, validSurname)
+    BankClient bankClient = new BankClient.Builder(validName, validSurname)
         .withEmail("abc@xyz.ema")
         .build();
     BankAccount bankAccount = new BankAccount.Builder()
-        .withOwner(customer)
+        .withOwner(bankClient)
         .withType(BankAccountType.CHECKING)
         .withAdditionalType(BankAccountAdditionalType.INTEREST_BEARING)
         .build();
-    assertThat(bankAccount.getOwner()).isEqualTo(customer);
+    assertThat(bankAccount.getOwner()).isEqualTo(bankClient);
   }
 
   @Test
   public void should_CreateRandomGUID_WhenBankAccountIsCreated(){
-    Customer customer = DummyService.createDummyCustomer();
+    BankClient bankClient = DummyService.createDummyCustomer();
     BankAccount bankAccount = new BankAccount.Builder()
-        .withOwner(customer)
+        .withOwner(bankClient)
         .withType(BankAccountType.CHECKING)
         .withAdditionalType(BankAccountAdditionalType.INTEREST_BEARING)
         .build();

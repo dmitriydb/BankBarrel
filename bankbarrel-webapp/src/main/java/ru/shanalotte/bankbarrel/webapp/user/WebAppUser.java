@@ -1,5 +1,7 @@
 package ru.shanalotte.bankbarrel.webapp.user;
 
+import ru.shanalotte.bankbarrel.core.BankClient;
+
 /**
  * Web app user.
  *
@@ -7,12 +9,18 @@ package ru.shanalotte.bankbarrel.webapp.user;
  */
 public class WebAppUser {
   private final String username;
+  private final BankClient bankClient;
 
-  public WebAppUser(String username) {
+  public WebAppUser(String username, BankClient bankClient) {
     this.username = username;
+    this.bankClient = bankClient;
   }
 
   public String getUsername() {
     return username;
+  }
+
+  public BankClient getClient() {
+    return bankClient;
   }
 }

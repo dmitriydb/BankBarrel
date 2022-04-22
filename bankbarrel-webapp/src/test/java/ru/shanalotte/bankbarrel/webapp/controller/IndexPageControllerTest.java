@@ -27,9 +27,26 @@ class IndexPageControllerTest {
   }
 
   @Test
+  public void enrollProcess() throws Exception {
+    mockMvc.perform(MockMvcRequestBuilders.get("/"))
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.content().string(containsString("Enroll")))
+        .andExpect(MockMvcResultMatchers.content().string(containsString("name")))
+        .andExpect(MockMvcResultMatchers.content().string(containsString("surname")))
+        .andExpect(MockMvcResultMatchers.content().string(containsString("email")))
+        .andExpect(MockMvcResultMatchers.content().string(containsString("telephone")))
+    ;
+
+  }
+
+  @Test
   public void webAppUserCanTypeUsernameAndLogin() throws Exception {
-    mockMvc.perform(MockMvcRequestBuilders.post("/login")
-        .param("username", "Vasya"))
+    mockMvc.perform(MockMvcRequestBuilders.post("/enroll")
+            .param("username", "Vasya")
+            .param("firstName", "vasya")
+            .param("lastName", "vasya")
+            .param("email", "a@xcyz")
+        )
         .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
         .andExpect(MockMvcResultMatchers.redirectedUrl("/user/Vasya"));
   }

@@ -8,8 +8,8 @@ import ru.shanalotte.bankbarrel.core.service.CurrencyRateService;
 
 public class DummyService {
 
-  public static Customer createDummyCustomer(){
-    return new Customer.Builder(validName, validSurname)
+  public static BankClient createDummyCustomer(){
+    return new BankClient.Builder(validName, validSurname)
         .withEmail("abc@xdf")
         .build();
   }

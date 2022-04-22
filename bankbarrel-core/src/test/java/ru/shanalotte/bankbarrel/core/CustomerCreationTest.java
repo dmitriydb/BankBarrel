@@ -18,7 +18,7 @@ public class CustomerCreationTest {
   @MethodSource("invalidNames")
   public void should_ThrowException_WhenClientCreatedWithInvalidName(String invalidName){
     Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-      Customer.Builder customer = new Customer.Builder(invalidName, validSurname);
+      BankClient.Builder customer = new BankClient.Builder(invalidName, validSurname);
     });
     assertThat(exception.getMessage()).contains("givenName");
   }
@@ -27,7 +27,7 @@ public class CustomerCreationTest {
   @MethodSource("invalidSurnames")
   public void should_ThrowException_WhenClientCreatedWithInvalidSurname(String invalidSurname){
     Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-      Customer.Builder customer = new Customer.Builder(validName, invalidSurname);
+      BankClient.Builder customer = new BankClient.Builder(validName, invalidSurname);
     });
     assertThat(exception.getMessage()).contains("familyName");
   }
@@ -35,39 +35,39 @@ public class CustomerCreationTest {
   @ParameterizedTest
   @MethodSource("validNames")
   public void should_CreateCustomer_WithValidName(String validName){
-    Customer.Builder customer = new Customer.Builder(validName, validSurname);
+    BankClient.Builder customer = new BankClient.Builder(validName, validSurname);
   }
 
   @ParameterizedTest
   @MethodSource("validSurnames")
   public void should_CreateCustomer_WithValidSurname(String validSurname){
-    Customer.Builder customer = new Customer.Builder(validName, validSurname);
+    BankClient.Builder customer = new BankClient.Builder(validName, validSurname);
   }
 
   @Test
   public void should_NotCreateCustomer_WithoutEmailAndTelephone(){
     Exception exception = assertThrows(Exception.class, () -> {
-      Customer customer = new Customer.Builder(validName, validSurname).build();
+      BankClient bankClient = new BankClient.Builder(validName, validSurname).build();
     });
   }
 
   @Test
   public void should_CreateCustomerWithOnlyEmailFilled(){
-    Customer customer = new Customer.Builder(validName, validSurname)
+    BankClient bankClient = new BankClient.Builder(validName, validSurname)
         .withEmail("abc@xyz")
         .build();
   }
 
   @Test
   public void should_CreateCustomerWithOnlyTelephoneFilled(){
-    Customer customer = new Customer.Builder(validName, validSurname)
+    BankClient bankClient = new BankClient.Builder(validName, validSurname)
         .withTelephone("+7849238402384")
         .build();
   }
 
   @Test
   public void should_CreateCustomerWithBothTelephoneAndEmailFilled(){
-    Customer customer = new Customer.Builder(validName, validSurname)
+    BankClient bankClient = new BankClient.Builder(validName, validSurname)
         .withTelephone("+74283642834")
         .withEmail("dadaad@djafj.xfjkdf")
         .build();

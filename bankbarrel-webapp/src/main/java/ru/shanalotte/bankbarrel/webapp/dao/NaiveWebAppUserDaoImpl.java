@@ -15,12 +15,17 @@ public class NaiveWebAppUserDaoImpl implements WebAppUserDao {
   }
 
   @Override
-  public void addUser(String username) {
-    existingUsers.add(new WebAppUser(username));
+  public void addUser(WebAppUser webAppUser) {
+    existingUsers.add(webAppUser);
   }
 
   @Override
   public boolean isUserExists(String username) {
     return findByUsername(username) != null;
+  }
+
+  @Override
+  public int count() {
+    return existingUsers.size();
   }
 }

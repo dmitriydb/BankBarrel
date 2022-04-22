@@ -1,7 +1,9 @@
 package ru.shanalotte.bankbarrel.webapp.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import ru.shanalotte.bankbarrel.webapp.dto.BankClientInfoDto;
 
 /**
  * Controller for the main page.
@@ -10,7 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class IndexPageController {
 
   @GetMapping("/")
-  public String mainPage() {
+  public String mainPage(Model model) {
+    model.addAttribute("dto", new BankClientInfoDto());
     return "index";
   }
 }

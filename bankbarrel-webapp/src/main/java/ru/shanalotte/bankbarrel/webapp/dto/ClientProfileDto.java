@@ -2,8 +2,10 @@ package ru.shanalotte.bankbarrel.webapp.dto;
 
 import ru.shanalotte.bankbarrel.core.BankClient;
 
+/**
+ * DTO для отображения профиля о пользователе веб-приложения.
+ */
 public class ClientProfileDto {
-
   private String username;
   private String firstName;
   private String lastName;

@@ -72,27 +72,19 @@
     <div class="mb-3">
       <label for="accountType" class="form-label">Тип счёта</label>
       <select name="accountType" id="accountType" class="form-select" th:field="*{accountType}">
-        <option th:value="Checking">Checking</option>
-        <option th:value="Saving">Saving</option>
+        <option th:each = "item: ${accountTypesDto.items}" th:value="${item.code}" th:text="${item.value}"></option>
       </select>
     </div>
     <div class="mb-3">
       <label for="accountAdditionalType" class="form-label">Вид счёта</label>
       <select name="accountAdditionalType" id="accountAdditionalType"  class="form-select"  th:field="*{accountAdditionalType}">
-        <option th:value="Traditional">Traditional</option>
-        <option th:value="Premium">Premium</option>
-        <option th:value="Interest">Interest bearing</option>
-        <option th:value="Rewards">Rewards</option>
-        <option th:value="Student">Student</option>
-        <option th:value="Second">Second chance</option>
+        <option th:each = "item: ${accountAdditionalTypesDto.items}" th:value="${item.code}" th:text="${item.value}"></option>
       </select>
     </div>
     <div class="mb-3">
       <label for="currency" class="form-label">Валюта</label>
       <select id="currency" name="currency" class="form-select" th:field="*{currency}">
-        <option th:value="USD">$ (доллар)</option>
-        <option th:value="RUB">₽ (рубль)</option>
-        <option th:value="EUR">€ (евро)</option>
+      <option th:each = "item: ${accountOpeningCurrenciesDto.items}" th:value="${item.code}" th:text="${item.value}"></option>
       </select>
     </div>
     <input type="hidden" name="username" th:value="${username}">

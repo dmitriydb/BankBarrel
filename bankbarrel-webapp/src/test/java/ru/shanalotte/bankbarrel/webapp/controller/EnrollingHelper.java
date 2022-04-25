@@ -16,7 +16,7 @@ public class EnrollingHelper {
   @Autowired
   private MockMvc mockMvc;
 
-  public void enrollSomeUser() throws Exception {
+  public void enrollTestUser() throws Exception {
     mockMvc.perform(post("/enroll")
         .param("username", "testuser")
         .param("firstName", "v")

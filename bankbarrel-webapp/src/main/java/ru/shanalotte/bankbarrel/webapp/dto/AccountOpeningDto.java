@@ -1,5 +1,8 @@
 package ru.shanalotte.bankbarrel.webapp.dto;
 
+/**
+ * DTO, которое присылается в контроллер при открытии счета пользователем веб-приложения.
+ */
 public class AccountOpeningDto {
   private String accountType;
   private String accountAdditionalType;

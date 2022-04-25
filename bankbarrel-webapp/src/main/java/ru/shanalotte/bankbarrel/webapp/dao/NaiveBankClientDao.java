@@ -5,6 +5,9 @@ import java.util.Set;
 import org.springframework.stereotype.Repository;
 import ru.shanalotte.bankbarrel.core.BankClient;
 
+/**
+ * Заглушка для DAO клиентов банка. Хранит всё в памяти.
+ */
 @Repository
 public class NaiveBankClientDao implements BankClientDao {
 
@@ -22,6 +25,8 @@ public class NaiveBankClientDao implements BankClientDao {
 
   @Override
   public BankClient findByGivenName(String givenName) {
-    return bankClients.stream().filter(client -> client.getGivenName().equals(givenName)).findFirst().orElse(null);
+    return bankClients.stream().filter(client -> client.getGivenName().equals(givenName))
+        .findFirst()
+        .orElse(null);
   }
 }

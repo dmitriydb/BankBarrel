@@ -12,9 +12,12 @@ public class ClientProfileDto {
   private String email;
   private String telephone;
 
-  public static ClientProfileDto of (BankClient client) {
+  /**
+   * Создает DTO из объекта BankClient.
+   */
+  public static ClientProfileDto of(BankClient client) {
     ClientProfileDto dto = new ClientProfileDto();
-    dto.email =  client.getEmail();
+    dto.email = client.getEmail();
     dto.firstName = client.getGivenName();
     dto.lastName = client.getFamilyName();
     dto.telephone = client.getTelephone();

@@ -26,6 +26,13 @@ public class LoginController {
     this.webAppUserDao = webAppUserDao;
   }
 
+  /**
+   * Обрабатывает запрос на логин.
+   * В данный момент пароль вводить не нужно, поэтому принимает только один параметр -
+   * логин пользователя веб-приложения.
+   *
+   * @throws WebAppUserNotFound кидает, если такого пользователя не существует. (HTTP 401)
+   */
   @PostMapping("/login")
   public String processLogin(@RequestParam("username") String username) throws WebAppUserNotFound {
     if (!webAppUserDao.isUserExists(username)) {

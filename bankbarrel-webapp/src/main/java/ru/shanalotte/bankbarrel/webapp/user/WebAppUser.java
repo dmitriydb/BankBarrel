@@ -4,7 +4,6 @@ import ru.shanalotte.bankbarrel.core.BankClient;
 
 /**
  * Web app user.
- *
  * Linked to the single (only one!) bank client.
  */
 public class WebAppUser {

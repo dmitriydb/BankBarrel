@@ -13,6 +13,9 @@ import ru.shanalotte.bankbarrel.webapp.dto.ClientProfileDto;
 import ru.shanalotte.bankbarrel.webapp.exception.WebAppUserNotFound;
 import ru.shanalotte.bankbarrel.webapp.user.WebAppUser;
 
+/**
+ * Контроллер для действий, связанных с профилем пользователя.
+ */
 @Controller
 public class ProfileController {
 
@@ -24,8 +27,14 @@ public class ProfileController {
     this.bankClientDao = bankClientDao;
   }
 
+  /**
+   * Обрабатывает открытие профиля в веб-приложении.
+   *
+   * @throws WebAppUserNotFound если такой пользователь не существует
+   */
   @GetMapping("/user/{username}/profile")
-  public String showProfile(Model model, @PathVariable("username") String username) throws WebAppUserNotFound {
+  public String showProfile(Model model, @PathVariable("username") String username)
+      throws WebAppUserNotFound {
     if (!webAppUserDao.isUserExists(username)) {
       throw new WebAppUserNotFound(username);
     }

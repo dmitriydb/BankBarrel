@@ -27,6 +27,13 @@ public class BankService {
 
   private String defaultMonetaryAmountCurrency;
 
+  /**
+   * Конструктор со всеми зависимостями.
+   *
+   * @param currencyRateService сервис, который хранит курсы валют
+   * @param currencyConverterService сервис, который конвертирует валюту
+   * @param defaultMonetaryAmountCurrency валюта, используемая в денежных обменах по умолчанию
+   */
   public BankService(CurrencyRateService currencyRateService,
                      CurrencyConverterService currencyConverterService,
                      @Value("${bank.monetaryAmount.defaultCurrency}")

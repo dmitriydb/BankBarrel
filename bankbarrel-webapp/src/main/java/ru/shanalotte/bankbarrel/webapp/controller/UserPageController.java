@@ -22,6 +22,9 @@ public class UserPageController {
   private AccountAdditionalTypesListingService accountAdditionalTypesListingService;
   private AccountOpeningCurrenciesListingService accountOpeningCurrenciesListingService;
 
+  /**
+   * Конструктор со всеми зависимостями.
+   */
   public UserPageController(WebAppUserDao webAppUserDao,
                             AccountTypeListingService accountTypeListingService,
                             AccountAdditionalTypesListingService
@@ -34,6 +37,11 @@ public class UserPageController {
     this.accountOpeningCurrenciesListingService = accountOpeningCurrenciesListingService;
   }
 
+  /**
+   * Вход в личный кабинет пользователя.
+   *
+   * @throws WebAppUserNotFound если такой пользователь не существует
+   */
   @GetMapping("/user/{username}")
   public String userPage(@PathVariable("username") String username, Model model)
       throws WebAppUserNotFound {

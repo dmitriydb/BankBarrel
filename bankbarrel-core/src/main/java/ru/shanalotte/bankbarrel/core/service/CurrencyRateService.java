@@ -16,6 +16,11 @@ public class CurrencyRateService {
   private String defaultRateCurrency;
   private Set<CurrencyRateRule> currencyRateRules = new HashSet<>();
 
+  /**
+   * Конструктор со всеми зависимостями.
+   *
+   * @param defaultRateCurrency валюта, через которую всё конвертируется по умолчанию.
+   */
   public CurrencyRateService(@Value("${bank.currency.defaultRateCurrency}")
                                  String defaultRateCurrency) {
     this.defaultRateCurrency = defaultRateCurrency;

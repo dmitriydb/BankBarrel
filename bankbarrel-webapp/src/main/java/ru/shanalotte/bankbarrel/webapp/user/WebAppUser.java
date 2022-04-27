@@ -1,6 +1,6 @@
 package ru.shanalotte.bankbarrel.webapp.user;
 
-import ru.shanalotte.bankbarrel.core.BankClient;
+import ru.shanalotte.bankbarrel.core.domain.BankClient;
 
 /**
  * Web app user.

@@ -5,6 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.context.TestPropertySource;
 import static ru.shanalotte.bankbarrel.core.CustomerCreationData.validName;
 import static ru.shanalotte.bankbarrel.core.CustomerCreationData.validSurname;
+import ru.shanalotte.bankbarrel.core.domain.BankAccount;
+import ru.shanalotte.bankbarrel.core.domain.BankAccountAdditionalType;
+import ru.shanalotte.bankbarrel.core.domain.BankAccountType;
+import ru.shanalotte.bankbarrel.core.domain.BankClient;
 
 @TestPropertySource("classpath:application.properties")
 public class BankAccountCreationTest {

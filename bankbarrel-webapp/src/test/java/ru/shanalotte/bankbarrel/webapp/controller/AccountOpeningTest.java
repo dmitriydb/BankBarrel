@@ -11,8 +11,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import ru.shanalotte.bankbarrel.webapp.dto.ListingDtoItem;
-import ru.shanalotte.bankbarrel.webapp.dto.ListingDto;
+import ru.shanalotte.bankbarrel.core.dto.ListingDtoItem;
+import ru.shanalotte.bankbarrel.core.dto.ListingDto;
 import ru.shanalotte.bankbarrel.webapp.service.ListingService;
 
 @SpringBootTest

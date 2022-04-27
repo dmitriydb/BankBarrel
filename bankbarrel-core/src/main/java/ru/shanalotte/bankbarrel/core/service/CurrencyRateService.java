@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.shanalotte.bankbarrel.core.CurrencyRateRule;
+import ru.shanalotte.bankbarrel.core.domain.CurrencyRateRule;
 
 /**
  * Class that stores all actual currency rate rules for the current bank service.

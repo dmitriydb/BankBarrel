@@ -1,10 +1,9 @@
 package ru.shanalotte.bankbarrel.webapp.config;
 
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import ru.shanalotte.bankbarrel.core.BankClient;
+import ru.shanalotte.bankbarrel.core.domain.BankClient;
 import ru.shanalotte.bankbarrel.webapp.dao.WebAppUserDao;
 import ru.shanalotte.bankbarrel.webapp.dto.BankClientInfoDto;
 import ru.shanalotte.bankbarrel.webapp.service.BankClientsEnrollingService;

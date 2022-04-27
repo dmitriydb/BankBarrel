@@ -1,7 +1,6 @@
 package ru.shanalotte.bankbarrel.webapp.service;
 
-import org.springframework.stereotype.Service;
-import ru.shanalotte.bankbarrel.webapp.dto.ListingDto;
+import ru.shanalotte.bankbarrel.core.dto.ListingDto;
 
 /**
  * Интерфейс для получения ListingDto.

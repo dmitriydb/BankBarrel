@@ -2,6 +2,9 @@ package ru.shanalotte.bankbarrel.core;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
+import ru.shanalotte.bankbarrel.core.domain.BankAccount;
+import ru.shanalotte.bankbarrel.core.domain.BankAccountAdditionalType;
+import ru.shanalotte.bankbarrel.core.domain.BankAccountType;
 
 
 public class CheckingBankAccountCreationTest {

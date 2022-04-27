@@ -1,6 +1,6 @@
 package ru.shanalotte.bankbarrel.webapp.dto;
 
-import ru.shanalotte.bankbarrel.core.BankClient;
+import ru.shanalotte.bankbarrel.core.domain.BankClient;
 
 /**
  * DTO для отображения профиля о пользователе веб-приложения.

@@ -2,9 +2,7 @@ package ru.shanalotte.bankbarrel.webapp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.shanalotte.bankbarrel.core.BankAccount;
-import ru.shanalotte.bankbarrel.core.BankAccountAdditionalType;
-import ru.shanalotte.bankbarrel.core.BankClient;
+import ru.shanalotte.bankbarrel.core.domain.BankClient;
 import ru.shanalotte.bankbarrel.webapp.dao.BankClientDao;
 import ru.shanalotte.bankbarrel.webapp.dto.BankClientInfoDto;
 
@@ -23,7 +21,7 @@ public class BankClientsEnrollingService {
    * Должен создать объект класса BankClient и сохранить его.
    *
    * @see ru.shanalotte.bankbarrel.webapp.dto.BankClientInfoDto
-   * @see ru.shanalotte.bankbarrel.core.BankClient
+   * @see BankClient
    * @param dto DTO
    * @return созданный объект класса BankClient, если создание прошло успешно
    */

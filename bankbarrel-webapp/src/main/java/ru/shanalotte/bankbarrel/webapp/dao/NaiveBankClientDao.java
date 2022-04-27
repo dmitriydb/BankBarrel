@@ -3,7 +3,7 @@ package ru.shanalotte.bankbarrel.webapp.dao;
 import java.util.HashSet;
 import java.util.Set;
 import org.springframework.stereotype.Repository;
-import ru.shanalotte.bankbarrel.core.BankClient;
+import ru.shanalotte.bankbarrel.core.domain.BankClient;
 
 /**
  * Заглушка для DAO клиентов банка. Хранит всё в памяти.

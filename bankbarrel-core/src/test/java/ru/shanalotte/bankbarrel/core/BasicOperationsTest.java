@@ -2,6 +2,8 @@ package ru.shanalotte.bankbarrel.core;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import org.junit.jupiter.api.Test;
+import ru.shanalotte.bankbarrel.core.domain.BankAccount;
+import ru.shanalotte.bankbarrel.core.domain.MonetaryAmount;
 import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRate;
 import ru.shanalotte.bankbarrel.core.service.BankService;
 

@@ -5,6 +5,7 @@ import java.math.RoundingMode;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
+import ru.shanalotte.bankbarrel.core.domain.*;
 import ru.shanalotte.bankbarrel.core.exception.InsufficientFundsException;
 import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRate;
 import ru.shanalotte.bankbarrel.core.service.BankService;

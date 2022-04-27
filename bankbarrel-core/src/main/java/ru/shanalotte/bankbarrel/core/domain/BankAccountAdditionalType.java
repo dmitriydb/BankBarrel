@@ -1,4 +1,4 @@
-package ru.shanalotte.bankbarrel.core;
+package ru.shanalotte.bankbarrel.core.domain;
 
 /**
  * Enum that represents bank account additional types

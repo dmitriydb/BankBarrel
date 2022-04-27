@@ -5,7 +5,7 @@ import java.math.RoundingMode;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.shanalotte.bankbarrel.core.CurrencyRateRule;
+import ru.shanalotte.bankbarrel.core.domain.CurrencyRateRule;
 import ru.shanalotte.bankbarrel.core.exception.CurrencyNotFoundException;
 
 /**

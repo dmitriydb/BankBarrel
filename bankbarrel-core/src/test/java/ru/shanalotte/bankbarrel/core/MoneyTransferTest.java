@@ -5,6 +5,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
+import ru.shanalotte.bankbarrel.core.domain.BankAccount;
+import ru.shanalotte.bankbarrel.core.domain.MonetaryAmount;
 import ru.shanalotte.bankbarrel.core.exception.InsufficientFundsException;
 import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRate;
 import ru.shanalotte.bankbarrel.core.service.BankService;

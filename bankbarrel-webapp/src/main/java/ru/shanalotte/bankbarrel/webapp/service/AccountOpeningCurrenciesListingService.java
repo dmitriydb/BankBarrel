@@ -3,8 +3,8 @@ package ru.shanalotte.bankbarrel.webapp.service;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.shanalotte.bankbarrel.webapp.dto.ListingDto;
-import ru.shanalotte.bankbarrel.webapp.dto.ListingDtoItem;
+import ru.shanalotte.bankbarrel.core.dto.ListingDto;
+import ru.shanalotte.bankbarrel.core.dto.ListingDtoItem;
 
 /**
  * Сервис, который возвращает список возможных валют для открытия счета.

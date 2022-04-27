@@ -1,6 +1,6 @@
 package ru.shanalotte.bankbarrel.webapp.dao;
 
-import ru.shanalotte.bankbarrel.core.BankClient;
+import ru.shanalotte.bankbarrel.core.domain.BankClient;
 
 /**
  * DAO для объектов класса BankClient.

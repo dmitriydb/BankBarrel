@@ -1,4 +1,4 @@
-package ru.shanalotte.bankbarrel.core;
+package ru.shanalotte.bankbarrel.core.domain;
 
 import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;

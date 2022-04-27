@@ -11,6 +11,7 @@
     <modules>
         <module>bankbarrel-core</module>
         <module>bankbarrel-webapp</module>
+        <module>bankbarrel-rest-infomodule</module>
     </modules>
 
     <properties>

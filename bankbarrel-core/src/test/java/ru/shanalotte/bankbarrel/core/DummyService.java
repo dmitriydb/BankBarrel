@@ -2,6 +2,7 @@ package ru.shanalotte.bankbarrel.core;
 
 import static ru.shanalotte.bankbarrel.core.CustomerCreationData.validName;
 import static ru.shanalotte.bankbarrel.core.CustomerCreationData.validSurname;
+import ru.shanalotte.bankbarrel.core.domain.*;
 import ru.shanalotte.bankbarrel.core.service.BankService;
 import ru.shanalotte.bankbarrel.core.service.CurrencyConverterService;
 import ru.shanalotte.bankbarrel.core.service.CurrencyRateService;

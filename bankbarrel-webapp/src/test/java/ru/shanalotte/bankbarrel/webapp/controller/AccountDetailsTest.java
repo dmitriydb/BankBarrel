@@ -76,4 +76,20 @@ public class AccountDetailsTest {
         .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString(expectedDto.getNumber())))
         .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString(expectedDto.getType())));
   }
+
+  @Test
+  public void freshlyCreatedAccountShowZeroBalance() throws Exception {
+    enrollingHelper.enrollUser("user1248");
+    BankClient client = webAppUserDao.findByUsername("user1248").getClient();
+    AccountOpeningDto dto = TestDtoFactory.accountOpeningDto();
+    bankAccountCreationService.createAccount(dto, client);
+    String accountNumber = client.getAccounts().iterator()
+        .next().getIdentifier();
+    BankAccountDetailsDto expectedDto = bankAccountDetailsDtoConverter.convert(client.getAccounts().iterator().next());
+    MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/user/user1248/account/" + accountNumber))
+        .andReturn();
+    BankAccountDetailsDto actualDto = (BankAccountDetailsDto) result.getModelAndView().getModel().get("account");
+    String actualBalance = actualDto.getBalance();
+    assertThat(actualBalance).isEqualTo("0.00");
+  }
 }

@@ -11,4 +11,5 @@ public interface BankAccountDao {
 
   BankAccount findByNumber(String number);
 
+  void delete(BankAccount account);
 }

@@ -9,6 +9,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script th:src="@{/userpage.js}"></script>
     <title th:text="${username} + ' page'"></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 <div class="container">
@@ -118,8 +119,23 @@
     </tr>
   </thead>
   <tbody>
+<!--/*-->
+    <tr>
+      <th scope="row"><a href="test">2424-423423-34-423-423-4234</a>&nbsp;<i style="color:red" class="fa fa-trash"></i></th>
+      <td>123</td>
+      <td>123</td>
+      <td>123</td>
+    </tr>
+<!--*/-->
     <tr th:each = "account : ${accounts}">
-      <th scope="row"><a th:text="${account.number}" th:href="@{/user/{username}/account/{number} (username = ${username}, number = ${account.number})}"></a></th>
+      <th scope="row"><a th:text="${account.number}" th:href="@{/user/{username}/account/{number} (username = ${username}, number = ${account.number})}"></a>
+        <form style="display: inline" method="post" th:action="@{/account/{number}/delete (number = ${account.number})}">
+          <input type="hidden" name="username" th:value="${username}">
+          <button style="display: inline" class="btn btn-link btn-xs" type="submit" name="action" value="delete">
+            <i style="color:red; cursor: pointer" class="fa fa-trash"></i>
+          </button>
+        </form>
+      </th>
       <td th:text="${account.type}"></td>
       <td th:text="${account.additionalType}"></td>
       <td th:text="${account.currency}"></td>

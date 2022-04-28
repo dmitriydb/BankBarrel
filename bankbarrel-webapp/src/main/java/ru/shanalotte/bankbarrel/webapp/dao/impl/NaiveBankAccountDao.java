@@ -24,4 +24,9 @@ public class NaiveBankAccountDao implements BankAccountDao {
     return bankAccounts.stream().filter(account -> account.getIdentifier().equals(number))
         .findFirst().orElse(null);
   }
+
+  @Override
+  public void delete(BankAccount account) {
+    bankAccounts.remove(account);
+  }
 }

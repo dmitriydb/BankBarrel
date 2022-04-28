@@ -17,6 +17,7 @@ import ru.shanalotte.bankbarrel.core.domain.BankClient;
 import ru.shanalotte.bankbarrel.webapp.dao.WebAppUserDao;
 import ru.shanalotte.bankbarrel.webapp.dto.AccountOpeningDto;
 import ru.shanalotte.bankbarrel.webapp.service.BankAccountCreationService;
+import ru.shanalotte.bankbarrel.webapp.testutils.TestDtoFactory;
 import ru.shanalotte.bankbarrel.webapp.user.WebAppUser;
 
 @SpringBootTest
@@ -68,6 +69,19 @@ public class AccountCreationControllerTest {
     mockMvc.perform(MockMvcRequestBuilders.get("/user/" + username))
         .andExpect(MockMvcResultMatchers.model().attributeExists("accounts"))
         .andExpect(MockMvcResultMatchers.model().attribute("accounts", Matchers.hasSize(1)));
+  }
+
+  @Test
+  public void afterCreationAnAccountShouldRedirectToUserPage() throws Exception {
+    String username = "vasya500";
+    enrollingHelper.enrollUser(username);
+    mockMvc.perform(MockMvcRequestBuilders.post("/account/create")
+            .param("username", username)
+            .param("accountType", BankAccountType.CHECKING.name())
+            .param("accountAdditionalType", BankAccountAdditionalType.TRADITIONAL.name())
+            .param("currency", "USD"))
+        .andExpect(MockMvcResultMatchers.redirectedUrl("/user/" + username));
+
   }
 
   @Test

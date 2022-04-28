@@ -8,7 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script th:src="@{/userpage.js}"></script>
-    <title th:text="${username} + ' page'"></title>
+    <title text="Управление счетом"></title>
 </head>
 <body>
 <div class="container">
@@ -39,7 +39,8 @@
       <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
             <ol class="breadcrumb">
             <li class="breadcrumb-item"><a th:href="@{/}">Главная страница</a></li>
-            <li class="breadcrumb-item active" aria-current="page" th:text="'Кабинет пользователя ' + ${username}">Кабинет пользователя Vasya</li>
+            <li class="breadcrumb-item"><a th:href="@{/user/{usr} (usr = ${username})}">Кабинет пользователя Vasya</a></li>
+            <li class="breadcrumb-item active" aria-current="page" th:text="'Счет ' + ${account.number}">Счет 234273-24-2342-4</li>
           </ol>
         </nav>
     </div>
@@ -51,9 +52,20 @@
       </h2>
       <div id="panelsStayOpen-collapseZero" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingZerp">
         <div class="accordion-body">
-          <p><strong>Добро пожаловать в свой личный кабинет, <span th:text="${username}">Vasya</span>.</strong><p>
-          <p>Здесь вы можете открывать новые счета, совершать денежные переводы и следить за новостями нашего банка.</p>
-
+          <p>
+              <strong th:text="'Счет ' + ${account.number}"></strong>
+              <br>
+              <strong th:text="'Тип: ' + ${account.type}"></strong>
+              <br>
+              <strong th:text="'Вид: ' + ${account.additionalType}"></strong>
+              <br>
+              <strong th:text="'Описание: ' + ${account.description}"></strong>
+              <br>
+              <strong th:text="'Валюта: ' + ${account.currency} + ' (' + ${account.currencySign} + ')'"></strong>
+              <br>
+              <strong th:text="'Баланс: ' + ${account.balance} + ${account.currencySign}"></strong>
+              <br>
+          </p>
         </div>
       </div>
     </div>
@@ -62,77 +74,30 @@
   <div class="accordion-item">
     <h2 class="accordion-header" id="panelsStayOpen-headingOne">
       <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-        Открыть новый счёт
+        Пополнить счет
       </button>
     </h2>
     <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
       <div class="accordion-body">
 
-  <form method="post" th:action="@{/account/create}" th:object="${accountOpeningDto}">
-<fieldset>
-    <legend>Открытие счета</legend>
-    <div class="mb-3">
-      <label for="accountType" class="form-label">Тип счёта</label>
-      <select name="accountType" id="accountType" class="form-select" th:field="*{accountType}">
-        <option th:each = "item: ${accountTypesDto.items}" th:value="${item.code}" th:text="${item.value}"></option>
-      </select>
-    </div>
-    <div class="mb-3">
-      <label for="accountAdditionalType" class="form-label">Вид счёта</label>
-      <select name="accountAdditionalType" id="accountAdditionalType"  class="form-select"  th:field="*{accountAdditionalType}">
-        <option th:each = "item: ${accountAdditionalTypesDto.items}" th:value="${item.code}" th:text="${item.value}"></option>
-      </select>
-    </div>
-    <div class="mb-3">
-      <label for="currency" class="form-label">Валюта</label>
-      <select id="currency" name="currency" class="form-select" th:field="*{currency}">
-      <option th:each = "item: ${accountOpeningCurrenciesDto.items}" th:value="${item.code}" th:text="${item.value}"></option>
-      </select>
-    </div>
-    <input type="hidden" name="username" th:value="${username}">
-    <div class="mb-3">
-          <p>In aliquam eros est, vitae porta ipsum tempus id. Nullam aliquet accumsan tellus a interdum. Duis vel ipsum ipsum. Proin pretium lectus ac tellus facilisis, nec tempus neque blandit. Maecenas eget arcu neque. Nulla lobortis turpis sagittis, auctor elit non, dignissim leo. Vestibulum vitae metus quis erat consequat porttitor. Curabitur tellus felis, tristique vel sollicitudin vel, sollicitudin ac urna. Nam blandit magna eu quam scelerisque, ac luctus dui volutpat. Quisque eu eros sed purus semper sollicitudin.
-</p>
-    </div>
-    <button type="submit" class="btn btn-primary">Открыть счет</button>
-  </fieldset>
-</form>
       </div>
     </div>
   </div>
   <div class="accordion-item">
     <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-        Список ваших счетов
+       Переводы
       </button>
     </h2>
     <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
       <div class="accordion-body">
-        <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Номер</th>
-      <th scope="col">Тип</th>
-      <th scope="col">Вид</th>
-      <th scope="col">Валюта</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr th:each = "account : ${accounts}">
-      <th scope="row"><a th:text="${account.number}" th:href="@{/user/{username}/account/{number} (username = ${username}, number = ${account.number})}"></a></th>
-      <td th:text="${account.type}"></td>
-      <td th:text="${account.additionalType}"></td>
-      <td th:text="${account.currency}"></td>
-    </tr>
-  </tbody>
-</table>
       </div>
     </div>
   </div>
   <div class="accordion-item">
     <h2 class="accordion-header" id="panelsStayOpen-headingThree">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-        История переводов
+        История операций
       </button>
     </h2>
     <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">

@@ -3,6 +3,7 @@ package ru.shanalotte.bankbarrel.webapp.service;
 import org.springframework.stereotype.Service;
 import ru.shanalotte.bankbarrel.core.domain.BankAccount;
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
+import ru.shanalotte.bankbarrel.webapp.dao.BankAccountDao;
 import ru.shanalotte.bankbarrel.webapp.dto.AccountOpeningDto;
 
 /**
@@ -12,9 +13,11 @@ import ru.shanalotte.bankbarrel.webapp.dto.AccountOpeningDto;
 public class BankAccountCreationService {
 
   private AccountTypesNameConverter accountTypesNameConverter;
+  private BankAccountDao bankAccountDao;
 
-  public BankAccountCreationService(AccountTypesNameConverter accountTypesNameConverter) {
+  public BankAccountCreationService(AccountTypesNameConverter accountTypesNameConverter, BankAccountDao bankAccountDao) {
     this.accountTypesNameConverter = accountTypesNameConverter;
+    this.bankAccountDao = bankAccountDao;
   }
 
   /**
@@ -28,6 +31,7 @@ public class BankAccountCreationService {
         .withCurrency(dto.getCurrency())
         .withOwner(bankClient)
         .build();
+    bankAccountDao.save(bankAccount);
     bankClient.addAccount(bankAccount);
   }
 }

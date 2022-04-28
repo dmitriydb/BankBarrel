@@ -1,5 +1,6 @@
 package ru.shanalotte.bankbarrel.webapp.controller;
 
+import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import org.hamcrest.Matchers;
 import static org.junit.jupiter.api.Assertions.*;
@@ -8,14 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import ru.shanalotte.bankbarrel.core.domain.BankAccount;
 import ru.shanalotte.bankbarrel.core.domain.BankAccountAdditionalType;
 import ru.shanalotte.bankbarrel.core.domain.BankAccountType;
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
 import ru.shanalotte.bankbarrel.webapp.dao.WebAppUserDao;
 import ru.shanalotte.bankbarrel.webapp.dto.AccountOpeningDto;
+import ru.shanalotte.bankbarrel.webapp.dto.BankAccountDto;
 import ru.shanalotte.bankbarrel.webapp.service.BankAccountCreationService;
 import ru.shanalotte.bankbarrel.webapp.testutils.TestDtoFactory;
 import ru.shanalotte.bankbarrel.webapp.user.WebAppUser;
@@ -52,6 +56,39 @@ public class AccountCreationControllerTest {
 
     assertThat(bankClient.getAccounts().size()).isEqualTo(1);
   }
+
+  @Test
+  public void userCanSeeOnlyItsOwnAccounts() throws Exception {
+    enrollingHelper.enrollUser("Imoen1");
+    enrollingHelper.enrollUser("Imoen2");
+    enrollingHelper.enrollUser("Imoen3");
+    WebAppUser webAppUser = webAppUserDao.findByUsername("Imoen1");
+    BankClient client1 = webAppUser.getClient();
+    WebAppUser webAppUser2 = webAppUserDao.findByUsername("Imoen2");
+    BankClient client2 = webAppUser2.getClient();
+    WebAppUser webAppUser3 = webAppUserDao.findByUsername("Imoen3");
+    BankClient client3 = webAppUser3.getClient();
+    bankAccountCreationService.createAccount(TestDtoFactory.accountOpeningDto(), client1);
+    bankAccountCreationService.createAccount(TestDtoFactory.accountOpeningDto(), client2);
+    bankAccountCreationService.createAccount(TestDtoFactory.accountOpeningDto(), client2);
+    bankAccountCreationService.createAccount(TestDtoFactory.accountOpeningDto(), client3);
+    bankAccountCreationService.createAccount(TestDtoFactory.accountOpeningDto(), client3);
+    bankAccountCreationService.createAccount(TestDtoFactory.accountOpeningDto(), client3);
+    MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.get("/user/Imoen1"))
+        .andReturn();
+    List<BankAccountDto> dtos = (List<BankAccountDto>) mvcResult1.getModelAndView().getModel().get("accounts");
+    assertThat(dtos.size() == 1).isTrue();
+    MvcResult mvcResult2 = mockMvc.perform(MockMvcRequestBuilders.get("/user/Imoen2"))
+        .andReturn();
+    List<BankAccountDto> dtos2 = (List<BankAccountDto>) mvcResult2.getModelAndView().getModel().get("accounts");
+    assertThat(dtos2.size() == 2).isTrue();
+    MvcResult mvcResult3 = mockMvc.perform(MockMvcRequestBuilders.get("/user/Imoen3"))
+        .andReturn();
+    List<BankAccountDto> dtos3 = (List<BankAccountDto>) mvcResult3.getModelAndView().getModel().get("accounts");
+    assertThat(dtos3.size() == 3).isTrue();
+  }
+
+
 
   @Test
   public void webAppUserShouldSeeFreshlyOpenedAccountAtUserPage() throws Exception {

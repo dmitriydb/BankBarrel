@@ -1,15 +1,20 @@
 package ru.shanalotte.bankbarrel.webapp.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import ru.shanalotte.bankbarrel.webapp.dao.WebAppUserDao;
 import ru.shanalotte.bankbarrel.webapp.dto.AccountOpeningDto;
+import ru.shanalotte.bankbarrel.webapp.dto.BankAccountDto;
 import ru.shanalotte.bankbarrel.webapp.exception.WebAppUserNotFound;
 import ru.shanalotte.bankbarrel.webapp.service.AccountAdditionalTypesListingService;
 import ru.shanalotte.bankbarrel.webapp.service.AccountOpeningCurrenciesListingService;
 import ru.shanalotte.bankbarrel.webapp.service.AccountTypeListingService;
+import ru.shanalotte.bankbarrel.webapp.service.BankAccountDtoConverter;
+import ru.shanalotte.bankbarrel.webapp.user.WebAppUser;
 
 /**
  * Controller for the user page.
@@ -21,20 +26,21 @@ public class UserPageController {
   private AccountTypeListingService accountTypeListingService;
   private AccountAdditionalTypesListingService accountAdditionalTypesListingService;
   private AccountOpeningCurrenciesListingService accountOpeningCurrenciesListingService;
+  private BankAccountDtoConverter bankAccountDtoConverter;
 
   /**
    * Конструктор со всеми зависимостями.
    */
   public UserPageController(WebAppUserDao webAppUserDao,
                             AccountTypeListingService accountTypeListingService,
-                            AccountAdditionalTypesListingService
-                                accountAdditionalTypesListingService,
-                            AccountOpeningCurrenciesListingService
-                                accountOpeningCurrenciesListingService) {
+                            AccountAdditionalTypesListingService accountAdditionalTypesListingService,
+                            AccountOpeningCurrenciesListingService accountOpeningCurrenciesListingService,
+                            BankAccountDtoConverter bankAccountDtoConverter) {
     this.webAppUserDao = webAppUserDao;
     this.accountTypeListingService = accountTypeListingService;
     this.accountAdditionalTypesListingService = accountAdditionalTypesListingService;
     this.accountOpeningCurrenciesListingService = accountOpeningCurrenciesListingService;
+    this.bankAccountDtoConverter = bankAccountDtoConverter;
   }
 
   /**
@@ -55,6 +61,11 @@ public class UserPageController {
         accountAdditionalTypesListingService.getListingDto());
     model.addAttribute("accountOpeningCurrenciesDto",
         accountOpeningCurrenciesListingService.getListingDto());
+    WebAppUser webAppUser = webAppUserDao.findByUsername(username);
+    List<BankAccountDto> accountDtos = webAppUser.getClient().getAccounts()
+        .stream().map(account -> bankAccountDtoConverter.convert(account))
+        .collect(Collectors.toList());
+    model.addAttribute("accounts", accountDtos);
     return "user-page";
   }
 }

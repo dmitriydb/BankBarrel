@@ -28,5 +28,6 @@ public class BankAccountCreationService {
         .withCurrency(dto.getCurrency())
         .withOwner(bankClient)
         .build();
+    bankClient.addAccount(bankAccount);
   }
 }

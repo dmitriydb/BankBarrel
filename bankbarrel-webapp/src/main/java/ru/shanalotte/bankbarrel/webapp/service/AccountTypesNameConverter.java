@@ -6,7 +6,7 @@ import ru.shanalotte.bankbarrel.core.domain.BankAccountType;
 
 /**
  * Класс, который преобразует текстовое представление кода типа счёта
- * в эксземпляр соответствующего enum-а.
+ * в экземпляр соответствующего enum-а.
  */
 @Service
 public class AccountTypesNameConverter {

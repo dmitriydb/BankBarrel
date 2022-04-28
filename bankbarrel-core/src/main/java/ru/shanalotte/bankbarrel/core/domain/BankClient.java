@@ -1,6 +1,8 @@
 package ru.shanalotte.bankbarrel.core.domain;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -11,6 +13,7 @@ public class BankClient {
   private String familyName;
   private String telephone;
   private String email;
+  private Set<BankAccount> accounts = new HashSet<>();
 
   private BankClient(String givenName, String familyName) {
     if (StringUtils.isBlank(givenName)) {
@@ -38,6 +41,14 @@ public class BankClient {
 
   public String getEmail() {
     return email;
+  }
+
+  public Set<BankAccount> getAccounts() {
+    return accounts;
+  }
+
+  public void addAccount(BankAccount bankAccount) {
+    accounts.add(bankAccount);
   }
 
   /**

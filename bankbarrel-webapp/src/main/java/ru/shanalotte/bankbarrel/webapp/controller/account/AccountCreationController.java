@@ -1,4 +1,4 @@
-package ru.shanalotte.bankbarrel.webapp.controller;
+package ru.shanalotte.bankbarrel.webapp.controller.account;
 
 import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
-import ru.shanalotte.bankbarrel.webapp.dao.WebAppUserDao;
-import ru.shanalotte.bankbarrel.webapp.dto.AccountOpeningDto;
+import ru.shanalotte.bankbarrel.webapp.dao.interfaces.WebAppUserDao;
+import ru.shanalotte.bankbarrel.webapp.dto.account.AccountOpeningDto;
 import ru.shanalotte.bankbarrel.webapp.exception.WebAppUserNotFound;
 import ru.shanalotte.bankbarrel.webapp.service.BankAccountCreationService;
 import ru.shanalotte.bankbarrel.webapp.user.WebAppUser;

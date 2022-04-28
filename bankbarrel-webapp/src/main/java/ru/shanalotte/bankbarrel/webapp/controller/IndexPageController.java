@@ -3,7 +3,7 @@ package ru.shanalotte.bankbarrel.webapp.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import ru.shanalotte.bankbarrel.webapp.dto.BankClientInfoDto;
+import ru.shanalotte.bankbarrel.webapp.dto.bankclient.BankClientInfoDto;
 
 /**
  * Controller for the main page.

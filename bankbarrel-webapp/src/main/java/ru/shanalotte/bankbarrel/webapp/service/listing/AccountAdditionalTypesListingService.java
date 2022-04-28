@@ -1,32 +1,31 @@
-package ru.shanalotte.bankbarrel.webapp.service;
+package ru.shanalotte.bankbarrel.webapp.service.listing;
 
 import org.springframework.stereotype.Service;
-import ru.shanalotte.bankbarrel.core.domain.BankAccountType;
+import ru.shanalotte.bankbarrel.core.domain.BankAccountAdditionalType;
 import ru.shanalotte.bankbarrel.core.dto.ListingDto;
 import ru.shanalotte.bankbarrel.core.dto.ListingDtoItem;
 import ru.shanalotte.bankbarrel.core.service.EnumToListingDtoItemConverter;
 
 /**
- * Сервис, который возвращает DTO со всеми возможными типами банковского счета 1 уровня.
- * Checking, Saving и т.д.
+ * Сервис возвращает ListingDto со списком всех дополнительных типов банковских счетов 2 уровня.
  */
 @Service
-public class AccountTypeListingService implements ListingService {
+public class AccountAdditionalTypesListingService implements ListingService {
 
   private EnumToListingDtoItemConverter enumToListingDtoItemConverter;
 
-  public AccountTypeListingService(EnumToListingDtoItemConverter enumToListingDtoItemConverter) {
+  public AccountAdditionalTypesListingService(EnumToListingDtoItemConverter
+                                                  enumToListingDtoItemConverter) {
     this.enumToListingDtoItemConverter = enumToListingDtoItemConverter;
   }
 
   @Override
   public ListingDto getListingDto() {
     ListingDto dto = new ListingDto();
-    for (BankAccountType accountType : BankAccountType.values()) {
+    for (BankAccountAdditionalType accountType : BankAccountAdditionalType.values()) {
       ListingDtoItem item = enumToListingDtoItemConverter.convert(accountType.name());
       dto.addItem(item);
     }
     return dto;
   }
-
 }

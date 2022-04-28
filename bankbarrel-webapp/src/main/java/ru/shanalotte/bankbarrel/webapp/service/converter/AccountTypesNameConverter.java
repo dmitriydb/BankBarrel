@@ -1,4 +1,4 @@
-package ru.shanalotte.bankbarrel.webapp.service;
+package ru.shanalotte.bankbarrel.webapp.service.converter;
 
 import org.springframework.stereotype.Service;
 import ru.shanalotte.bankbarrel.core.domain.BankAccountAdditionalType;

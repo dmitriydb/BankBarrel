@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import ru.shanalotte.bankbarrel.webapp.dao.BankClientDao;
-import ru.shanalotte.bankbarrel.webapp.dao.WebAppUserDao;
+import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankClientDao;
+import ru.shanalotte.bankbarrel.webapp.dao.interfaces.WebAppUserDao;
 
 @ActiveProfiles("production")
 @SpringBootTest

@@ -1,4 +1,4 @@
-package ru.shanalotte.bankbarrel.webapp.dto;
+package ru.shanalotte.bankbarrel.webapp.dto.account;
 
 /**
  * DTO, которое присылается в контроллер при открытии счета пользователем веб-приложения.

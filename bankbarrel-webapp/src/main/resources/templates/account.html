@@ -39,7 +39,7 @@
       <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
             <ol class="breadcrumb">
             <li class="breadcrumb-item"><a th:href="@{/}">Главная страница</a></li>
-            <li class="breadcrumb-item"><a th:href="@{/user/{usr} (usr = ${username})}">Кабинет пользователя Vasya</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/user/{usr} (usr = ${username})}" th:text="'Кабинет пользователя ' + ${username}"></a></li>
             <li class="breadcrumb-item active" aria-current="page" th:text="'Счет ' + ${account.number}">Счет 234273-24-2342-4</li>
           </ol>
         </nav>

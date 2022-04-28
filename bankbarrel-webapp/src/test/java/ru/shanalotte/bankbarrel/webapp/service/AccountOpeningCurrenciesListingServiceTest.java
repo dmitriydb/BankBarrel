@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import ru.shanalotte.bankbarrel.core.dto.ListingDto;
+import ru.shanalotte.bankbarrel.webapp.service.listing.AccountOpeningCurrenciesListingService;
 
 @SpringBootTest
 @AutoConfigureMockMvc

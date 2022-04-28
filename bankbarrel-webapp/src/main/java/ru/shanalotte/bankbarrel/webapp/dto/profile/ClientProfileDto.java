@@ -1,4 +1,4 @@
-package ru.shanalotte.bankbarrel.webapp.dto;
+package ru.shanalotte.bankbarrel.webapp.dto.profile;
 
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
 

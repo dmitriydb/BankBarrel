@@ -1,4 +1,4 @@
-package ru.shanalotte.bankbarrel.webapp.controller;
+package ru.shanalotte.bankbarrel.webapp.controller.enroll;
 
 import java.util.Locale;
 import javax.validation.Valid;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
-import ru.shanalotte.bankbarrel.webapp.dao.WebAppUserDao;
-import ru.shanalotte.bankbarrel.webapp.dto.BankClientInfoDto;
+import ru.shanalotte.bankbarrel.webapp.dao.interfaces.WebAppUserDao;
+import ru.shanalotte.bankbarrel.webapp.dto.bankclient.BankClientInfoDto;
 import ru.shanalotte.bankbarrel.webapp.service.BankClientsEnrollingService;
 import ru.shanalotte.bankbarrel.webapp.user.WebAppUser;
 

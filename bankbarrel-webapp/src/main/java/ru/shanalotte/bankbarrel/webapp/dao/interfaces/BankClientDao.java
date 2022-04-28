@@ -1,4 +1,4 @@
-package ru.shanalotte.bankbarrel.webapp.dao;
+package ru.shanalotte.bankbarrel.webapp.dao.interfaces;
 
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
 

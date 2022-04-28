@@ -1,4 +1,4 @@
-package ru.shanalotte.bankbarrel.webapp.dto;
+package ru.shanalotte.bankbarrel.webapp.dto.account;
 
 /**
  * DTO для бизнес-объекта BankAccount.

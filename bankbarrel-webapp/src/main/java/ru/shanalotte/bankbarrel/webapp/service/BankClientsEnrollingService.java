@@ -3,8 +3,8 @@ package ru.shanalotte.bankbarrel.webapp.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
-import ru.shanalotte.bankbarrel.webapp.dao.BankClientDao;
-import ru.shanalotte.bankbarrel.webapp.dto.BankClientInfoDto;
+import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankClientDao;
+import ru.shanalotte.bankbarrel.webapp.dto.bankclient.BankClientInfoDto;
 
 /**
  * Сервис, который создает и сохраняет новых банковских клиентов.
@@ -20,7 +20,7 @@ public class BankClientsEnrollingService {
    * веб-приложения формы регистрации.
    * Должен создать объект класса BankClient и сохранить его.
    *
-   * @see ru.shanalotte.bankbarrel.webapp.dto.BankClientInfoDto
+   * @see BankClientInfoDto
    * @see BankClient
    * @param dto DTO
    * @return созданный объект класса BankClient, если создание прошло успешно

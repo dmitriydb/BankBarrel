@@ -12,12 +12,12 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ru.shanalotte.bankbarrel.core.domain.BankAccount;
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
-import ru.shanalotte.bankbarrel.webapp.dao.WebAppUserDao;
-import ru.shanalotte.bankbarrel.webapp.dto.AccountOpeningDto;
-import ru.shanalotte.bankbarrel.webapp.dto.BankAccountDetailsDto;
+import ru.shanalotte.bankbarrel.webapp.dao.interfaces.WebAppUserDao;
+import ru.shanalotte.bankbarrel.webapp.dto.account.AccountOpeningDto;
+import ru.shanalotte.bankbarrel.webapp.dto.account.BankAccountDetailsDto;
 import ru.shanalotte.bankbarrel.webapp.service.BankAccountCreationService;
-import ru.shanalotte.bankbarrel.webapp.service.BankAccountDetailsDtoConverter;
-import ru.shanalotte.bankbarrel.webapp.service.CurrencyPresentationConverter;
+import ru.shanalotte.bankbarrel.webapp.service.converter.BankAccountDetailsDtoConverter;
+import ru.shanalotte.bankbarrel.webapp.service.converter.CurrencyPresentationConverter;
 import ru.shanalotte.bankbarrel.webapp.testutils.TestDtoFactory;
 
 @SpringBootTest

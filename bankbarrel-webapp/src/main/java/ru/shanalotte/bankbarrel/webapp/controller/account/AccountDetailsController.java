@@ -1,4 +1,4 @@
-package ru.shanalotte.bankbarrel.webapp.controller;
+package ru.shanalotte.bankbarrel.webapp.controller.account;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -6,14 +6,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import ru.shanalotte.bankbarrel.core.domain.BankAccount;
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
-import ru.shanalotte.bankbarrel.webapp.dao.BankAccountDao;
-import ru.shanalotte.bankbarrel.webapp.dao.WebAppUserDao;
-import ru.shanalotte.bankbarrel.webapp.dto.BankAccountDetailsDto;
+import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankAccountDao;
+import ru.shanalotte.bankbarrel.webapp.dao.interfaces.WebAppUserDao;
 import ru.shanalotte.bankbarrel.webapp.exception.BankAccountNotExists;
 import ru.shanalotte.bankbarrel.webapp.exception.UnathorizedAccessToBankAccount;
 import ru.shanalotte.bankbarrel.webapp.exception.WebAppUserNotFound;
 import ru.shanalotte.bankbarrel.webapp.service.BankAccountAccessAuthorizationService;
-import ru.shanalotte.bankbarrel.webapp.service.BankAccountDetailsDtoConverter;
+import ru.shanalotte.bankbarrel.webapp.service.converter.BankAccountDetailsDtoConverter;
 
 /**
  * Контроллер, который обрабатывает запрос на открытие страницы с деталями конкретного счёта.

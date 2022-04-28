@@ -1,6 +1,6 @@
 package ru.shanalotte.bankbarrel.webapp.testutils;
 
-import ru.shanalotte.bankbarrel.webapp.dto.AccountOpeningDto;
+import ru.shanalotte.bankbarrel.webapp.dto.account.AccountOpeningDto;
 
 public class TestDtoFactory {
 

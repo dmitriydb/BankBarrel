@@ -4,8 +4,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
-import ru.shanalotte.bankbarrel.webapp.dao.WebAppUserDao;
-import ru.shanalotte.bankbarrel.webapp.dto.BankClientInfoDto;
+import ru.shanalotte.bankbarrel.webapp.dao.interfaces.WebAppUserDao;
+import ru.shanalotte.bankbarrel.webapp.dto.bankclient.BankClientInfoDto;
 import ru.shanalotte.bankbarrel.webapp.service.BankClientsEnrollingService;
 import ru.shanalotte.bankbarrel.webapp.user.WebAppUser;
 

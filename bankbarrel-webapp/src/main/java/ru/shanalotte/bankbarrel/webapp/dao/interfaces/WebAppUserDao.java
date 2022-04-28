@@ -1,4 +1,4 @@
-package ru.shanalotte.bankbarrel.webapp.dao;
+package ru.shanalotte.bankbarrel.webapp.dao.interfaces;
 
 import org.springframework.stereotype.Repository;
 import ru.shanalotte.bankbarrel.webapp.user.WebAppUser;

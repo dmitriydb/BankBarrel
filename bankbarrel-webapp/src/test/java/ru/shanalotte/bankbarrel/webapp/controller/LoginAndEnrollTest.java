@@ -16,8 +16,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
-import ru.shanalotte.bankbarrel.webapp.dao.BankClientDao;
-import ru.shanalotte.bankbarrel.webapp.dao.WebAppUserDao;
+import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankClientDao;
+import ru.shanalotte.bankbarrel.webapp.dao.interfaces.WebAppUserDao;
 import ru.shanalotte.bankbarrel.webapp.user.WebAppUser;
 
 @SpringBootTest

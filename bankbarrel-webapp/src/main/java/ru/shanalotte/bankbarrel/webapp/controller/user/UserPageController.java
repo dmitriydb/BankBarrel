@@ -1,4 +1,4 @@
-package ru.shanalotte.bankbarrel.webapp.controller;
+package ru.shanalotte.bankbarrel.webapp.controller.user;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -6,14 +6,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import ru.shanalotte.bankbarrel.webapp.dao.WebAppUserDao;
-import ru.shanalotte.bankbarrel.webapp.dto.AccountOpeningDto;
-import ru.shanalotte.bankbarrel.webapp.dto.BankAccountDto;
+import ru.shanalotte.bankbarrel.webapp.dao.interfaces.WebAppUserDao;
+import ru.shanalotte.bankbarrel.webapp.dto.account.AccountOpeningDto;
+import ru.shanalotte.bankbarrel.webapp.dto.account.BankAccountDto;
 import ru.shanalotte.bankbarrel.webapp.exception.WebAppUserNotFound;
-import ru.shanalotte.bankbarrel.webapp.service.AccountAdditionalTypesListingService;
-import ru.shanalotte.bankbarrel.webapp.service.AccountOpeningCurrenciesListingService;
-import ru.shanalotte.bankbarrel.webapp.service.AccountTypeListingService;
-import ru.shanalotte.bankbarrel.webapp.service.BankAccountDtoConverter;
+import ru.shanalotte.bankbarrel.webapp.service.listing.AccountAdditionalTypesListingService;
+import ru.shanalotte.bankbarrel.webapp.service.listing.AccountOpeningCurrenciesListingService;
+import ru.shanalotte.bankbarrel.webapp.service.listing.AccountTypeListingService;
+import ru.shanalotte.bankbarrel.webapp.service.converter.BankAccountDtoConverter;
 import ru.shanalotte.bankbarrel.webapp.user.WebAppUser;
 
 /**

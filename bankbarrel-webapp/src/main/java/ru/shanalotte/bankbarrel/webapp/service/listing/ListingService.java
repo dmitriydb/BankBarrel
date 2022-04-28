@@ -1,4 +1,4 @@
-package ru.shanalotte.bankbarrel.webapp.service;
+package ru.shanalotte.bankbarrel.webapp.service.listing;
 
 import ru.shanalotte.bankbarrel.core.dto.ListingDto;
 

@@ -1,4 +1,4 @@
-package ru.shanalotte.bankbarrel.webapp.dto;
+package ru.shanalotte.bankbarrel.webapp.dto.bankclient;
 
 import javax.validation.constraints.NotEmpty;
 

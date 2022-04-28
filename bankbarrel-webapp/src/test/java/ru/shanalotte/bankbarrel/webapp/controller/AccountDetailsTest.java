@@ -10,12 +10,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import ru.shanalotte.bankbarrel.core.domain.BankAccount;
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
 import ru.shanalotte.bankbarrel.webapp.dao.WebAppUserDao;
 import ru.shanalotte.bankbarrel.webapp.dto.AccountOpeningDto;
 import ru.shanalotte.bankbarrel.webapp.dto.BankAccountDetailsDto;
 import ru.shanalotte.bankbarrel.webapp.service.BankAccountCreationService;
 import ru.shanalotte.bankbarrel.webapp.service.BankAccountDetailsDtoConverter;
+import ru.shanalotte.bankbarrel.webapp.service.CurrencyPresentationConverter;
 import ru.shanalotte.bankbarrel.webapp.testutils.TestDtoFactory;
 
 @SpringBootTest
@@ -36,6 +38,9 @@ public class AccountDetailsTest {
 
   @Autowired
   private BankAccountDetailsDtoConverter bankAccountDetailsDtoConverter;
+
+  @Autowired
+  private CurrencyPresentationConverter currencyPresentationConverter;
 
   @Test
   public void shouldThrow404WhenUserIsAuthorizedButThereIsNotSuchAccount() throws Exception {
@@ -91,5 +96,21 @@ public class AccountDetailsTest {
     BankAccountDetailsDto actualDto = (BankAccountDetailsDto) result.getModelAndView().getModel().get("account");
     String actualBalance = actualDto.getBalance();
     assertThat(actualBalance).isEqualTo("0.00");
+  }
+
+  @Test
+  public void shouldShowBankAccountCurrencyInTheSameCurrencyAndAccount() throws Exception {
+    enrollingHelper.enrollUser("user1252");
+    BankClient client = webAppUserDao.findByUsername("user1252").getClient();
+    AccountOpeningDto dto = TestDtoFactory.accountOpeningDto();
+    dto.setCurrency("KZT");
+    bankAccountCreationService.createAccount(dto, client);
+    BankAccount account = client.getAccounts().iterator().next();
+    String accountNumber = account.getIdentifier();
+    MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/user/user1252/account/" + accountNumber))
+        .andReturn();
+    BankAccountDetailsDto actualDto = (BankAccountDetailsDto) result.getModelAndView().getModel().get("account");
+    String currencySign = actualDto.getCurrencySign();
+    assertThat(currencySign).isEqualTo(currencyPresentationConverter.currencyToSign(account.getCurrency()));
   }
 }

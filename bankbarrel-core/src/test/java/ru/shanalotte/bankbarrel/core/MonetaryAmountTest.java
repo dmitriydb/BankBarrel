@@ -79,7 +79,7 @@ public class MonetaryAmountTest {
   public void monetaryAmountWith0dot1Amount() {
     MonetaryAmount m = new MonetaryAmount(0.1, "USD");
     assertThat(m.getValue().toString()).isEqualTo("0.1");
-    BigDecimal bg = new BigDecimal(0.1);
+    BigDecimal bg = new BigDecimal("0.1");
     assertThat(bg.toString()).isNotEqualTo("0.1");
   }
 

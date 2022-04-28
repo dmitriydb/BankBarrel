@@ -1,5 +1,9 @@
 package ru.shanalotte.bankbarrel.webapp.dto.account;
 
+/**
+ * DTO для отображения детальной информации о банковском счете.
+ * В данный момент используется на странице банковского счета.
+ */
 public class BankAccountDetailsDto {
   private String number;
   private String type;

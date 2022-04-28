@@ -10,10 +10,10 @@ import ru.shanalotte.bankbarrel.webapp.dao.interfaces.WebAppUserDao;
 import ru.shanalotte.bankbarrel.webapp.dto.account.AccountOpeningDto;
 import ru.shanalotte.bankbarrel.webapp.dto.account.BankAccountDto;
 import ru.shanalotte.bankbarrel.webapp.exception.WebAppUserNotFound;
+import ru.shanalotte.bankbarrel.webapp.service.converter.BankAccountDtoConverter;
 import ru.shanalotte.bankbarrel.webapp.service.listing.AccountAdditionalTypesListingService;
 import ru.shanalotte.bankbarrel.webapp.service.listing.AccountOpeningCurrenciesListingService;
 import ru.shanalotte.bankbarrel.webapp.service.listing.AccountTypeListingService;
-import ru.shanalotte.bankbarrel.webapp.service.converter.BankAccountDtoConverter;
 import ru.shanalotte.bankbarrel.webapp.user.WebAppUser;
 
 /**
@@ -33,8 +33,10 @@ public class UserPageController {
    */
   public UserPageController(WebAppUserDao webAppUserDao,
                             AccountTypeListingService accountTypeListingService,
-                            AccountAdditionalTypesListingService accountAdditionalTypesListingService,
-                            AccountOpeningCurrenciesListingService accountOpeningCurrenciesListingService,
+                            AccountAdditionalTypesListingService
+                                accountAdditionalTypesListingService,
+                            AccountOpeningCurrenciesListingService
+                                accountOpeningCurrenciesListingService,
                             BankAccountDtoConverter bankAccountDtoConverter) {
     this.webAppUserDao = webAppUserDao;
     this.accountTypeListingService = accountTypeListingService;

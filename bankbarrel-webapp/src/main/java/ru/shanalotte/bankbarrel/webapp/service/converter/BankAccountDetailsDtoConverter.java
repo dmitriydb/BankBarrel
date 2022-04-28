@@ -9,6 +9,7 @@ import ru.shanalotte.bankbarrel.webapp.dto.account.BankAccountDto;
 
 /**
  * Класс, который преобразует бизнес-объекты класса BankAccount в соответствующее DTO.
+ *
  * @see BankAccountDto
  */
 @Service
@@ -17,7 +18,10 @@ public class BankAccountDetailsDtoConverter {
   private EnumToListingDtoItemConverter enumToListingDtoItemConverter;
   private CurrencyPresentationConverter currencyPresentationConverter;
 
-  public BankAccountDetailsDtoConverter(EnumToListingDtoItemConverter enumToListingDtoItemConverter, CurrencyPresentationConverter currencyPresentationConverter) {
+  public BankAccountDetailsDtoConverter(EnumToListingDtoItemConverter
+                                            enumToListingDtoItemConverter,
+                                        CurrencyPresentationConverter
+                                            currencyPresentationConverter) {
     this.enumToListingDtoItemConverter = enumToListingDtoItemConverter;
     this.currencyPresentationConverter = currencyPresentationConverter;
   }

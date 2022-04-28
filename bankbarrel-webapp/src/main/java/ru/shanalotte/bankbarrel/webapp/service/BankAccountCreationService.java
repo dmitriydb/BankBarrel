@@ -16,7 +16,8 @@ public class BankAccountCreationService {
   private AccountTypesNameConverter accountTypesNameConverter;
   private BankAccountDao bankAccountDao;
 
-  public BankAccountCreationService(AccountTypesNameConverter accountTypesNameConverter, BankAccountDao bankAccountDao) {
+  public BankAccountCreationService(AccountTypesNameConverter accountTypesNameConverter,
+                                    BankAccountDao bankAccountDao) {
     this.accountTypesNameConverter = accountTypesNameConverter;
     this.bankAccountDao = bankAccountDao;
   }

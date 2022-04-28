@@ -7,6 +7,7 @@ import ru.shanalotte.bankbarrel.webapp.dto.account.BankAccountDto;
 
 /**
  * Класс, который преобразует бизнес-объекты класса BankAccount в соответствующее DTO.
+ *
  * @see BankAccountDto
  */
 @Service

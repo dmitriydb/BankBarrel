@@ -25,13 +25,30 @@ public class AccountDetailsController {
   private BankAccountAccessAuthorizationService bankAccountAccessAuthorizationService;
   private BankAccountDetailsDtoConverter bankAccountDetailsDtoConverter;
 
-  public AccountDetailsController(WebAppUserDao webAppUserDao, BankAccountDao bankAccountDao, BankAccountAccessAuthorizationService bankAccountAccessAuthorizationService, BankAccountDetailsDtoConverter bankAccountDetailsDtoConverter) {
+  /**
+   * Конструктор со всеми зависимостями.
+   */
+  public AccountDetailsController(WebAppUserDao webAppUserDao,
+                                  BankAccountDao bankAccountDao,
+                                  BankAccountAccessAuthorizationService
+                                      bankAccountAccessAuthorizationService,
+                                  BankAccountDetailsDtoConverter bankAccountDetailsDtoConverter) {
     this.webAppUserDao = webAppUserDao;
     this.bankAccountDao = bankAccountDao;
     this.bankAccountAccessAuthorizationService = bankAccountAccessAuthorizationService;
     this.bankAccountDetailsDtoConverter = bankAccountDetailsDtoConverter;
   }
 
+  /**
+   * Обрабатывает запрос на открытие страницы с информацией о банковском счете.
+   *
+   * @param accountNumber номер счета
+   * @param username      имя пользователя
+   * @throws WebAppUserNotFound             если пользователь не авторизован
+   * @throws UnathorizedAccessToBankAccount <p>если пользователь пытается получить
+   *                                        * доступ к чужому счету</p>
+   * @throws BankAccountNotExists           если счет с таким номером не существует
+   */
   @GetMapping("/user/{username}/account/{number}")
   public String openAccountPage(Model model, @PathVariable("number") String accountNumber,
                                 @PathVariable("username") String username)

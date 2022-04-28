@@ -22,6 +22,9 @@ public class DummyUserCreationConfig {
   private WebAppUserDao webAppUserDao;
   private BankAccountCreationService bankAccountCreationService;
 
+  /**
+   * Конструктор со всеми зависимостями.
+   */
   public DummyUserCreationConfig(BankClientsEnrollingService bankClientsEnrollingService,
                                  WebAppUserDao webAppUserDao,
                                  BankAccountCreationService bankAccountCreationService) {

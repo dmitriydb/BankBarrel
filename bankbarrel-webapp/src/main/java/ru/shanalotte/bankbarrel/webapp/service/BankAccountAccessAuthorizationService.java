@@ -12,6 +12,7 @@ public class BankAccountAccessAuthorizationService {
 
   /**
    * Определяет, есть ли у клиента банка счет с заданным номером.
+   *
    * @param accountNumber искомый номер счета
    */
   public boolean bankClientHasTheAccountWithNumber(BankClient client, String accountNumber) {

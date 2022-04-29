@@ -97,6 +97,29 @@
   <div class="accordion-item">
     <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+       Снятие со счета
+      </button>
+    </h2>
+    <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+      <div class="accordion-body">
+        <form method="post" th:action="@{/account/{number}/withdraw (number = ${account.number})}">
+          <div class="mb-3">
+            <label for="amount" class="form-label">Введите желаемую сумму</label>
+            <input type="number" class="form-control" name="amount" id="amount">
+            <input type="hidden" name="username" th:value="${username}">
+            <div class="form-check form-check-inline" th:each="currency : ${currencies}">
+              <input class="form-check-input" type="radio" name="currency" th:id="'currency' + ${currency.code}" th:value="${currency.code}">
+              <label class="form-check-label" th:for="'currency' + ${currency.code}" th:text="${currency.value}"></label>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Пополнить</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
        Переводы
       </button>
     </h2>

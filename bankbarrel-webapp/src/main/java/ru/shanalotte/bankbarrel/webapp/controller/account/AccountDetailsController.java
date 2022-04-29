@@ -13,6 +13,7 @@ import ru.shanalotte.bankbarrel.webapp.exception.UnathorizedAccessToBankAccount;
 import ru.shanalotte.bankbarrel.webapp.exception.WebAppUserNotFound;
 import ru.shanalotte.bankbarrel.webapp.service.BankAccountAccessAuthorizationService;
 import ru.shanalotte.bankbarrel.webapp.service.converter.BankAccountDetailsDtoConverter;
+import ru.shanalotte.bankbarrel.webapp.service.listing.AccountOpeningCurrenciesListingService;
 
 /**
  * Контроллер, который обрабатывает запрос на открытие страницы с деталями конкретного счёта.
@@ -24,6 +25,7 @@ public class AccountDetailsController {
   private BankAccountDao bankAccountDao;
   private BankAccountAccessAuthorizationService bankAccountAccessAuthorizationService;
   private BankAccountDetailsDtoConverter bankAccountDetailsDtoConverter;
+  private AccountOpeningCurrenciesListingService accountOpeningCurrenciesListingService;
 
   /**
    * Конструктор со всеми зависимостями.
@@ -32,11 +34,14 @@ public class AccountDetailsController {
                                   BankAccountDao bankAccountDao,
                                   BankAccountAccessAuthorizationService
                                       bankAccountAccessAuthorizationService,
-                                  BankAccountDetailsDtoConverter bankAccountDetailsDtoConverter) {
+                                  BankAccountDetailsDtoConverter bankAccountDetailsDtoConverter,
+                                  AccountOpeningCurrenciesListingService
+                                      accountOpeningCurrenciesListingService) {
     this.webAppUserDao = webAppUserDao;
     this.bankAccountDao = bankAccountDao;
     this.bankAccountAccessAuthorizationService = bankAccountAccessAuthorizationService;
     this.bankAccountDetailsDtoConverter = bankAccountDetailsDtoConverter;
+    this.accountOpeningCurrenciesListingService = accountOpeningCurrenciesListingService;
   }
 
   /**
@@ -69,6 +74,8 @@ public class AccountDetailsController {
     if (isAuthorized) {
       BankAccount bankAccount = bankAccountDao.findByNumber(accountNumber);
       model.addAttribute("account", bankAccountDetailsDtoConverter.convert(bankAccount));
+      model.addAttribute("currencies",
+          accountOpeningCurrenciesListingService.getListingDto().getItems());
       return "account";
     } else {
       throw new UnathorizedAccessToBankAccount(username + " to " + accountNumber);

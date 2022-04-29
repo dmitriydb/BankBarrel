@@ -28,11 +28,12 @@ public class DepositController {
   @PostMapping("/account/{number}/deposit")
   public String depositAccount(@PathVariable("number") String accountNumber,
                                @RequestParam("username") String username,
-                               @RequestParam("amount") Double amount
+                               @RequestParam("amount") Double amount,
+                               @RequestParam("currency") String currency
                                ) throws WebAppUserNotFound,
       UnathorizedAccessToBankAccount, BankAccountNotExists, UnknownCurrencyRate {
     BankAccount account = bankAccountAccessAuthorizationService.authorize(username, accountNumber);
-    MonetaryAmount monetaryAmount = new MonetaryAmount(amount, "USD");
+    MonetaryAmount monetaryAmount = new MonetaryAmount(amount, currency);
     bankService.deposit(account, monetaryAmount);
     return "redirect:/user/" + username + "/account/" + accountNumber;
   }

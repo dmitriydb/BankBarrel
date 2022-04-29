@@ -84,6 +84,10 @@
             <label for="amount" class="form-label">Введите желаемую сумму</label>
             <input type="number" class="form-control" name="amount" id="amount">
             <input type="hidden" name="username" th:value="${username}">
+            <div class="form-check form-check-inline" th:each="currency : ${currencies}">
+              <input class="form-check-input" type="radio" name="currency" th:id="'currency' + ${currency.code}" th:value="${currency.code}">
+              <label class="form-check-label" th:for="'currency' + ${currency.code}" th:text="${currency.value}"></label>
+            </div>
           </div>
           <button type="submit" class="btn btn-primary">Пополнить</button>
         </form>

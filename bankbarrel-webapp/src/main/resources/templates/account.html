@@ -13,6 +13,7 @@
 <body>
 <div class="container">
 
+
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
       <div class="container">
 
@@ -43,6 +44,8 @@
             <li class="breadcrumb-item active" aria-current="page" th:text="'Счет ' + ${account.number}">Счет 234273-24-2342-4</li>
           </ol>
         </nav>
+    </div>
+    <div th:if="${message}" class="alert alert-danger" role="alert" th:text="#{${message}}">
     </div>
 
   <div class="accordion" id="accordionPanelsStayOpenExample">
@@ -112,7 +115,7 @@
               <label class="form-check-label" th:for="'currency' + ${currency.code}" th:text="${currency.value}"></label>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary">Пополнить</button>
+          <button type="submit" class="btn btn-primary">Снять</button>
         </form>
       </div>
     </div>

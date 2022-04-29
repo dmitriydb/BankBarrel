@@ -79,7 +79,14 @@
     </h2>
     <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
       <div class="accordion-body">
-
+        <form method="post" th:action="@{/account/{number}/deposit (number = ${account.number})}">
+          <div class="mb-3">
+            <label for="amount" class="form-label">Введите желаемую сумму</label>
+            <input type="number" class="form-control" name="amount" id="amount">
+            <input type="hidden" name="username" th:value="${username}">
+          </div>
+          <button type="submit" class="btn btn-primary">Пополнить</button>
+        </form>
       </div>
     </div>
   </div>

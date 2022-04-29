@@ -42,10 +42,8 @@ public class AccountRemovingController {
     if (!bankAccountAccessAuthorizationService.bankClientHasTheAccountWithNumber(bankClient, accountNumber)) {
       throw new UnathorizedAccessToBankAccount(username + " to " + accountNumber);
     }
-    System.out.println(bankClient.getAccounts().size());
     bankAccountDao.delete(account);
     bankClient.getAccounts().remove(account);
-    System.out.println(bankClient.getAccounts().size());
     return "redirect:/user/" + username;
   }
 }

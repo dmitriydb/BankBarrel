@@ -30,7 +30,7 @@ public class BankAccountDtoConverter {
     String additionalType = enumToListingDtoItemConverter
         .convert(account.getAdditionalType().name()).getValue();
     String currency = account.getCurrency();
-    String number = account.getIdentifier();
+    String number = account.getNumber();
     BankAccountDto dto = new BankAccountDto(number, type, additionalType, currency);
     return dto;
   }

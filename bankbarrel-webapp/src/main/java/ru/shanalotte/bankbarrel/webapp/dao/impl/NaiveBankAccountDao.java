@@ -24,7 +24,7 @@ public class NaiveBankAccountDao implements BankAccountDao {
 
   @Override
   public BankAccount findByNumber(String number) {
-    return bankAccounts.stream().filter(account -> account.getIdentifier().equals(number))
+    return bankAccounts.stream().filter(account -> account.getNumber().equals(number))
         .findFirst().orElse(null);
   }
 
@@ -36,7 +36,7 @@ public class NaiveBankAccountDao implements BankAccountDao {
   @Override
   public BankAccount findByTransferDto(TransferDto dto) throws BankAccountNotFound {
     Optional<BankAccount> foundAccount = bankAccounts.stream()
-          .filter(acc -> acc.getIdentifier().equals(dto.getAccountNumber()))
+          .filter(acc -> acc.getNumber().equals(dto.getAccountNumber()))
           .findFirst();
     return foundAccount.orElseThrow(() -> new BankAccountNotFound(dto.getAccountNumber()));
   }

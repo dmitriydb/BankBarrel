@@ -31,7 +31,7 @@ public class BankAccountAccessAuthorizationService {
    */
   public boolean bankClientHasTheAccountWithNumber(BankClient client, String accountNumber) {
     return client.getAccounts().stream()
-        .anyMatch(account -> account.getIdentifier().equals(accountNumber));
+        .anyMatch(account -> account.getNumber().equals(accountNumber));
   }
 
   /**

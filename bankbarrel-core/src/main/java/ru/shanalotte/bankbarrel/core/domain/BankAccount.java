@@ -11,6 +11,7 @@ import ru.shanalotte.bankbarrel.core.misc.PropertiesLoader;
 public class BankAccount {
   protected final BankClient owner;
   protected final String identifier;
+  protected String number = "";
   protected BankAccountType bankAccountType;
   protected BankAccountAdditionalType additionalType;
   protected String description;
@@ -48,6 +49,14 @@ public class BankAccount {
 
   public void setValue(BigDecimal value) {
     this.value = value;
+  }
+
+  public String getNumber() {
+    return number;
+  }
+
+  public void setNumber(String number) {
+    this.number = number;
   }
 
   @Override

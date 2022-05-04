@@ -32,7 +32,7 @@ public class TransferControllerTest {
   public void shouldPassTransferDtoWhenOpeningAccountPage() throws Exception {
     enrollingHelper.enrollTestUser();
     accountHelper.openThreeAccountsForUser("testuser");
-    String someAccountNumber = webAppUserDao.findByUsername("testuser").getClient().getAccounts().iterator().next().getIdentifier();
+    String someAccountNumber = webAppUserDao.findByUsername("testuser").getClient().getAccounts().iterator().next().getNumber();
     mockMvc.perform(MockMvcRequestBuilders.get("/user/testuser/account/" + someAccountNumber))
         .andExpect(MockMvcResultMatchers.model().attributeExists("transferDto"));
   }

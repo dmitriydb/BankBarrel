@@ -57,7 +57,7 @@ public class AccountDetailsTest {
     BankClient client2 = webAppUserDao.findByUsername("user1216-2").getClient();
     bankAccountCreationService.createAccount(TestDtoFactory.accountOpeningDto(), client1);
     bankAccountCreationService.createAccount(TestDtoFactory.accountOpeningDto(), client2);
-    String unathorizedAccountNumber = client2.getAccounts().iterator().next().getIdentifier();
+    String unathorizedAccountNumber = client2.getAccounts().iterator().next().getNumber();
     mockMvc.perform(MockMvcRequestBuilders.get("/user/user1216-1/account/" + unathorizedAccountNumber))
         .andExpect(MockMvcResultMatchers.status().isForbidden());
   }
@@ -69,7 +69,7 @@ public class AccountDetailsTest {
     AccountOpeningDto dto = TestDtoFactory.accountOpeningDto();
     bankAccountCreationService.createAccount(dto, client);
     String accountNumber = client.getAccounts().iterator()
-        .next().getIdentifier();
+        .next().getNumber();
     BankAccountDetailsDto expectedDto = bankAccountDetailsDtoConverter.convert(client.getAccounts().iterator().next());
     mockMvc.perform(MockMvcRequestBuilders.get("/user/user1220-1/account/" + accountNumber))
         .andExpect(MockMvcResultMatchers.model().attributeExists("account"))
@@ -89,7 +89,7 @@ public class AccountDetailsTest {
     AccountOpeningDto dto = TestDtoFactory.accountOpeningDto();
     bankAccountCreationService.createAccount(dto, client);
     String accountNumber = client.getAccounts().iterator()
-        .next().getIdentifier();
+        .next().getNumber();
     BankAccountDetailsDto expectedDto = bankAccountDetailsDtoConverter.convert(client.getAccounts().iterator().next());
     MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/user/user1248/account/" + accountNumber))
         .andReturn();
@@ -106,7 +106,7 @@ public class AccountDetailsTest {
     dto.setCurrency("KZT");
     bankAccountCreationService.createAccount(dto, client);
     BankAccount account = client.getAccounts().iterator().next();
-    String accountNumber = account.getIdentifier();
+    String accountNumber = account.getNumber();
     MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/user/user1252/account/" + accountNumber))
         .andReturn();
     BankAccountDetailsDto actualDto = (BankAccountDetailsDto) result.getModelAndView().getModel().get("account");

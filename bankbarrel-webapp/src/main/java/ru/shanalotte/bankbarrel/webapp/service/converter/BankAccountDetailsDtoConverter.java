@@ -38,7 +38,7 @@ public class BankAccountDetailsDtoConverter {
         .convert(account.getAdditionalType().name()).getValue();
     String currency = account.getCurrency();
     String currencySign = currencyPresentationConverter.currencyToSign(currency);
-    String number = account.getIdentifier();
+    String number = account.getNumber();
     String description = account.getDescription();
     String balance = account.getValue().setScale(2, RoundingMode.HALF_UP).toString();
     BankAccountDetailsDto dto = new BankAccountDetailsDto();

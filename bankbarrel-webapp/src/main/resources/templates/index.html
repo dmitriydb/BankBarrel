@@ -49,7 +49,6 @@
       <label for="telephone" class="form-label">Your telephone</label>
       <input type="text" class="form-control" id="telephone" th:field="*{telephone}">
       <div id="telephoneHelpError" class="form-text" th:if="${#fields.hasErrors('telephone')}" th:errors="*{telephone}"></div>
-      <div id="telephoneHelp" th:unless="${#fields.hasErrors('telephone')}" class="form-text">Please fill at least one of these: email/telephone.</div>
     </div>
     <button type="submit" class="btn btn-primary">Enroll</button>
   </form>

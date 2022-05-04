@@ -64,13 +64,13 @@ public class AccountRemovingControllerTest {
     accountHelper.openThreeAccountsForUser(username);
     WebAppUser webAppUser = webAppUserDao.findByUsername(username);
     BankClient client = webAppUser.getClient();
-    String accountNumber = client.getAccounts().iterator().next().getIdentifier();
+    String accountNumber = client.getAccounts().iterator().next().getNumber();
     assertThat(client.getAccounts()).hasSize(3);
     mockMvc.perform(MockMvcRequestBuilders.post("/account/" + accountNumber + "/delete")
             .param("username", username));
     assertThat(client.getAccounts()).hasSize(2);
     assertThat(client.getAccounts().stream()
-        .anyMatch(acc -> acc.getIdentifier().equals(accountNumber))).isFalse();
+        .anyMatch(acc -> acc.getNumber().equals(accountNumber))).isFalse();
   }
   
   @Test

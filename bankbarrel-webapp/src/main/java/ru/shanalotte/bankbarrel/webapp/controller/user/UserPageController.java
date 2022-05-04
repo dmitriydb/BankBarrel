@@ -1,5 +1,6 @@
 package ru.shanalotte.bankbarrel.webapp.controller.user;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Controller;
@@ -66,6 +67,7 @@ public class UserPageController {
     WebAppUser webAppUser = webAppUserDao.findByUsername(username);
     List<BankAccountDto> accountDtos = webAppUser.getClient().getAccounts()
         .stream().map(account -> bankAccountDtoConverter.convert(account))
+        .sorted(Comparator.comparing(BankAccountDto::getNumber))
         .collect(Collectors.toList());
     model.addAttribute("accounts", accountDtos);
     return "user-page";

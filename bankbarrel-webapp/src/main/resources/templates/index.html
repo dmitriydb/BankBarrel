@@ -18,6 +18,7 @@
     <div class="mb-3">
       <label for="username" class="form-label">Username</label>
       <input type="text" name="username" class="form-control" id="username">
+      <div id="loginUsernameHelp" class="form-text" th:if="${message}" th:text="#{${message}}"></div>
     </div>
     <button type="submit" class="btn btn-primary">Login</button>
   </form>
@@ -26,8 +27,8 @@
   <form method="post" th:action="@{/enroll}" th:object="${dto}">
     <div class="mb-3">
       <label for="username" class="form-label">Username</label>
-      <input type="text" name="username" class="form-control" id="username">
-      <div th:if = "${message}" id="usernameHelp" class="form-text" th:text="${message}"></div>
+      <input type="text" name="username" class="form-control" id="username" th:field="*{username}">
+      <div id="usernameHelp" class="form-text" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
     </div>
     <div class="mb-3">
       <label for="firstname" class="form-label">Your name</label>

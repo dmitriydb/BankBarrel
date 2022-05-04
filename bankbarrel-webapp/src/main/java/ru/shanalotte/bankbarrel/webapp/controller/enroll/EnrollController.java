@@ -43,12 +43,10 @@ public class EnrollController {
    *
    * @param redirectAttributes нужны для передачи DTO назад в модель
    *                           при редиректе на страницу регистрации.
-   * @param username логин пользователя
    * @param dto дто с информацией о клиенте
    */
   @PostMapping("/enroll")
   public String processEnroll(RedirectAttributes redirectAttributes,
-                              @RequestParam("username") String username,
                               @Valid @ModelAttribute("dto") BankClientInfoDto dto,
                               BindingResult bindingResult) {
     if (StringUtils.isBlank(dto.getEmail()) && StringUtils.isBlank(dto.getTelephone())) {
@@ -59,15 +57,15 @@ public class EnrollController {
     if (bindingResult.hasErrors()) {
       return "index";
     }
-    if (!webAppUserDao.isUserExists(username)) {
+    if (!webAppUserDao.isUserExists(dto.getUsername())) {
       BankClient bankClient = bankClientsEnrollingService.enrollClient(dto);
-      webAppUserDao.addUser(new WebAppUser(username, bankClient));
+      webAppUserDao.addUser(new WebAppUser(dto.getUsername(), bankClient));
     } else {
       redirectAttributes.addFlashAttribute("dto", dto);
       redirectAttributes.addFlashAttribute("message",
-          "Username " + username + " is already exists!");
+          "Username " + dto.getUsername() + " is already exists!");
       return "redirect:/";
     }
-    return "redirect:/user/" + username;
+    return "redirect:/user/" + dto.getUsername();
   }
 }

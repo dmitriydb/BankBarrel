@@ -8,6 +8,8 @@ import javax.validation.constraints.NotEmpty;
 public class BankClientInfoDto {
 
   @NotEmpty
+  private String username;
+  @NotEmpty
   private String firstName;
   @NotEmpty
   private String lastName;
@@ -46,10 +48,19 @@ public class BankClientInfoDto {
     this.email = email;
   }
 
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
   @Override
   public String toString() {
     final StringBuilder sb = new StringBuilder("BankClientInfoDto{");
-    sb.append("firstName='").append(firstName).append('\'');
+    sb.append("username='").append(username).append('\'');
+    sb.append(", firstName='").append(firstName).append('\'');
     sb.append(", lastName='").append(lastName).append('\'');
     sb.append(", telephone='").append(telephone).append('\'');
     sb.append(", email='").append(email).append('\'');

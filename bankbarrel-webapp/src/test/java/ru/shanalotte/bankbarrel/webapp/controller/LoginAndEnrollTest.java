@@ -36,6 +36,17 @@ public class LoginAndEnrollTest {
   @SpyBean
   private BankClientDao bankClientDao;
 
+  @Autowired
+  private EnrollingHelper enrollingHelper;
+
+  @Test
+  public void shouldNotCreateAnotherUserIfUserAlreadyExists() throws Exception {
+    String username = "user114004052022";
+    enrollingHelper.enrollUser(username);
+    enrollingHelper.enrollUser(username);
+    verify(webAppUserDao, times(1)).addUser(any());
+  }
+
   @Test
   public void afterEnrollShouldCreateWebAppUserWithTheSameName() throws Exception {
     mockMvc.perform(post("/enroll")

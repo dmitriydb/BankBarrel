@@ -8,6 +8,7 @@ import ru.shanalotte.bankbarrel.core.domain.BankAccount;
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankAccountDao;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.WebAppUserDao;
+import ru.shanalotte.bankbarrel.webapp.dto.transfer.TransferDto;
 import ru.shanalotte.bankbarrel.webapp.exception.BankAccountNotExists;
 import ru.shanalotte.bankbarrel.webapp.exception.UnathorizedAccessToBankAccount;
 import ru.shanalotte.bankbarrel.webapp.exception.WebAppUserNotFound;
@@ -76,6 +77,7 @@ public class AccountDetailsController {
       model.addAttribute("account", bankAccountDetailsDtoConverter.convert(bankAccount));
       model.addAttribute("currencies",
           accountOpeningCurrenciesListingService.getListingDto().getItems());
+      model.addAttribute("transferDto", new TransferDto());
       return "account";
     } else {
       throw new UnathorizedAccessToBankAccount(username + " to " + accountNumber);

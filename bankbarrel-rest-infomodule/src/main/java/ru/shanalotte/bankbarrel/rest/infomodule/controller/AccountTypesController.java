@@ -2,10 +2,12 @@ package ru.shanalotte.bankbarrel.rest.infomodule.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import ru.shanalotte.bankbarrel.core.domain.BankAccountAdditionalType;
 import ru.shanalotte.bankbarrel.core.domain.BankAccountType;
 import ru.shanalotte.bankbarrel.core.dto.ListingDto;
@@ -29,6 +31,7 @@ public class AccountTypesController {
    */
   @CrossOrigin(origins = "http://localhost:8888")
   @GetMapping("/accounttypes")
+  @Operation(description = "Получить названия типов банковских счетов")
   public List<ListingDtoItem> accountTypes() {
     List<ListingDtoItem> listingDtoItems = new ArrayList<>();
     try {
@@ -38,7 +41,6 @@ public class AccountTypesController {
     } catch (Exception ex) {
       ex.printStackTrace();
     }
-
     return listingDtoItems;
   }
 
@@ -49,7 +51,9 @@ public class AccountTypesController {
    * */
   @CrossOrigin(origins = "http://localhost:8888")
   @GetMapping("/accounttype/{code}/additionaltypes")
-  public List<ListingDtoItem> additionalTypes(@PathVariable("code") String code) {
+  @Operation(description = "Получить названия типов банковских счетов 2 уровня")
+  @ApiResponse(responseCode = "404", description = "Возвращает в случае если тип банковского счета 1 уровня с таким кодом не существует")
+  public ResponseEntity<List<ListingDtoItem>> additionalTypes(@Parameter(description = "Тип счета 1 уровня") @PathVariable("code") String code) {
     List<ListingDtoItem> listingDtoItems = new ArrayList<>();
     try {
       BankAccountType type = BankAccountType.valueOf(code);
@@ -57,9 +61,9 @@ public class AccountTypesController {
         listingDtoItems.add(
             enumToListingDtoItemConverter.convert(bankAccountAdditionalType.name()));
       }
-    } catch (Exception ex) {
-      ex.printStackTrace();
+    } catch (IllegalArgumentException ex) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    return listingDtoItems;
+    return new ResponseEntity<>(listingDtoItems, HttpStatus.OK);
   }
 }

@@ -1,20 +1,26 @@
 package ru.shanalotte.bankbarrel.core.domain;
 
 import java.math.BigDecimal;
+import javax.persistence.*;
 import ru.shanalotte.bankbarrel.core.misc.PropertiesLoader;
 
 /**
  * Class that establishes the rule for currency rate.
  * E.g. 1$ = 20RUB
  */
+@Entity
+@Table(name = "currency_rates")
 public class CurrencyRateRule {
-
-  private final BigDecimal rate;
+  public CurrencyRateRule() {
+  }
+  private BigDecimal rate;
   /**
    * true for currencies that are bigger that USD, false otherwise.
    *
    */
-  private final boolean more;
+  @Column(name = "is_more")
+  private boolean more;
+  @Id
   private String currency;
 
   /**

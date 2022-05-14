@@ -13,6 +13,7 @@
         <module>bankbarrel-webapp</module>
         <module>bankbarrel-rest-infomodule</module>
         <module>bankbarrel-serviceregistry</module>
+        <module>bb-appserver</module>
     </modules>
 
     <properties>

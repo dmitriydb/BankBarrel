@@ -3,18 +3,29 @@ package ru.shanalotte.bankbarrel.core.domain;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
+import javax.persistence.*;
+import org.springframework.context.annotation.ComponentScan;
 import ru.shanalotte.bankbarrel.core.misc.PropertiesLoader;
 
 /**
  * Class represents a single bank account.
  */
+@Entity
+@Table(name = "bank_accounts")
 public class BankAccount {
-  protected final BankClient owner;
-  protected final String identifier;
+
+  @ManyToOne
+  @JoinColumn(name = "owner")
+  protected BankClient owner;
+  @Id
+  protected String identifier;
   protected String number = "";
+  @Column(name = "type")
   protected BankAccountType bankAccountType;
+  @Column(name = "additional_type")
   protected BankAccountAdditionalType additionalType;
   protected String description;
+  @Column(name = "balance")
   protected BigDecimal value = BigDecimal.valueOf(0L);
   protected String currency;
 

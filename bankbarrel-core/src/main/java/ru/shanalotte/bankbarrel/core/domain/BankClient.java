@@ -3,17 +3,35 @@ package ru.shanalotte.bankbarrel.core.domain;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.*;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  * Class that represents a single bank customer.
  */
+@Entity
+@Table(name = "bank_clients")
 public class BankClient {
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "identifier")
+  private Long id;
+  @Column(name = "given_name")
   private String givenName;
+  @Column(name = "family_name")
   private String familyName;
   private String telephone;
   private String email;
+  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private Set<BankAccount> accounts = new HashSet<>();
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
 
   private BankClient(String givenName, String familyName) {
     if (StringUtils.isBlank(givenName)) {

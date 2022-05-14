@@ -127,7 +127,7 @@ public class AccountCreationControllerTest {
       mockMvc.perform(MockMvcRequestBuilders.post("/account/create")
           .param("username", "testuser")
           .param("accountType", BankAccountType.SAVING.name())
-          .param("accountAdditionalType", BankAccountAdditionalType.REWARDS.name())
+          .param("accountAdditionalType", BankAccountAdditionalType.REWARD.name())
           .param("currency", "USD"));
     });
   }
@@ -137,7 +137,7 @@ public class AccountCreationControllerTest {
     mockMvc.perform(MockMvcRequestBuilders.post("/account/create")
         .param("username", "idefinitelydontexist")
         .param("accountType", BankAccountType.SAVING.name())
-        .param("accountAdditionalType", BankAccountAdditionalType.REWARDS.name())
+        .param("accountAdditionalType", BankAccountAdditionalType.REWARD.name())
         .param("currency", "USD"))
         .andExpect(MockMvcResultMatchers.status().isUnauthorized());
   }

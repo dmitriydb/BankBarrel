@@ -15,7 +15,7 @@ public enum BankAccountType {
       BankAccountAdditionalType.TRADITIONAL,
       BankAccountAdditionalType.PREMIUM,
       BankAccountAdditionalType.INTEREST_BEARING,
-      BankAccountAdditionalType.REWARDS,
+      BankAccountAdditionalType.REWARD,
       BankAccountAdditionalType.STUDENT,
       BankAccountAdditionalType.SECOND_CHANCE
   ))),

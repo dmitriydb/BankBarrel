@@ -10,7 +10,7 @@ public enum BankAccountAdditionalType {
   TRADITIONAL,
   PREMIUM,
   INTEREST_BEARING,
-  REWARDS,
+  REWARD,
   STUDENT,
   SECOND_CHANCE,
   SAVINGS_ONLY

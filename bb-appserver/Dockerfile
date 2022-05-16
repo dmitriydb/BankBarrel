@@ -1,5 +1,5 @@
 FROM adoptopenjdk/openjdk8
-ADD target/bankbarrel-appserver-2.6.7.jar /home
+ADD target/bb-appserver-2.6.7.jar /home
 WORKDIR ["/home"]
-CMD ["java", "-jar", "/home/bankbarrel-appserver-2.6.7.jar"]
+CMD ["java", "-jar", "/home/bb-appserver-2.6.7.jar"]
 EXPOSE 8886

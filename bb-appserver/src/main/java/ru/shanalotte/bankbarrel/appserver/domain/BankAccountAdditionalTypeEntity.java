@@ -11,10 +11,9 @@ import ru.shanalotte.bankbarrel.core.domain.BankAccountType;
 public class BankAccountAdditionalTypeEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  @Enumerated(EnumType.STRING)
-  private BankAccountAdditionalType code;
+  private String code;
   private String description;
   @ManyToOne
   @JoinColumn(name = "owner_type")
@@ -28,11 +27,11 @@ public class BankAccountAdditionalTypeEntity {
     this.id = id;
   }
 
-  public BankAccountAdditionalType getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(BankAccountAdditionalType code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
@@ -56,15 +55,14 @@ public class BankAccountAdditionalTypeEntity {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    BankAccountAdditionalTypeEntity that = (BankAccountAdditionalTypeEntity) o;
-    return Objects.equals(id, that.id) && code == that.code;
+    BankAccountAdditionalTypeEntity entity = (BankAccountAdditionalTypeEntity) o;
+    return Objects.equals(code, entity.code);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, code);
+    return Objects.hash(code);
   }
-
 
   @Override
   public String toString() {

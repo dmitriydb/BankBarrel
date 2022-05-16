@@ -6,4 +6,5 @@ import ru.shanalotte.bankbarrel.appserver.domain.Currency;
 
 @Repository
 public interface CurrencyDao extends JpaRepository<Currency, Long> {
+  Currency findByCode(String code);
 }

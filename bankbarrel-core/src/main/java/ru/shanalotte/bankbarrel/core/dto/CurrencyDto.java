@@ -1,17 +1,11 @@
-package ru.shanalotte.bankbarrel.appserver.domain;
+package ru.shanalotte.bankbarrel.core.dto;
 
+import java.util.Currency;
 import java.util.Objects;
-import javax.persistence.*;
-import ru.shanalotte.bankbarrel.core.dto.CurrencyDto;
 
-@Entity
-@Table(name = "currencies")
-public class Currency {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class CurrencyDto {
+
   private Long id;
-
-  @Column(nullable = false, length = 10)
   private String code;
 
   public Long getId() {
@@ -34,18 +28,18 @@ public class Currency {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    Currency currency = (Currency) o;
-    return Objects.equals(code, currency.code);
+    CurrencyDto that = (CurrencyDto) o;
+    return Objects.equals(id, that.id) && Objects.equals(code, that.code);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code);
+    return Objects.hash(id, code);
   }
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder("Currency{");
+    final StringBuilder sb = new StringBuilder("CurrencyDto{");
     sb.append("id=").append(id);
     sb.append(", code='").append(code).append('\'');
     sb.append('}');

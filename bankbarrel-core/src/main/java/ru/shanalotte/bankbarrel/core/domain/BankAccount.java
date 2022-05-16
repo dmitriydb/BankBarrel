@@ -21,9 +21,9 @@ public class BankAccount {
   protected String identifier;
   protected String number = "";
   @Column(name = "type")
-  protected BankAccountType bankAccountType;
+  protected String bankAccountType;
   @Column(name = "additional_type")
-  protected BankAccountAdditionalType additionalType;
+  protected String additionalType;
   protected String description;
   @Column(name = "balance")
   protected BigDecimal value = BigDecimal.valueOf(0L);
@@ -34,6 +34,9 @@ public class BankAccount {
     identifier = UUID.randomUUID().toString();
   }
 
+  public BankAccount() {
+  }
+
   public String getIdentifier() {
     return identifier;
   }
@@ -42,13 +45,6 @@ public class BankAccount {
     return owner;
   }
 
-  public BankAccountType getBankAccountType() {
-    return bankAccountType;
-  }
-
-  public BankAccountAdditionalType getAdditionalType() {
-    return additionalType;
-  }
 
   public String getDescription() {
     return description;
@@ -68,6 +64,38 @@ public class BankAccount {
 
   public void setNumber(String number) {
     this.number = number;
+  }
+
+  public void setOwner(BankClient owner) {
+    this.owner = owner;
+  }
+
+  public void setIdentifier(String identifier) {
+    this.identifier = identifier;
+  }
+
+  public String getBankAccountType() {
+    return bankAccountType;
+  }
+
+  public void setBankAccountType(String bankAccountType) {
+    this.bankAccountType = bankAccountType;
+  }
+
+  public String getAdditionalType() {
+    return additionalType;
+  }
+
+  public void setAdditionalType(String additionalType) {
+    this.additionalType = additionalType;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public void setCurrency(String currency) {
+    this.currency = currency;
   }
 
   @Override
@@ -174,8 +202,8 @@ public class BankAccount {
     public BankAccount build() {
       validateBuildParameters();
       BankAccount account = new BankAccount(owner);
-      account.bankAccountType = bankAccountType;
-      account.additionalType = additionalType;
+      account.bankAccountType = bankAccountType.name();
+      account.additionalType = additionalType.name();
       account.description = bankAccountType + " " + additionalType;
       if (currency == null) {
         account.currency = PropertiesLoader.get("bank.account.defaultCurrency");

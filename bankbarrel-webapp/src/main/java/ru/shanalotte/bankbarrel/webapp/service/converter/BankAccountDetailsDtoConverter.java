@@ -33,9 +33,9 @@ public class BankAccountDetailsDtoConverter {
    */
   public BankAccountDetailsDto convert(BankAccount account) {
     String type = enumToListingDtoItemConverter
-        .convert(account.getBankAccountType().name()).getValue();
+        .convert(account.getBankAccountType()).getValue();
     String additionalType = enumToListingDtoItemConverter
-        .convert(account.getAdditionalType().name()).getValue();
+        .convert(account.getAdditionalType()).getValue();
     String currency = account.getCurrency();
     String currencySign = currencyPresentationConverter.currencyToSign(currency);
     String number = account.getNumber();

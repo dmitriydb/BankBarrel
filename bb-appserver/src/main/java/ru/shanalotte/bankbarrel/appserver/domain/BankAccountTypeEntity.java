@@ -13,12 +13,11 @@ import ru.shanalotte.bankbarrel.core.domain.BankAccountType;
 public class BankAccountTypeEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  @Enumerated(EnumType.STRING)
-  private BankAccountType code;
+  private String code;
   private String description;
-  @OneToMany(mappedBy = "ownerType", fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "ownerType", fetch = FetchType.EAGER, orphanRemoval = true)
   private Set<BankAccountAdditionalTypeEntity> subTypes = new HashSet<>();
 
   public Long getId() {
@@ -29,11 +28,11 @@ public class BankAccountTypeEntity {
     this.id = id;
   }
 
-  public BankAccountType getCode() {
+  public String getCode() {
     return code;
   }
 
-  public void setCode(BankAccountType code) {
+  public void setCode(String code) {
     this.code = code;
   }
 

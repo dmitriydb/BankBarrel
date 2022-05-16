@@ -11,7 +11,7 @@ import ru.shanalotte.bankbarrel.core.domain.BankClient;
 @Table(name = "money_deposit")
 public class MoneyDeposit {
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @ManyToOne

@@ -44,7 +44,7 @@ public class BankAccountCreationTest {
         .withType(BankAccountType.CHECKING)
         .withAdditionalType(BankAccountAdditionalType.INTEREST_BEARING)
         .build();
-    assertThat(bankAccount.getBankAccountType()).isEqualTo(BankAccountType.CHECKING);
+    assertThat(bankAccount.getBankAccountType()).isEqualTo("CHECKING");
   }
 
   @Test
@@ -54,7 +54,7 @@ public class BankAccountCreationTest {
         .withType(BankAccountType.SAVING)
         .withAdditionalType(BankAccountAdditionalType.SAVINGS_ONLY)
         .build();
-    assertThat(bankAccount.getBankAccountType()).isEqualTo(BankAccountType.SAVING);
+    assertThat(bankAccount.getBankAccountType()).isEqualTo("SAVING");
   }
 
   @Test
@@ -66,8 +66,8 @@ public class BankAccountCreationTest {
             .withType(type)
             .withAdditionalType(additionalType)
             .build();
-        assertThat(account.getBankAccountType()).isEqualTo(type);
-        assertThat(account.getAdditionalType()).isEqualTo(additionalType);
+        assertThat(account.getBankAccountType()).isEqualTo(type.name());
+        assertThat(account.getAdditionalType()).isEqualTo(additionalType.name());
       }
     }
   }

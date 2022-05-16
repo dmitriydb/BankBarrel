@@ -7,6 +7,6 @@ docker stop bb-appserver
 docker rm bb-appserver
 docker image rm bb-appserver
 docker build -t "bb-appserver" .
-docker run -i -t --net=bb-network --name bb-appserver -d bb-appserver
+docker run -i -t --net=bb-network --name bb-appserver -d bb-appserver -p 8886:8886
 docker logs -ft bb-appserver
 pause

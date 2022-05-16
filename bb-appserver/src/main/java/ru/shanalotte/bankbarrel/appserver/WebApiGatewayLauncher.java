@@ -10,9 +10,9 @@ import org.springframework.stereotype.Controller;
 
 @SpringBootApplication
 @ComponentScan("ru.shanalotte.bankbarrel.appserver")
+@ComponentScan("ru.shanalotte.bankbarrel.core")
 @EntityScan(value = {"ru.shanalotte.bankbarrel.core.domain", "ru.shanalotte.bankbarrel.appserver"})
 public class WebApiGatewayLauncher {
-
   public static void main(String[] args) {
     SpringApplication.run(WebApiGatewayLauncher.class, args);
   }

@@ -9,7 +9,7 @@ import ru.shanalotte.bankbarrel.core.domain.BankAccount;
 @Table(name = "money_withdraw")
 public class MoneyWithdraw {
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @ManyToOne

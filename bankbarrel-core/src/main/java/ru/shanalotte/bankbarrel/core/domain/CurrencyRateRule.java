@@ -23,6 +23,19 @@ public class CurrencyRateRule {
   @Id
   private String currency;
 
+
+  public void setRate(BigDecimal rate) {
+    this.rate = rate;
+  }
+
+  public void setMore(boolean more) {
+    this.more = more;
+  }
+
+  public void setCurrency(String currency) {
+    this.currency = currency;
+  }
+
   /**
    * Constructor for creating the immutable instance of the CurrencyRateRule class.
    *

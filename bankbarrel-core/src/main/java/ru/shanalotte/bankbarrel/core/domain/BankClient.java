@@ -13,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 @Table(name = "bank_clients")
 public class BankClient {
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "identifier")
   private Long id;
   @Column(name = "given_name")
@@ -22,8 +22,11 @@ public class BankClient {
   private String familyName;
   private String telephone;
   private String email;
-  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "owner")
   private Set<BankAccount> accounts = new HashSet<>();
+
+  public BankClient() {
+  }
 
   public Long getId() {
     return id;
@@ -67,6 +70,22 @@ public class BankClient {
 
   public void addAccount(BankAccount bankAccount) {
     accounts.add(bankAccount);
+  }
+
+  public void setGivenName(String givenName) {
+    this.givenName = givenName;
+  }
+
+  public void setFamilyName(String familyName) {
+    this.familyName = familyName;
+  }
+
+  public void setTelephone(String telephone) {
+    this.telephone = telephone;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
   }
 
   /**

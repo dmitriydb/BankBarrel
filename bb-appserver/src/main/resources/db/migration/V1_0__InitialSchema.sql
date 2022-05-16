@@ -8,7 +8,7 @@ INSERT INTO operation_sources (name) VALUES
 ('curl');
 
 CREATE TABLE bank_accounts (
-  identifier uuid primary key,
+  identifier varchar primary key,
   number varchar(20) unique not null,
   type varchar not null,
   additional_type varchar not null,
@@ -111,7 +111,7 @@ CREATE TABLE account_openings_history (
 
 CREATE TABLE money_deposit (
   id serial primary key,
-  account uuid references bank_accounts(identifier),
+  account varchar references bank_accounts(identifier),
   amount decimal not null,
   deposit_date_time timestamp not null,
   currency integer references currencies(id),
@@ -134,7 +134,7 @@ CREATE TABLE money_deposit_history (
 
 CREATE TABLE money_withdraw (
   id serial primary key,
-  account uuid references bank_accounts(identifier),
+  account varchar references bank_accounts(identifier),
   amount decimal not null,
   withdraw_date_time timestamp not null,
   currency integer references currencies(id),
@@ -157,8 +157,8 @@ CREATE TABLE money_withdraw_history (
 
 CREATE TABLE money_transfer (
   id serial primary key,
-  from_account uuid references bank_accounts(identifier),
-  to_account uuid references bank_accounts(identifier),
+  from_account varchar references bank_accounts(identifier),
+  to_account varchar references bank_accounts(identifier),
   amount decimal not null,
   transfer_date_time timestamp not null,
   currency integer references currencies(id),

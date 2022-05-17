@@ -2,9 +2,9 @@ package ru.shanalotte.bankbarrel.webapp.testutils;
 
 import org.springframework.stereotype.Service;
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
+import ru.shanalotte.bankbarrel.core.dto.BankClientDto;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.WebAppUserDao;
 import ru.shanalotte.bankbarrel.webapp.dto.account.AccountOpeningDto;
-import ru.shanalotte.bankbarrel.webapp.dto.account.BankAccountDto;
 import ru.shanalotte.bankbarrel.webapp.service.BankAccountCreationService;
 import ru.shanalotte.bankbarrel.webapp.user.WebAppUser;
 
@@ -21,7 +21,7 @@ public class AccountHelper {
 
   public void openThreeAccountsForUser(String username) {
     WebAppUser webAppUser = webAppUserDao.findByUsername(username);
-    BankClient bankClient = webAppUser.getClient();
+    BankClientDto bankClient = webAppUser.getClient();
     AccountOpeningDto accountOpeningDto = TestDtoFactory.accountOpeningDto();
     bankAccountCreationService.createAccount(accountOpeningDto, bankClient);
     bankAccountCreationService.createAccount(accountOpeningDto, bankClient);

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.shanalotte.bankbarrel.core.domain.BankAccount;
 import ru.shanalotte.bankbarrel.core.domain.MonetaryAmount;
+import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
 import ru.shanalotte.bankbarrel.core.exception.InsufficientFundsException;
 import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRate;
 import ru.shanalotte.bankbarrel.core.service.BankService;
@@ -34,15 +35,10 @@ public class WithdrawController {
                                RedirectAttributes redirectAttributes
   ) throws WebAppUserNotFound,
       UnathorizedAccessToBankAccount, BankAccountNotExists {
-    BankAccount account = bankAccountAccessAuthorizationService.authorize(username, accountNumber);
+    BankAccountDto account = bankAccountAccessAuthorizationService.authorize(username, accountNumber);
     MonetaryAmount monetaryAmount = new MonetaryAmount(amount, currency);
-    try {
-      bankService.withdraw(account, monetaryAmount);
-    } catch (InsufficientFundsException e) {
-      redirectAttributes.addFlashAttribute("message", "webapp.error.withdraw.notsufficientfunds");
-    } catch (UnknownCurrencyRate unknownCurrencyRate) {
-      redirectAttributes.addFlashAttribute("message", "webapp.error.unknowncurrency");
-    }
+    //  bankService.withdraw(account, monetaryAmount);
+    //TODO
     return "redirect:/user/" + username + "/account/" + accountNumber;
   }
 }

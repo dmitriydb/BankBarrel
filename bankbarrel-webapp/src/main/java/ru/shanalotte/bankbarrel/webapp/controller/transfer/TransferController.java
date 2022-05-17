@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.shanalotte.bankbarrel.core.domain.BankAccount;
 import ru.shanalotte.bankbarrel.core.domain.MonetaryAmount;
+import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
 import ru.shanalotte.bankbarrel.core.exception.InsufficientFundsException;
 import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRate;
 import ru.shanalotte.bankbarrel.core.service.BankService;
@@ -50,17 +51,14 @@ public class TransferController {
       return "redirect:/user/" + username + "/account/" + accountFromNumber;
     }
     try {
-      BankAccount fromAccount = bankAccountAccessAuthorizationService.authorize(username,
+      BankAccountDto fromAccount = bankAccountAccessAuthorizationService.authorize(username,
           accountFromNumber);
-      BankAccount toAccount = bankAccountDao.findByTransferDto(dto);
+      BankAccountDto toAccount = bankAccountDao.findByTransferDto(dto);
       MonetaryAmount monetaryAmount = new MonetaryAmount(dto.getAmount(), dto.getCurrency());
-      bankService.transfer(fromAccount, toAccount, monetaryAmount);
+      //bankService.transfer(fromAccount, toAccount, monetaryAmount);
+      //TODO
       redirectAttributes.addFlashAttribute("successMessage", "webapp.transfer.success");
-    } catch (InsufficientFundsException e) {
-      redirectAttributes.addFlashAttribute("message", "webapp.error.withdraw.notsufficientfunds");
-    } catch (UnknownCurrencyRate unknownCurrencyRate) {
-      redirectAttributes.addFlashAttribute("message", "webapp.error.unknowncurrency");
-    } catch (BankAccountNotFound BankAccountNotFound) {
+    } catch (BankAccountNotFound e) {
       redirectAttributes.addFlashAttribute("message", "webapp.transfer.toaccountnotexists");
     }
     return "redirect:/user/" + username + "/account/" + accountFromNumber;

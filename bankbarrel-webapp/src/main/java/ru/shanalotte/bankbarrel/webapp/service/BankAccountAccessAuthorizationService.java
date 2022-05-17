@@ -3,6 +3,8 @@ package ru.shanalotte.bankbarrel.webapp.service;
 import org.springframework.stereotype.Service;
 import ru.shanalotte.bankbarrel.core.domain.BankAccount;
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
+import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
+import ru.shanalotte.bankbarrel.core.dto.BankClientDto;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankAccountDao;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.WebAppUserDao;
 import ru.shanalotte.bankbarrel.webapp.exception.BankAccountNotExists;
@@ -27,11 +29,12 @@ public class BankAccountAccessAuthorizationService {
   /**
    * Определяет, есть ли у клиента банка счет с заданным номером.
    *
+   * @param client
    * @param accountNumber искомый номер счета
    */
-  public boolean bankClientHasTheAccountWithNumber(BankClient client, String accountNumber) {
-    return client.getAccounts().stream()
-        .anyMatch(account -> account.getNumber().equals(accountNumber));
+  public boolean bankClientHasTheAccountWithNumber(BankClientDto client, String accountNumber) {
+    //TODO
+    return true;
   }
 
   /**
@@ -42,16 +45,16 @@ public class BankAccountAccessAuthorizationService {
    * @param accountNumber номер банковского счета
    * @return
    */
-  public BankAccount authorize(String username, String accountNumber) throws WebAppUserNotFound, BankAccountNotExists, UnathorizedAccessToBankAccount {
+  public BankAccountDto authorize(String username, String accountNumber) throws WebAppUserNotFound, BankAccountNotExists, UnathorizedAccessToBankAccount {
     WebAppUser webAppUser = webAppUserDao.findByUsername(username);
     if (webAppUser == null) {
       throw new WebAppUserNotFound(username);
     }
-    BankAccount bankAccount = bankAccountDao.findByNumber(accountNumber);
+    BankAccountDto bankAccount = bankAccountDao.findByNumber(accountNumber);
     if (bankAccount == null) {
       throw new BankAccountNotExists(accountNumber);
     }
-    BankClient client = webAppUser.getClient();
+    BankClientDto client = webAppUser.getClient();
     if (!bankClientHasTheAccountWithNumber(client, accountNumber)) {
       throw new UnathorizedAccessToBankAccount(client + " " + accountNumber);
     }

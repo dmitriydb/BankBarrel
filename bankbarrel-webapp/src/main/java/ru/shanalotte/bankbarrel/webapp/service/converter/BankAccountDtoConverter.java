@@ -3,12 +3,12 @@ package ru.shanalotte.bankbarrel.webapp.service.converter;
 import org.springframework.stereotype.Service;
 import ru.shanalotte.bankbarrel.core.domain.BankAccount;
 import ru.shanalotte.bankbarrel.core.service.EnumToListingDtoItemConverter;
-import ru.shanalotte.bankbarrel.webapp.dto.account.BankAccountDto;
+import ru.shanalotte.bankbarrel.webapp.dto.account.BankAccountWebAppDto;
 
 /**
  * Класс, который преобразует бизнес-объекты класса BankAccount в соответствующее DTO.
  *
- * @see BankAccountDto
+ * @see BankAccountWebAppDto
  */
 @Service
 public class BankAccountDtoConverter {
@@ -24,14 +24,14 @@ public class BankAccountDtoConverter {
    * В данном методе названия констант перечислений банковских счетов напрямую передаются
    * в сервис enumToListingDtoItemConverter, что в дальнейшем может создать ненужный coupling.
    */
-  public BankAccountDto convert(BankAccount account) {
+  public BankAccountWebAppDto convert(BankAccount account) {
     String type = enumToListingDtoItemConverter
         .convert(account.getBankAccountType()).getValue();
     String additionalType = enumToListingDtoItemConverter
         .convert(account.getAdditionalType()).getValue();
     String currency = account.getCurrency();
     String number = account.getNumber();
-    BankAccountDto dto = new BankAccountDto(number, type, additionalType, currency);
+    BankAccountWebAppDto dto = new BankAccountWebAppDto(number, type, additionalType, currency);
     return dto;
   }
 }

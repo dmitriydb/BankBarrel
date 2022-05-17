@@ -3,7 +3,7 @@ package ru.shanalotte.bankbarrel.webapp.dto.account;
 /**
  * DTO для бизнес-объекта BankAccount.
  */
-public class BankAccountDto {
+public class BankAccountWebAppDto {
   private final String number;
   private final String type;
   private final String additionalType;
@@ -12,7 +12,7 @@ public class BankAccountDto {
   /**
    * Конструктор.
    */
-  public BankAccountDto(String number, String type, String additionalType, String currency) {
+  public BankAccountWebAppDto(String number, String type, String additionalType, String currency) {
     this.number = number;
     this.type = type;
     this.additionalType = additionalType;

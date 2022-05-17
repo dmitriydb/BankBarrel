@@ -1,6 +1,7 @@
 package ru.shanalotte.bankbarrel.webapp.dto.profile;
 
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
+import ru.shanalotte.bankbarrel.core.dto.BankClientDto;
 
 /**
  * DTO для отображения профиля о пользователе веб-приложения.
@@ -15,7 +16,7 @@ public class ClientProfileDto {
   /**
    * Создает DTO из объекта BankClient.
    */
-  public static ClientProfileDto of(BankClient client) {
+  public static ClientProfileDto of(BankClientDto client) {
     ClientProfileDto dto = new ClientProfileDto();
     dto.email = client.getEmail();
     dto.firstName = client.getGivenName();

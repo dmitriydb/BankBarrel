@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
+import ru.shanalotte.bankbarrel.core.dto.BankClientDto;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.WebAppUserDao;
 import ru.shanalotte.bankbarrel.webapp.dto.bankclient.BankClientInfoDto;
 import ru.shanalotte.bankbarrel.webapp.service.BankClientsEnrollingService;
@@ -58,7 +59,7 @@ public class EnrollController {
       return "index";
     }
     if (!webAppUserDao.isUserExists(dto.getUsername())) {
-      BankClient bankClient = bankClientsEnrollingService.enrollClient(dto);
+      BankClientDto bankClient = bankClientsEnrollingService.enrollClient(dto);
       webAppUserDao.addUser(new WebAppUser(dto.getUsername(), bankClient));
     } else {
       redirectAttributes.addFlashAttribute("dto", dto);

@@ -1,6 +1,6 @@
 package ru.shanalotte.bankbarrel.webapp.dao.interfaces;
 
-import ru.shanalotte.bankbarrel.core.domain.BankAccount;
+import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
 import ru.shanalotte.bankbarrel.webapp.dto.transfer.TransferDto;
 import ru.shanalotte.bankbarrel.webapp.exception.BankAccountNotFound;
 
@@ -9,11 +9,11 @@ import ru.shanalotte.bankbarrel.webapp.exception.BankAccountNotFound;
  */
 public interface BankAccountDao {
 
-  void save(BankAccount account);
+  void save(BankAccountDto account);
 
-  BankAccount findByNumber(String number);
+  BankAccountDto findByNumber(String number);
 
-  void delete(BankAccount account);
+  void delete(BankAccountDto account);
 
-  BankAccount findByTransferDto(TransferDto dto) throws BankAccountNotFound;
+  BankAccountDto findByTransferDto(TransferDto dto) throws BankAccountNotFound;
 }

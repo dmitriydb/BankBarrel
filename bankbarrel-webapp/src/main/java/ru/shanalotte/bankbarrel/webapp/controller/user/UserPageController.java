@@ -1,15 +1,17 @@
 package ru.shanalotte.bankbarrel.webapp.controller.user;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.WebAppUserDao;
 import ru.shanalotte.bankbarrel.webapp.dto.account.AccountOpeningDto;
-import ru.shanalotte.bankbarrel.webapp.dto.account.BankAccountDto;
+import ru.shanalotte.bankbarrel.webapp.dto.account.BankAccountWebAppDto;
 import ru.shanalotte.bankbarrel.webapp.exception.WebAppUserNotFound;
 import ru.shanalotte.bankbarrel.webapp.service.converter.BankAccountDtoConverter;
 import ru.shanalotte.bankbarrel.webapp.service.listing.AccountAdditionalTypesListingService;
@@ -22,6 +24,10 @@ import ru.shanalotte.bankbarrel.webapp.user.WebAppUser;
  */
 @Controller
 public class UserPageController {
+
+
+  @Value("${server.port}")
+  private String serverPort;
 
   private WebAppUserDao webAppUserDao;
   private AccountTypeListingService accountTypeListingService;
@@ -57,6 +63,7 @@ public class UserPageController {
     if (!webAppUserDao.isUserExists(username)) {
       throw new WebAppUserNotFound(username);
     }
+    model.addAttribute("serverPort", serverPort);
     model.addAttribute("username", username);
     model.addAttribute("accountOpeningDto", new AccountOpeningDto());
     model.addAttribute("accountTypesDto", accountTypeListingService.getListingDto());
@@ -65,10 +72,8 @@ public class UserPageController {
     model.addAttribute("accountOpeningCurrenciesDto",
         accountOpeningCurrenciesListingService.getListingDto());
     WebAppUser webAppUser = webAppUserDao.findByUsername(username);
-    List<BankAccountDto> accountDtos = webAppUser.getClient().getAccounts()
-        .stream().map(account -> bankAccountDtoConverter.convert(account))
-        .sorted(Comparator.comparing(BankAccountDto::getNumber))
-        .collect(Collectors.toList());
+    List<BankAccountWebAppDto> accountDtos = new ArrayList<>();
+    //TODO
     model.addAttribute("accounts", accountDtos);
     return "user-page";
   }

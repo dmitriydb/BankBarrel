@@ -41,7 +41,7 @@ public class ServiceRegistryController {
     if (info == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    return new ResponseEntity<RegisteredServiceInfo>(info, HttpStatus.OK);
+    return new ResponseEntity<>(info, HttpStatus.OK);
   }
 
   @Operation(description = "Create microservice information")

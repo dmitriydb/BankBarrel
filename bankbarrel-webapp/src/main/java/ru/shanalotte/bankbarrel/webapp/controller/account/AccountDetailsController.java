@@ -4,8 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import ru.shanalotte.bankbarrel.core.domain.BankAccount;
-import ru.shanalotte.bankbarrel.core.domain.BankClient;
+import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
+import ru.shanalotte.bankbarrel.core.dto.BankClientDto;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankAccountDao;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.WebAppUserDao;
 import ru.shanalotte.bankbarrel.webapp.dto.transfer.TransferDto;
@@ -68,12 +68,12 @@ public class AccountDetailsController {
       throw new BankAccountNotExists(username + " to " + accountNumber);
     }
 
-    BankClient bankClient = webAppUserDao.findByUsername(username).getClient();
+    BankClientDto bankClient = webAppUserDao.findByUsername(username).getClient();
     boolean isAuthorized = bankAccountAccessAuthorizationService
         .bankClientHasTheAccountWithNumber(bankClient, accountNumber);
 
     if (isAuthorized) {
-      BankAccount bankAccount = bankAccountDao.findByNumber(accountNumber);
+      BankAccountDto bankAccount = bankAccountDao.findByNumber(accountNumber);
       model.addAttribute("account", bankAccountDetailsDtoConverter.convert(bankAccount));
       model.addAttribute("currencies",
           accountOpeningCurrenciesListingService.getListingDto().getItems());

@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
+import ru.shanalotte.bankbarrel.core.dto.BankClientDto;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankClientDao;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.WebAppUserDao;
 import ru.shanalotte.bankbarrel.webapp.dto.profile.ClientProfileDto;
@@ -37,7 +38,7 @@ public class ProfileController {
       throw new WebAppUserNotFound(username);
     }
     WebAppUser webAppUser = webAppUserDao.findByUsername(username);
-    BankClient bankClient = webAppUser.getClient();
+    BankClientDto bankClient = webAppUser.getClient();
     ClientProfileDto dto = ClientProfileDto.of(bankClient);
     dto.setUsername(username);
     model.addAttribute("username", username);

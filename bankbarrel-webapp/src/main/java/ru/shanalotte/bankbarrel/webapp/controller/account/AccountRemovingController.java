@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.shanalotte.bankbarrel.core.domain.BankAccount;
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
+import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
+import ru.shanalotte.bankbarrel.core.dto.BankClientDto;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankAccountDao;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.WebAppUserDao;
 import ru.shanalotte.bankbarrel.webapp.exception.BankAccountNotExists;
@@ -34,8 +36,8 @@ public class AccountRemovingController {
       throw new WebAppUserNotFound(username);
     }
     WebAppUser webAppUser = webAppUserDao.findByUsername(username);
-    BankClient bankClient = webAppUser.getClient();
-    BankAccount account = bankAccountDao.findByNumber(accountNumber);
+    BankClientDto bankClient = webAppUser.getClient();
+    BankAccountDto account = bankAccountDao.findByNumber(accountNumber);
     if (account == null) {
       throw new BankAccountNotExists(accountNumber);
     }
@@ -43,7 +45,6 @@ public class AccountRemovingController {
       throw new UnathorizedAccessToBankAccount(username + " to " + accountNumber);
     }
     bankAccountDao.delete(account);
-    bankClient.getAccounts().remove(account);
     return "redirect:/user/" + username;
   }
 }

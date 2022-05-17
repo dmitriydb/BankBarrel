@@ -7,8 +7,11 @@ import java.util.Objects;
  * Содержит код значения и самое значение в виде строки.
  */
 public class ListingDtoItem {
-  private final String code;
-  private final String value;
+  private String code;
+  private String value;
+
+  public ListingDtoItem() {
+  }
 
   public ListingDtoItem(String code, String value) {
     this.code = code;

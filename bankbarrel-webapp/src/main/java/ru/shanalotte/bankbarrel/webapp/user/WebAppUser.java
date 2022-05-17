@@ -1,6 +1,7 @@
 package ru.shanalotte.bankbarrel.webapp.user;
 
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
+import ru.shanalotte.bankbarrel.core.dto.BankClientDto;
 
 /**
  * Web app user.
@@ -8,9 +9,9 @@ import ru.shanalotte.bankbarrel.core.domain.BankClient;
  */
 public class WebAppUser {
   private final String username;
-  private final BankClient bankClient;
+  private final BankClientDto bankClient;
 
-  public WebAppUser(String username, BankClient bankClient) {
+  public WebAppUser(String username, BankClientDto bankClient) {
     this.username = username;
     this.bankClient = bankClient;
   }
@@ -19,7 +20,7 @@ public class WebAppUser {
     return username;
   }
 
-  public BankClient getClient() {
+  public BankClientDto getClient() {
     return bankClient;
   }
 }

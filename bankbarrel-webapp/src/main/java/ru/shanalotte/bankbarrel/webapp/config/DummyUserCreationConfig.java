@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
+import ru.shanalotte.bankbarrel.core.dto.BankClientDto;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.WebAppUserDao;
 import ru.shanalotte.bankbarrel.webapp.dto.account.AccountOpeningDto;
 import ru.shanalotte.bankbarrel.webapp.dto.bankclient.BankClientInfoDto;
@@ -43,7 +44,7 @@ public class DummyUserCreationConfig {
     dto.setFirstName("Admin");
     dto.setLastName("Admin");
     dto.setTelephone("+7 333 333 33 33");
-    BankClient bankClient = bankClientsEnrollingService.enrollClient(dto);
+    BankClientDto bankClient = bankClientsEnrollingService.enrollClient(dto);
     webAppUserDao.addUser(new WebAppUser("admin", bankClient));
     AccountOpeningDto accountOpeningDto = new AccountOpeningDto();
     accountOpeningDto.setCurrency("USD");

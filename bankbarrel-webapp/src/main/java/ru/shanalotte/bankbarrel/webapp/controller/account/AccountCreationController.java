@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
+import ru.shanalotte.bankbarrel.core.dto.BankClientDto;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.WebAppUserDao;
 import ru.shanalotte.bankbarrel.webapp.dto.account.AccountOpeningDto;
 import ru.shanalotte.bankbarrel.webapp.exception.WebAppUserNotFound;
@@ -42,7 +43,7 @@ public class AccountCreationController {
     if (webAppUser == null) {
       throw new WebAppUserNotFound(username);
     }
-    BankClient bankClient = webAppUser.getClient();
+    BankClientDto bankClient = webAppUser.getClient();
     bankAccountCreationService.createAccount(dto, bankClient);
 
     return "redirect:/user/" + username;

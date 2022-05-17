@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
+import ru.shanalotte.bankbarrel.core.dto.BankClientDto;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankClientDao;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.WebAppUserDao;
 import ru.shanalotte.bankbarrel.webapp.user.WebAppUser;
@@ -115,7 +116,7 @@ public class LoginAndEnrollTest {
         .param("email", "a@xcyz")
     );
     WebAppUser webAppUser = webAppUserDao.findByUsername("FullPledgeClient2");
-    BankClient bankClient = bankClientDao.findByGivenName("FullPledgeClient2name");
+    BankClientDto bankClient = bankClientDao.findByGivenName("FullPledgeClient2name");
     assertThat(webAppUser.getClient() == bankClient);
   }
 

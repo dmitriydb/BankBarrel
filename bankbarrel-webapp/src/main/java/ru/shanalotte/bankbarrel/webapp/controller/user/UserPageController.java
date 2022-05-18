@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankClientDao;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.WebAppUserDao;
 import ru.shanalotte.bankbarrel.webapp.dto.account.AccountOpeningDto;
 import ru.shanalotte.bankbarrel.webapp.dto.account.BankAccountWebAppDto;
@@ -30,6 +31,7 @@ public class UserPageController {
   private String serverPort;
 
   private WebAppUserDao webAppUserDao;
+  private BankClientDao bankClientDao;
   private AccountTypeListingService accountTypeListingService;
   private AccountAdditionalTypesListingService accountAdditionalTypesListingService;
   private AccountOpeningCurrenciesListingService accountOpeningCurrenciesListingService;
@@ -38,14 +40,11 @@ public class UserPageController {
   /**
    * Конструктор со всеми зависимостями.
    */
-  public UserPageController(WebAppUserDao webAppUserDao,
-                            AccountTypeListingService accountTypeListingService,
-                            AccountAdditionalTypesListingService
-                                accountAdditionalTypesListingService,
-                            AccountOpeningCurrenciesListingService
-                                accountOpeningCurrenciesListingService,
-                            BankAccountDtoConverter bankAccountDtoConverter) {
+  public UserPageController(
+      WebAppUserDao webAppUserDao, BankClientDao bankClientDao, AccountTypeListingService accountTypeListingService, AccountAdditionalTypesListingService accountAdditionalTypesListingService, AccountOpeningCurrenciesListingService accountOpeningCurrenciesListingService, BankAccountDtoConverter bankAccountDtoConverter) {
+    this.serverPort = serverPort;
     this.webAppUserDao = webAppUserDao;
+    this.bankClientDao = bankClientDao;
     this.accountTypeListingService = accountTypeListingService;
     this.accountAdditionalTypesListingService = accountAdditionalTypesListingService;
     this.accountOpeningCurrenciesListingService = accountOpeningCurrenciesListingService;
@@ -72,9 +71,9 @@ public class UserPageController {
     model.addAttribute("accountOpeningCurrenciesDto",
         accountOpeningCurrenciesListingService.getListingDto());
     WebAppUser webAppUser = webAppUserDao.findByUsername(username);
-    List<BankAccountWebAppDto> accountDtos = new ArrayList<>();
-    //TODO
-    model.addAttribute("accounts", accountDtos);
+    List<BankAccountWebAppDto> accountDtos = bankClientDao.accounts(webAppUser.getClient())
+            .stream().map(dto -> bankAccountDtoConverter.convert(dto)).collect(Collectors.toList());
+        model.addAttribute("accounts", accountDtos);
     return "user-page";
   }
 }

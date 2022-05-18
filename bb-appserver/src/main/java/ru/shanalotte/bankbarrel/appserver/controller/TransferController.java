@@ -54,6 +54,7 @@ public class TransferController {
 
   @PostMapping(value = "/transfer", consumes = "application/json", produces = "application/json")
   public ResponseEntity<TransferDto> createTransfer(@RequestBody TransferDto dto) {
+    System.out.println(dto);
     if (!bankAccountDao.findById(dto.getFromAccount()).isPresent()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -61,6 +62,7 @@ public class TransferController {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     if (currencyDao.findByCode(dto.getCurrency()) == null) {
+      System.out.println("Null currency");
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
     if (dto.getTimestamp() == null) {
@@ -86,8 +88,10 @@ public class TransferController {
       dto.setId(moneyTransfer.getId());
       return new ResponseEntity<>(dto, HttpStatus.OK);
     } catch (UnknownCurrencyRate unknownCurrencyRate) {
+      System.out.println("Unknown currency");
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     } catch (InsufficientFundsException e) {
+      System.out.println("Not enough money");
       moneyTransfer.setResult("REJECTED: NOT ENOUGH FUNDS");
       transferDao.save(moneyTransfer);
       dto.setResult("REJECTED: NOT ENOUGH FUNDS");

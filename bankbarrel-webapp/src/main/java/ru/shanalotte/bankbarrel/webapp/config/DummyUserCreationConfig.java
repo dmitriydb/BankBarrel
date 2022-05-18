@@ -37,7 +37,7 @@ public class DummyUserCreationConfig {
   /**
    * Создает пользователя веб-приложения и привязывает к нему банковского клиента.
    */
-  @Scheduled(initialDelay = 500, fixedDelay = Integer.MAX_VALUE)
+  @Scheduled(initialDelay = 2000, fixedDelay = Integer.MAX_VALUE)
   public void createDummyUserAndFakeAccounts() {
     BankClientInfoDto dto = new BankClientInfoDto();
     dto.setEmail("admin@admin.ru");

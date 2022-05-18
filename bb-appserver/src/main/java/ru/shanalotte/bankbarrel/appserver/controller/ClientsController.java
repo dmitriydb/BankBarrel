@@ -1,5 +1,7 @@
 package ru.shanalotte.bankbarrel.appserver.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +27,22 @@ public class ClientsController {
     bankClientDao.save(client);
     dto.setId(client.getId());
     return new ResponseEntity<>(dto, HttpStatus.CREATED);
+  }
+
+  @GetMapping("/clients")
+  public ResponseEntity<List<BankClientDto>> getClientList() {
+    List<BankClientDto> result = bankClientDao.findAll()
+        .stream()
+        .map(e -> {
+          BankClientDto dto = new BankClientDto();
+          dto.setEmail(e.getEmail());
+          dto.setTelephone(e.getTelephone());
+          dto.setFamilyName(e.getFamilyName());
+          dto.setGivenName(e.getGivenName());
+          dto.setId(e.getId());
+          return dto;
+        }).collect(Collectors.toList());
+    return new ResponseEntity<>(result, HttpStatus.OK);
   }
 
   @GetMapping("/clients/{id}")

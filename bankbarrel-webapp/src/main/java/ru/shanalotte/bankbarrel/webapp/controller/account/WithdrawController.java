@@ -15,14 +15,15 @@ import ru.shanalotte.bankbarrel.webapp.exception.BankAccountNotExists;
 import ru.shanalotte.bankbarrel.webapp.exception.UnathorizedAccessToBankAccount;
 import ru.shanalotte.bankbarrel.webapp.exception.WebAppUserNotFound;
 import ru.shanalotte.bankbarrel.webapp.service.BankAccountAccessAuthorizationService;
+import ru.shanalotte.bankbarrel.webapp.service.WebAppBankService;
 
 @Controller
 public class WithdrawController {
 
   private BankAccountAccessAuthorizationService bankAccountAccessAuthorizationService;
-  private BankService bankService;
+  private WebAppBankService bankService;
 
-  public WithdrawController(BankAccountAccessAuthorizationService bankAccountAccessAuthorizationService, BankService bankService) {
+  public WithdrawController(BankAccountAccessAuthorizationService bankAccountAccessAuthorizationService, WebAppBankService bankService) {
     this.bankAccountAccessAuthorizationService = bankAccountAccessAuthorizationService;
     this.bankService = bankService;
   }
@@ -37,8 +38,14 @@ public class WithdrawController {
       UnathorizedAccessToBankAccount, BankAccountNotExists {
     BankAccountDto account = bankAccountAccessAuthorizationService.authorize(username, accountNumber);
     MonetaryAmount monetaryAmount = new MonetaryAmount(amount, currency);
-    //  bankService.withdraw(account, monetaryAmount);
-    //TODO
+    try {
+      bankService.withdraw(account, monetaryAmount);
+    } catch (InsufficientFundsException e) {
+      redirectAttributes.addFlashAttribute("message", "webapp.error.withdraw.notsufficientfunds");
+    } catch (UnknownCurrencyRate e) {
+      redirectAttributes.addFlashAttribute("message", "webapp.error.unknowncurrency");
+    }
+
     return "redirect:/user/" + username + "/account/" + accountNumber;
   }
 }

@@ -40,39 +40,9 @@ public class LoginAndEnrollTest {
   @Autowired
   private EnrollingHelper enrollingHelper;
 
-  @Test
-  public void shouldNotCreateAnotherUserIfUserAlreadyExists() throws Exception {
-    String username = "user114004052022";
-    enrollingHelper.enrollUser(username);
-    enrollingHelper.enrollUser(username);
-    verify(webAppUserDao, times(1)).addUser(any());
-  }
 
-  @Test
-  public void afterEnrollShouldCreateWebAppUserWithTheSameName() throws Exception {
-    mockMvc.perform(post("/enroll")
-        .param("username", "OZSM")
-        .param("firstName", "OZSM")
-        .param("lastName", "OZSM")
-        .param("email", "a@OZSM"));
-    WebAppUser webAppUser = webAppUserDao.findByUsername("OZSM");
-    assertThat(webAppUser).isNotNull();
-  }
 
-  @Test
-  public void afterLoginWithExistingUsernameShouldNotCreateAnotherOneWebAppUser() throws Exception {
-    mockMvc.perform(post("/enroll")
-        .param("username", "NotExisting")
-        .param("firstName", "NotExisting")
-        .param("lastName", "NotExisting")
-        .param("email", "a@NotExisting"));
-    mockMvc.perform(post("/enroll")
-        .param("username", "NotExisting")
-        .param("firstName", "NotExisting")
-        .param("lastName", "NotExisting")
-        .param("email", "a@NotExisting"));
-    verify(webAppUserDao, times(1)).addUser(any());
-  }
+
 
   @Test
   public void shouldShowErrorWhenTryingToSeeUserPageWithNotExistingUSer() throws Exception {
@@ -81,18 +51,7 @@ public class LoginAndEnrollTest {
         .andReturn();
   }
 
-  @Test
-  public void shouldGrantAccessToAlreadyExistingUser() throws Exception {
-    mockMvc.perform(post("/enroll")
-        .param("username", "iamhere")
-        .param("firstName", "iamhere")
-        .param("lastName", "iamhere")
-        .param("email", "a@iamhere")
-    );
 
-    mockMvc.perform(get("/user/iamhere"))
-        .andExpect(status().isOk());
-  }
 
   @Test
   public void shouldCreateNewBankClientAfterNewLogin() throws Exception {
@@ -107,34 +66,9 @@ public class LoginAndEnrollTest {
     assertThat(clientsQtyAfter - clientsQtyBefore).isEqualTo(1);
   }
 
-  @Test
-  public void shouldLinkBankClientToNewWebAppUser() throws Exception {
-    mockMvc.perform(post("/enroll")
-        .param("username", "FullPledgeClient2")
-        .param("firstName", "FullPledgeClient2name")
-        .param("lastName", "a")
-        .param("email", "a@xcyz")
-    );
-    WebAppUser webAppUser = webAppUserDao.findByUsername("FullPledgeClient2");
-    BankClientDto bankClient = bankClientDao.findByGivenName("FullPledgeClient2name");
-    assertThat(webAppUser.getClient() == bankClient);
-  }
 
-  @Test
-  public void canLoginAfterEnroll() throws Exception {
-    mockMvc.perform(post("/enroll")
-        .param("username", "FullPledgeClient3")
-        .param("firstName", "FullPledgeClient3name")
-        .param("lastName", "a")
-        .param("email", "a@xcyz")
-    );
 
-    mockMvc.perform(post("/login")
-            .param("username", "FullPledgeClient3"))
-        .andExpect(status().is3xxRedirection())
-        .andExpect(MockMvcResultMatchers.redirectedUrl("/user/FullPledgeClient3"));
 
-  }
 
   @Test
   public void cantLoginBeforeEnroll() throws Exception {
@@ -143,18 +77,7 @@ public class LoginAndEnrollTest {
         .andExpect(status().isUnauthorized());
   }
 
-  @Test
-  public void shouldLoadBankClientAfterEnrollAndLogin() throws Exception {
-    mockMvc.perform(post("/enroll")
-        .param("username", "FullPledgeClient4")
-        .param("firstName", "FullPledgeClient4name")
-        .param("lastName", "a")
-        .param("email", "a@xcyz")
-    );
 
-    WebAppUser webAppUser = webAppUserDao.findByUsername("FullPledgeClient4");
-    assertThat(webAppUser.getClient().getGivenName()).isEqualTo("FullPledgeClient4name");
-  }
 
   @Test
   public void shouldNotCreateWebAppUserAndBankClientWhenEnrollingWithExistingUsername() throws Exception {

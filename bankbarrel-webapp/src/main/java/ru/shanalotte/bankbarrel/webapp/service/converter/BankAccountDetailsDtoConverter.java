@@ -1,5 +1,6 @@
 package ru.shanalotte.bankbarrel.webapp.service.converter;
 
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import org.springframework.stereotype.Service;
 import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
@@ -40,9 +41,8 @@ public class BankAccountDetailsDtoConverter {
     String currencySign = currencyPresentationConverter.currencyToSign(currency);
     String number = account.getNumber();
     String description = account.getDescription();
-    String balance = "0.00";
     BankAccountDetailsDto dto = new BankAccountDetailsDto();
-    dto.setBalance(balance);
+    dto.setBalance(new BigDecimal(account.getBalance()).setScale(2, RoundingMode.HALF_UP).toString());
     dto.setAdditionalType(additionalType);
     dto.setCurrency(currency);
     dto.setDescription(description);

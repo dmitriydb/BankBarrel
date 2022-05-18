@@ -2,7 +2,9 @@ package ru.shanalotte.bankbarrel.appserver.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +41,7 @@ public class AccountController {
     BankAccountDto dto = new BankAccountDto();
     dto.setIdentifier(account.getIdentifier());
     dto.setNumber(account.getNumber());
+    dto.setBalance(account.getValue().toString());
     dto.setType(account.getBankAccountType());
     dto.setAdditionalType(account.getAdditionalType());
     dto.setOwner(account.getOwner().getId());
@@ -47,16 +50,34 @@ public class AccountController {
     return new ResponseEntity<>(dto, HttpStatus.OK);
   }
 
-  @DeleteMapping("/accounts")
-  public ResponseEntity<?> deleteAccount(@RequestBody BankAccountDto dto) {
-    BankAccount account = bankAccountDao.findByNumber(dto.getNumber());
-    if (account == null) {
+  @GetMapping("/accounts")
+  public ResponseEntity<List<BankAccountDto>> getAllAccounts() {
+    List<BankAccountDto> result = bankAccountDao.findAll()
+        .stream().map(account -> {
+          BankAccountDto dto = new BankAccountDto();
+          dto.setIdentifier(account.getIdentifier());
+          dto.setNumber(account.getNumber());
+          dto.setBalance(account.getValue().toString());
+          dto.setType(account.getBankAccountType());
+          dto.setAdditionalType(account.getAdditionalType());
+          dto.setOwner(account.getOwner().getId());
+          dto.setDescription(account.getDescription());
+          dto.setCurrency(account.getCurrency());
+          return dto;
+        }).collect(Collectors.toList());
+    return new ResponseEntity<>(result, HttpStatus.OK);
+  }
+
+  @DeleteMapping("/accounts/{id}")
+  public ResponseEntity<?> deleteAccount(@PathVariable("id") String id) {
+    Optional<BankAccount> account = bankAccountDao.findById(id);
+    if (!account.isPresent()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    BankClient client = bankClientDao.getById(account.getOwner().getId());
-    client.getAccounts().remove(account);
+    BankClient client = bankClientDao.getById(account.get().getOwner().getId());
+    client.getAccounts().remove(account.get());
     bankClientDao.save(client);
-    bankAccountDao.delete(account);
+    bankAccountDao.delete(account.get());
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
@@ -71,6 +92,7 @@ public class AccountController {
       BankAccountDto dto = new BankAccountDto();
       dto.setIdentifier(account.getIdentifier());
       dto.setCurrency(account.getCurrency());
+      dto.setBalance(account.getValue().toString());
       dto.setDescription(account.getDescription());
       dto.setOwner(account.getOwner().getId());
       dto.setType(account.getBankAccountType());

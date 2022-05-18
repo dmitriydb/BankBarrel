@@ -11,18 +11,21 @@ import ru.shanalotte.bankbarrel.core.domain.MonetaryAmount;
 import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
 import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRate;
 import ru.shanalotte.bankbarrel.core.service.BankService;
+import ru.shanalotte.bankbarrel.core.service.IBankService;
 import ru.shanalotte.bankbarrel.webapp.exception.BankAccountNotExists;
+import ru.shanalotte.bankbarrel.webapp.exception.BankAccountNotFound;
 import ru.shanalotte.bankbarrel.webapp.exception.UnathorizedAccessToBankAccount;
 import ru.shanalotte.bankbarrel.webapp.exception.WebAppUserNotFound;
 import ru.shanalotte.bankbarrel.webapp.service.BankAccountAccessAuthorizationService;
+import ru.shanalotte.bankbarrel.webapp.service.WebAppBankService;
 
 @Controller
 public class DepositController {
 
   private BankAccountAccessAuthorizationService bankAccountAccessAuthorizationService;
-  private BankService bankService;
+  private WebAppBankService bankService;
 
-  public DepositController(BankAccountAccessAuthorizationService bankAccountAccessAuthorizationService, BankService bankService) {
+  public DepositController(BankAccountAccessAuthorizationService bankAccountAccessAuthorizationService, WebAppBankService bankService) {
     this.bankAccountAccessAuthorizationService = bankAccountAccessAuthorizationService;
     this.bankService = bankService;
   }
@@ -36,8 +39,7 @@ public class DepositController {
       UnathorizedAccessToBankAccount, BankAccountNotExists, UnknownCurrencyRate {
     BankAccountDto account = bankAccountAccessAuthorizationService.authorize(username, accountNumber);
     MonetaryAmount monetaryAmount = new MonetaryAmount(amount, currency);
-    //bankService.deposit(account, monetaryAmount);
-    //TODO
+    bankService.deposit(account, monetaryAmount);
     return "redirect:/user/" + username + "/account/" + accountNumber;
   }
 }

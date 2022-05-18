@@ -9,6 +9,7 @@ public class BankAccountDto {
   private String additionalType;
   private String description;
   private String currency;
+  private String balance;
 
   public Long getOwner() {
     return owner;
@@ -64,6 +65,14 @@ public class BankAccountDto {
 
   public void setCurrency(String currency) {
     this.currency = currency;
+  }
+
+  public String getBalance() {
+    return balance;
+  }
+
+  public void setBalance(String balance) {
+    this.balance = balance;
   }
 
   @Override

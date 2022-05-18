@@ -23,7 +23,7 @@ public class ServiceRegistryProxy {
   @Value("${service.registry.url}")
   private String serviceRegistryUrl;
 
-  @Scheduled(initialDelay = 1000, fixedDelay = Integer.MAX_VALUE)
+  @Scheduled(initialDelay = 100, fixedDelay = Integer.MAX_VALUE)
   private void loadServicesInfo() {
     RestTemplate restTemplate = new RestTemplate();
     for (String serviceName : serviceDependencies) {
@@ -35,6 +35,10 @@ public class ServiceRegistryProxy {
 
   public RegisteredServiceInfo getRestInfoModuleInfo() {
     return registeredServices.get("bb-rest-infomodule");
+  }
+
+  public RegisteredServiceInfo getWebApiInfo() {
+    return registeredServices.get("bb-gateway-webapi");
   }
 
 }

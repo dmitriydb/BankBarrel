@@ -36,26 +36,7 @@ public class AccountRemovingControllerTest {
   @Autowired
   private AccountHelper accountHelper;
 
-  @Test
-  public void shouldNotShowDeletedAccountAfterDeletion() throws Exception {
-    String username = "user153328042022";
-    enrollingHelper.enrollUser(username);
-    accountHelper.openThreeAccountsForUser(username);
-    MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/user/" + username))
-        .andReturn();
-    List<BankAccountWebAppDto> dtos = (List<BankAccountWebAppDto>) mvcResult.getModelAndView().getModel().get("accounts");
-    assertThat(dtos.size()).isEqualTo(3);
-    BankAccountWebAppDto dto = dtos.iterator().next();
-    String accountNumber = dto.getNumber();
-    mockMvc.perform(MockMvcRequestBuilders.post("/account/" + accountNumber + "/delete")
-        .param("username", username))
-        .andDo(MockMvcResultHandlers.print());
-    mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/user/" + username))
-        .andReturn();
-    dtos = (List<BankAccountWebAppDto>) mvcResult.getModelAndView().getModel().get("accounts");
-    assertThat(dtos.size()).isEqualTo(2);
-    assertThat(dtos.stream().anyMatch(dt -> dt.getNumber().equals(accountNumber))).isFalse();
-  }
+
 
   @Test
   public void shouldRemoveAccountFromClientWhenDeleting() throws Exception {

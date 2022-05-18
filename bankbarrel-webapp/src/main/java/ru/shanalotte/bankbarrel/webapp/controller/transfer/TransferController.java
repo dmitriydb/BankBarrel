@@ -21,6 +21,7 @@ import ru.shanalotte.bankbarrel.webapp.exception.BankAccountNotFound;
 import ru.shanalotte.bankbarrel.webapp.exception.UnathorizedAccessToBankAccount;
 import ru.shanalotte.bankbarrel.webapp.exception.WebAppUserNotFound;
 import ru.shanalotte.bankbarrel.webapp.service.BankAccountAccessAuthorizationService;
+import ru.shanalotte.bankbarrel.webapp.service.WebAppBankService;
 
 /**
  * Контроллер для операций перевода.
@@ -30,9 +31,9 @@ public class TransferController {
 
   private BankAccountAccessAuthorizationService bankAccountAccessAuthorizationService;
   private BankAccountDao bankAccountDao;
-  private BankService bankService;
+  private WebAppBankService bankService;
 
-  public TransferController(BankAccountAccessAuthorizationService bankAccountAccessAuthorizationService, BankAccountDao bankAccountDao, BankService bankService) {
+  public TransferController(BankAccountAccessAuthorizationService bankAccountAccessAuthorizationService, BankAccountDao bankAccountDao, WebAppBankService bankService) {
     this.bankAccountAccessAuthorizationService = bankAccountAccessAuthorizationService;
     this.bankAccountDao = bankAccountDao;
     this.bankService = bankService;
@@ -55,12 +56,16 @@ public class TransferController {
           accountFromNumber);
       BankAccountDto toAccount = bankAccountDao.findByTransferDto(dto);
       MonetaryAmount monetaryAmount = new MonetaryAmount(dto.getAmount(), dto.getCurrency());
-      //bankService.transfer(fromAccount, toAccount, monetaryAmount);
-      //TODO
+      bankService.transfer(fromAccount, toAccount, monetaryAmount);
       redirectAttributes.addFlashAttribute("successMessage", "webapp.transfer.success");
     } catch (BankAccountNotFound e) {
       redirectAttributes.addFlashAttribute("message", "webapp.transfer.toaccountnotexists");
+    } catch (UnknownCurrencyRate unknownCurrencyRate) {
+      redirectAttributes.addFlashAttribute("message", "webapp.error.unknowncurrency");
+    } catch (InsufficientFundsException e) {
+      redirectAttributes.addFlashAttribute("message", "webapp.error.withdraw.notsufficientfunds");
     }
+
     return "redirect:/user/" + username + "/account/" + accountFromNumber;
   }
 }

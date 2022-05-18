@@ -23,12 +23,11 @@ public class DummyUserCreationConfigTestDevProfile {
   @Test
   public void shouldCreateDummyUserWhenDevProfileIsEnabled() {
     try {
-      Thread.sleep(1000);
+      Thread.sleep(5000);
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
     assertThat(webAppUserDao.isUserExists("admin")).isTrue();
     assertThat(bankClientDao.findByGivenName("Admin")).isNotNull();
   }
-
 }

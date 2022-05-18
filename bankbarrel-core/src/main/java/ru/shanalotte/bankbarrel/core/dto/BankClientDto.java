@@ -1,5 +1,7 @@
 package ru.shanalotte.bankbarrel.core.dto;
 
+import java.util.Objects;
+
 public class BankClientDto {
   private Long id;
   private String givenName;
@@ -45,6 +47,19 @@ public class BankClientDto {
 
   public void setEmail(String email) {
     this.email = email;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    BankClientDto that = (BankClientDto) o;
+    return Objects.equals(givenName, that.givenName) && Objects.equals(familyName, that.familyName) && Objects.equals(telephone, that.telephone) && Objects.equals(email, that.email);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(givenName, familyName, telephone, email);
   }
 
   @Override

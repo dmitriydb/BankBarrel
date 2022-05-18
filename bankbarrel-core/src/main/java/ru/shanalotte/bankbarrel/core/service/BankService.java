@@ -15,7 +15,7 @@ import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRate;
  * such as deposit, withdraw, transfer etc.
  */
 @Service
-public class BankService {
+public class BankService implements IBankService {
 
   @Autowired
   private CurrencyRateService currencyRateService;

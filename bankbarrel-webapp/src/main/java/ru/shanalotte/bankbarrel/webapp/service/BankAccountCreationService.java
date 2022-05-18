@@ -13,6 +13,7 @@ import ru.shanalotte.bankbarrel.webapp.config.FakeAccountNumberGenerator;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankAccountDao;
 import ru.shanalotte.bankbarrel.webapp.dto.account.AccountOpeningDto;
 import ru.shanalotte.bankbarrel.webapp.service.converter.AccountTypesNameConverter;
+import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.IServiceRegistryProxy;
 import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.IServiceUrlBuilder;
 import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.ServiceRegistryProxy;
 
@@ -26,13 +27,9 @@ public class BankAccountCreationService {
   private BankAccountDao bankAccountDao;
   private FakeAccountNumberGenerator fakeAccountNumberGenerator;
   private IServiceUrlBuilder serviceUrlBuilder;
-  private ServiceRegistryProxy serviceRegistryProxy;
+  private IServiceRegistryProxy serviceRegistryProxy;
 
-  public BankAccountCreationService(AccountTypesNameConverter accountTypesNameConverter,
-                                    BankAccountDao bankAccountDao,
-                                    FakeAccountNumberGenerator fakeAccountNumberGenerator,
-                                    IServiceUrlBuilder serviceUrlBuilder,
-                                    ServiceRegistryProxy serviceRegistryProxy) {
+  public BankAccountCreationService(AccountTypesNameConverter accountTypesNameConverter, BankAccountDao bankAccountDao, FakeAccountNumberGenerator fakeAccountNumberGenerator, IServiceUrlBuilder serviceUrlBuilder, IServiceRegistryProxy serviceRegistryProxy) {
     this.accountTypesNameConverter = accountTypesNameConverter;
     this.bankAccountDao = bankAccountDao;
     this.fakeAccountNumberGenerator = fakeAccountNumberGenerator;
@@ -44,17 +41,6 @@ public class BankAccountCreationService {
    * Открывает счет с информацией из дто и привязывает его клиенту.
    */
   public void createAccount(AccountOpeningDto dto, BankClientDto bankClient) {
-    String url = serviceUrlBuilder.buildUrl(serviceRegistryProxy.getWebApiInfo()) + "/clients";
-    RestTemplate restTemplate = new RestTemplate();
-    ResponseEntity<BankClientDto[]> responseEntity = restTemplate.getForEntity(URI.create(url), BankClientDto[].class);
-    BankClientDto client = Arrays.stream(responseEntity.getBody()).filter(e -> e.equals(bankClient)).findFirst().get();
-    BankAccountDto bankAccount = new BankAccountDto();
-    bankAccount.setOwner(client.getId());
-    bankAccount.setNumber(fakeAccountNumberGenerator.generateNumber());
-    bankAccount.setDescription(bankAccount.getNumber());
-    bankAccount.setCurrency(dto.getCurrency());
-    bankAccount.setType(dto.getAccountType());
-    bankAccount.setAdditionalType(dto.getAccountAdditionalType());
-    bankAccountDao.save(bankAccount);
+   bankAccountDao.createAccount(dto, bankClient);
   }
 }

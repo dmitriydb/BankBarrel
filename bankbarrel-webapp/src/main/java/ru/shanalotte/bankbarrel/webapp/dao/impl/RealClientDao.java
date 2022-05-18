@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
@@ -14,7 +15,7 @@ import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.IServiceUrlBuilde
 import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.ServiceRegistryProxy;
 
 @Repository
-@Primary
+@Profile({"dev", "production"})
 public class RealClientDao implements BankClientDao {
 
   private IServiceUrlBuilder serviceUrlBuilder;
@@ -67,4 +68,6 @@ public class RealClientDao implements BankClientDao {
     Optional<BankClientDto> result = Arrays.stream(list).filter(e -> e.equals(dto)).findFirst();
     return result.map(BankClientDto::getId).orElse(null);
   }
+
+
 }

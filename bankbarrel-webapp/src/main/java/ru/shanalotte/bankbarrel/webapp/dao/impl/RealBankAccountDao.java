@@ -3,6 +3,7 @@ package ru.shanalotte.bankbarrel.webapp.dao.impl;
 import java.net.URI;
 import java.util.Arrays;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
@@ -10,6 +11,7 @@ import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
 import ru.shanalotte.bankbarrel.core.dto.BankClientDto;
 import ru.shanalotte.bankbarrel.webapp.config.FakeAccountNumberGenerator;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankAccountDao;
+import ru.shanalotte.bankbarrel.webapp.dto.account.AccountOpeningDto;
 import ru.shanalotte.bankbarrel.webapp.dto.serviceregistry.RegisteredServiceInfo;
 import ru.shanalotte.bankbarrel.webapp.dto.transfer.TransferDto;
 import ru.shanalotte.bankbarrel.webapp.exception.BankAccountNotFound;
@@ -17,7 +19,7 @@ import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.IServiceUrlBuilde
 import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.ServiceRegistryProxy;
 
 @Repository
-@Primary
+@Profile({"dev", "production"})
 public class RealBankAccountDao implements BankAccountDao {
 
   private ServiceRegistryProxy serviceRegistryProxy;
@@ -70,5 +72,21 @@ public class RealBankAccountDao implements BankAccountDao {
     String url = serviceUrlBuilder.buildUrl(serviceRegistryProxy.getWebApiInfo()) + "/accounts";
     BankAccountDto[] list = restTemplate.getForEntity(URI.create(url), BankAccountDto[].class).getBody();
     return Arrays.stream(list).filter(e -> e.getNumber().equals(dto.getAccountNumber())).findFirst().get();
+  }
+
+  @Override
+  public void createAccount(AccountOpeningDto dto, BankClientDto bankClient) {
+    String url = serviceUrlBuilder.buildUrl(serviceRegistryProxy.getWebApiInfo()) + "/clients";
+    RestTemplate restTemplate = new RestTemplate();
+    ResponseEntity<BankClientDto[]> responseEntity = restTemplate.getForEntity(URI.create(url), BankClientDto[].class);
+    BankClientDto client = Arrays.stream(responseEntity.getBody()).filter(e -> e.equals(bankClient)).findFirst().get();
+    BankAccountDto bankAccount = new BankAccountDto();
+    bankAccount.setOwner(client.getId());
+    bankAccount.setNumber(fakeAccountNumberGenerator.generateNumber());
+    bankAccount.setDescription(bankAccount.getNumber());
+    bankAccount.setCurrency(dto.getCurrency());
+    bankAccount.setType(dto.getAccountType());
+    bankAccount.setAdditionalType(dto.getAccountAdditionalType());
+    save(bankAccount);
   }
 }

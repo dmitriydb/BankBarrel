@@ -6,10 +6,9 @@ import java.util.stream.Collectors;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import ru.shanalotte.bankbarrel.core.domain.BankAccount;
-import ru.shanalotte.bankbarrel.core.domain.BankClient;
 import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
 import ru.shanalotte.bankbarrel.core.dto.BankClientDto;
+import ru.shanalotte.bankbarrel.webapp.dao.impl.AccountHolder;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankAccountDao;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankClientDao;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.WebAppUserDao;
@@ -18,28 +17,25 @@ import ru.shanalotte.bankbarrel.webapp.exception.UnathorizedAccessToBankAccount;
 import ru.shanalotte.bankbarrel.webapp.exception.WebAppUserNotFound;
 import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.IServiceRegistryProxy;
 import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.IServiceUrlBuilder;
-import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.ServiceRegistryProxy;
 import ru.shanalotte.bankbarrel.webapp.user.WebAppUser;
 
 /**
  * Сервис, который выдает разрешения клиентам банка на доступ к банковским счетам.
  */
 @Service
-@Profile({"dev", "production"})
-public class BankAccountAccessAuthorizationService implements IBankAccountAccessAuthorizationService {
+@Profile({"test"})
+public class TestBankAccountAccessAuthorizationService  implements IBankAccountAccessAuthorizationService {
 
   private WebAppUserDao webAppUserDao;
   private BankAccountDao bankAccountDao;
   private BankClientDao bankClientDao;
-  private IServiceUrlBuilder serviceUrlBuilder;
-  private IServiceRegistryProxy serviceRegistryProxy;
+  private AccountHolder accountHolder;
 
-  public BankAccountAccessAuthorizationService(WebAppUserDao webAppUserDao, BankAccountDao bankAccountDao, BankClientDao bankClientDao, IServiceUrlBuilder serviceUrlBuilder, IServiceRegistryProxy serviceRegistryProxy) {
+  public TestBankAccountAccessAuthorizationService(WebAppUserDao webAppUserDao, BankAccountDao bankAccountDao, BankClientDao bankClientDao, AccountHolder accountHolder) {
     this.webAppUserDao = webAppUserDao;
     this.bankAccountDao = bankAccountDao;
     this.bankClientDao = bankClientDao;
-    this.serviceUrlBuilder = serviceUrlBuilder;
-    this.serviceRegistryProxy = serviceRegistryProxy;
+    this.accountHolder = accountHolder;
   }
 
   /**
@@ -49,9 +45,7 @@ public class BankAccountAccessAuthorizationService implements IBankAccountAccess
    * @param accountNumber искомый номер счета
    */
   public boolean bankClientHasTheAccountWithNumber(BankClientDto client, String accountNumber) {
-    Long id = bankClientDao.idByDto(client);
-    String url = serviceUrlBuilder.buildUrl(serviceRegistryProxy.getWebApiInfo()) + "/clients/" + id + "/accounts";
-    List<BankAccountDto> accountDtos = Arrays.stream(new RestTemplate().getForEntity(url, BankAccountDto[].class).getBody()).collect(Collectors.toList());
+    List<BankAccountDto> accountDtos = accountHolder.getAccounts().get(client);
     return accountDtos.stream().anyMatch(dto -> dto.getNumber().equals(accountNumber));
   }
 

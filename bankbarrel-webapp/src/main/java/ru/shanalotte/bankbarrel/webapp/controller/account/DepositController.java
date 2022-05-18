@@ -17,15 +17,18 @@ import ru.shanalotte.bankbarrel.webapp.exception.BankAccountNotFound;
 import ru.shanalotte.bankbarrel.webapp.exception.UnathorizedAccessToBankAccount;
 import ru.shanalotte.bankbarrel.webapp.exception.WebAppUserNotFound;
 import ru.shanalotte.bankbarrel.webapp.service.BankAccountAccessAuthorizationService;
+import ru.shanalotte.bankbarrel.webapp.service.IBankAccountAccessAuthorizationService;
+import ru.shanalotte.bankbarrel.webapp.service.IWebAppBankService;
 import ru.shanalotte.bankbarrel.webapp.service.WebAppBankService;
 
 @Controller
 public class DepositController {
 
-  private BankAccountAccessAuthorizationService bankAccountAccessAuthorizationService;
-  private WebAppBankService bankService;
+  private IBankAccountAccessAuthorizationService bankAccountAccessAuthorizationService;
+  private IWebAppBankService bankService;
 
-  public DepositController(BankAccountAccessAuthorizationService bankAccountAccessAuthorizationService, WebAppBankService bankService) {
+
+  public DepositController(IBankAccountAccessAuthorizationService bankAccountAccessAuthorizationService, IWebAppBankService bankService) {
     this.bankAccountAccessAuthorizationService = bankAccountAccessAuthorizationService;
     this.bankService = bankService;
   }

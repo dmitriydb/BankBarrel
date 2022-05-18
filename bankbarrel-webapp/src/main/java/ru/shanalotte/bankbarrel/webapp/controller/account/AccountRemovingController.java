@@ -15,16 +15,17 @@ import ru.shanalotte.bankbarrel.webapp.exception.BankAccountNotExists;
 import ru.shanalotte.bankbarrel.webapp.exception.UnathorizedAccessToBankAccount;
 import ru.shanalotte.bankbarrel.webapp.exception.WebAppUserNotFound;
 import ru.shanalotte.bankbarrel.webapp.service.BankAccountAccessAuthorizationService;
+import ru.shanalotte.bankbarrel.webapp.service.IBankAccountAccessAuthorizationService;
 import ru.shanalotte.bankbarrel.webapp.user.WebAppUser;
 
 @Controller
 public class AccountRemovingController {
 
   private WebAppUserDao webAppUserDao;
-  private BankAccountAccessAuthorizationService bankAccountAccessAuthorizationService;
+  private IBankAccountAccessAuthorizationService bankAccountAccessAuthorizationService;
   private BankAccountDao bankAccountDao;
 
-  public AccountRemovingController(WebAppUserDao webAppUserDao, BankAccountAccessAuthorizationService bankAccountAccessAuthorizationService, BankAccountDao bankAccountDao) {
+  public AccountRemovingController(WebAppUserDao webAppUserDao, IBankAccountAccessAuthorizationService bankAccountAccessAuthorizationService, BankAccountDao bankAccountDao) {
     this.webAppUserDao = webAppUserDao;
     this.bankAccountAccessAuthorizationService = bankAccountAccessAuthorizationService;
     this.bankAccountDao = bankAccountDao;

@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import ru.shanalotte.bankbarrel.core.dto.ListingDto;
 import ru.shanalotte.bankbarrel.core.dto.ListingDtoItem;
 import ru.shanalotte.bankbarrel.webapp.dto.serviceregistry.RegisteredServiceInfo;
+import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.IServiceRegistryProxy;
 import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.IServiceUrlBuilder;
 import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.ServiceRegistryProxy;
 import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.ServiceUrlBuilder;
@@ -25,10 +26,10 @@ import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.ServiceUrlBuilder
 @RestController
 public class AccountTypesController {
 
-  private ServiceRegistryProxy serviceRegistryProxy;
+  private IServiceRegistryProxy serviceRegistryProxy;
   private IServiceUrlBuilder iServiceUrlBuilder;
 
-  public AccountTypesController(ServiceRegistryProxy serviceRegistryProxy, IServiceUrlBuilder iServiceUrlBuilder) {
+  public AccountTypesController(IServiceRegistryProxy serviceRegistryProxy, IServiceUrlBuilder iServiceUrlBuilder) {
     this.serviceRegistryProxy = serviceRegistryProxy;
     this.iServiceUrlBuilder = iServiceUrlBuilder;
   }

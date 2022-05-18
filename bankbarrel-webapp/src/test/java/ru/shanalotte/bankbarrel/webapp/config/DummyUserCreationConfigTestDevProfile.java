@@ -9,7 +9,7 @@ import org.springframework.test.context.ActiveProfiles;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankClientDao;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.WebAppUserDao;
 
-@ActiveProfiles("dev")
+@ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
 public class DummyUserCreationConfigTestDevProfile {
@@ -30,4 +30,5 @@ public class DummyUserCreationConfigTestDevProfile {
     assertThat(webAppUserDao.isUserExists("admin")).isTrue();
     assertThat(bankClientDao.findByGivenName("Admin")).isNotNull();
   }
+
 }

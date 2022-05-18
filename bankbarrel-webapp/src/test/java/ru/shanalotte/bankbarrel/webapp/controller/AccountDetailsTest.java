@@ -12,7 +12,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ru.shanalotte.bankbarrel.core.domain.BankAccount;
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
+import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
 import ru.shanalotte.bankbarrel.core.dto.BankClientDto;
+import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankClientDao;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.WebAppUserDao;
 import ru.shanalotte.bankbarrel.webapp.dto.account.AccountOpeningDto;
 import ru.shanalotte.bankbarrel.webapp.dto.account.BankAccountDetailsDto;
@@ -43,6 +45,9 @@ public class AccountDetailsTest {
   @Autowired
   private CurrencyPresentationConverter currencyPresentationConverter;
 
+  @Autowired
+  private BankClientDao bankClientDao;
+
   @Test
   public void shouldThrow404WhenUserIsAuthorizedButThereIsNotSuchAccount() throws Exception {
     enrollingHelper.enrollTestUser();
@@ -51,28 +56,14 @@ public class AccountDetailsTest {
   }
 
   @Test
-  public void shouldThrow403WhenTryingToSeeAnothersUserAccountInfo() throws Exception {
-    enrollingHelper.enrollUser("user1216-1");
-    enrollingHelper.enrollUser("user1216-2");
-    BankClientDto client1 = webAppUserDao.findByUsername("user1216-1").getClient();
-    BankClientDto client2 = webAppUserDao.findByUsername("user1216-2").getClient();
-    bankAccountCreationService.createAccount(TestDtoFactory.accountOpeningDto(), client1);
-    bankAccountCreationService.createAccount(TestDtoFactory.accountOpeningDto(), client2);
-    /*String unathorizedAccountNumber = client2.getAccounts().iterator().next().getNumber();
-    mockMvc.perform(MockMvcRequestBuilders.get("/user/user1216-1/account/" + unathorizedAccountNumber))
-        .andExpect(MockMvcResultMatchers.status().isForbidden());*/
-    //TODO
-  }
-
-  @Test
   public void testingAccountDetails() throws Exception {
     enrollingHelper.enrollUser("user1220-1");
     BankClientDto client = webAppUserDao.findByUsername("user1220-1").getClient();
     AccountOpeningDto dto = TestDtoFactory.accountOpeningDto();
     bankAccountCreationService.createAccount(dto, client);
-   /*String accountNumber = client.getAccounts().iterator()
+    String accountNumber = bankClientDao.accounts(client).iterator()
         .next().getNumber();
-    BankAccountDetailsDto expectedDto = bankAccountDetailsDtoConverter.convert(client.getAccounts().iterator().next());
+    BankAccountDetailsDto expectedDto = bankAccountDetailsDtoConverter.convert(bankClientDao.accounts(client).iterator().next());
     mockMvc.perform(MockMvcRequestBuilders.get("/user/user1220-1/account/" + accountNumber))
         .andExpect(MockMvcResultMatchers.model().attributeExists("account"))
         .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString(expectedDto.getAdditionalType())))
@@ -81,44 +72,38 @@ public class AccountDetailsTest {
         .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString(expectedDto.getDescription())))
         .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString(expectedDto.getCurrencySign())))
         .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString(expectedDto.getNumber())))
-        .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString(expectedDto.getType())));*/
-    //TODO
+        .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString(expectedDto.getType())));
   }
 
   @Test
   public void freshlyCreatedAccountShowZeroBalance() throws Exception {
-    /*
     enrollingHelper.enrollUser("user1248");
-    BankClient client = webAppUserDao.findByUsername("user1248").getClient();
+    BankClientDto client = webAppUserDao.findByUsername("user1248").getClient();
     AccountOpeningDto dto = TestDtoFactory.accountOpeningDto();
     bankAccountCreationService.createAccount(dto, client);
-    String accountNumber = client.getAccounts().iterator()
+    String accountNumber = bankClientDao.accounts(client).iterator()
         .next().getNumber();
-    BankAccountDetailsDto expectedDto = bankAccountDetailsDtoConverter.convert(client.getAccounts().iterator().next());
+    BankAccountDetailsDto expectedDto = bankAccountDetailsDtoConverter.convert(bankClientDao.accounts(client).iterator().next());
     MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/user/user1248/account/" + accountNumber))
         .andReturn();
     BankAccountDetailsDto actualDto = (BankAccountDetailsDto) result.getModelAndView().getModel().get("account");
     String actualBalance = actualDto.getBalance();
-    assertThat(actualBalance).isEqualTo("0.00");*/
-    //TODO
+    assertThat(actualBalance).isEqualTo("0.00");
   }
 
   @Test
   public void shouldShowBankAccountCurrencyInTheSameCurrencyAndAccount() throws Exception {
-    /*
     enrollingHelper.enrollUser("user1252");
-    BankClient client = webAppUserDao.findByUsername("user1252").getClient();
+    BankClientDto client = webAppUserDao.findByUsername("user1252").getClient();
     AccountOpeningDto dto = TestDtoFactory.accountOpeningDto();
     dto.setCurrency("KZT");
     bankAccountCreationService.createAccount(dto, client);
-    BankAccount account = client.getAccounts().iterator().next();
+    BankAccountDto account = bankClientDao.accounts(client).iterator().next();
     String accountNumber = account.getNumber();
     MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/user/user1252/account/" + accountNumber))
         .andReturn();
     BankAccountDetailsDto actualDto = (BankAccountDetailsDto) result.getModelAndView().getModel().get("account");
     String currencySign = actualDto.getCurrencySign();
     assertThat(currencySign).isEqualTo(currencyPresentationConverter.currencyToSign(account.getCurrency()));
-    */
-     //TODO
   }
 }

@@ -1,7 +1,6 @@
 package ru.shanalotte.bankbarrel.webapp.testutils;
 
 import org.springframework.stereotype.Service;
-import ru.shanalotte.bankbarrel.core.domain.BankClient;
 import ru.shanalotte.bankbarrel.core.dto.BankClientDto;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.WebAppUserDao;
 import ru.shanalotte.bankbarrel.webapp.dto.account.AccountOpeningDto;

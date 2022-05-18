@@ -21,6 +21,8 @@ import ru.shanalotte.bankbarrel.webapp.exception.BankAccountNotFound;
 import ru.shanalotte.bankbarrel.webapp.exception.UnathorizedAccessToBankAccount;
 import ru.shanalotte.bankbarrel.webapp.exception.WebAppUserNotFound;
 import ru.shanalotte.bankbarrel.webapp.service.BankAccountAccessAuthorizationService;
+import ru.shanalotte.bankbarrel.webapp.service.IBankAccountAccessAuthorizationService;
+import ru.shanalotte.bankbarrel.webapp.service.IWebAppBankService;
 import ru.shanalotte.bankbarrel.webapp.service.WebAppBankService;
 
 /**
@@ -29,11 +31,11 @@ import ru.shanalotte.bankbarrel.webapp.service.WebAppBankService;
 @Controller
 public class TransferController {
 
-  private BankAccountAccessAuthorizationService bankAccountAccessAuthorizationService;
+  private IBankAccountAccessAuthorizationService bankAccountAccessAuthorizationService;
   private BankAccountDao bankAccountDao;
-  private WebAppBankService bankService;
+  private IWebAppBankService bankService;
 
-  public TransferController(BankAccountAccessAuthorizationService bankAccountAccessAuthorizationService, BankAccountDao bankAccountDao, WebAppBankService bankService) {
+  public TransferController(IBankAccountAccessAuthorizationService bankAccountAccessAuthorizationService, BankAccountDao bankAccountDao, IWebAppBankService bankService) {
     this.bankAccountAccessAuthorizationService = bankAccountAccessAuthorizationService;
     this.bankAccountDao = bankAccountDao;
     this.bankService = bankService;

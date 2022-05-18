@@ -13,6 +13,7 @@ import ru.shanalotte.bankbarrel.webapp.exception.BankAccountNotExists;
 import ru.shanalotte.bankbarrel.webapp.exception.UnathorizedAccessToBankAccount;
 import ru.shanalotte.bankbarrel.webapp.exception.WebAppUserNotFound;
 import ru.shanalotte.bankbarrel.webapp.service.BankAccountAccessAuthorizationService;
+import ru.shanalotte.bankbarrel.webapp.service.IBankAccountAccessAuthorizationService;
 import ru.shanalotte.bankbarrel.webapp.service.converter.BankAccountDetailsDtoConverter;
 import ru.shanalotte.bankbarrel.webapp.service.listing.AccountOpeningCurrenciesListingService;
 
@@ -24,20 +25,14 @@ public class AccountDetailsController {
 
   private WebAppUserDao webAppUserDao;
   private BankAccountDao bankAccountDao;
-  private BankAccountAccessAuthorizationService bankAccountAccessAuthorizationService;
+  private IBankAccountAccessAuthorizationService bankAccountAccessAuthorizationService;
   private BankAccountDetailsDtoConverter bankAccountDetailsDtoConverter;
   private AccountOpeningCurrenciesListingService accountOpeningCurrenciesListingService;
 
   /**
    * Конструктор со всеми зависимостями.
    */
-  public AccountDetailsController(WebAppUserDao webAppUserDao,
-                                  BankAccountDao bankAccountDao,
-                                  BankAccountAccessAuthorizationService
-                                      bankAccountAccessAuthorizationService,
-                                  BankAccountDetailsDtoConverter bankAccountDetailsDtoConverter,
-                                  AccountOpeningCurrenciesListingService
-                                      accountOpeningCurrenciesListingService) {
+  public AccountDetailsController(WebAppUserDao webAppUserDao, BankAccountDao bankAccountDao, IBankAccountAccessAuthorizationService bankAccountAccessAuthorizationService, BankAccountDetailsDtoConverter bankAccountDetailsDtoConverter, AccountOpeningCurrenciesListingService accountOpeningCurrenciesListingService) {
     this.webAppUserDao = webAppUserDao;
     this.bankAccountDao = bankAccountDao;
     this.bankAccountAccessAuthorizationService = bankAccountAccessAuthorizationService;

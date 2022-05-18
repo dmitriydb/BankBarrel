@@ -9,6 +9,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
 import ru.shanalotte.bankbarrel.webapp.controller.EnrollingHelper;
+import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankClientDao;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.WebAppUserDao;
 import ru.shanalotte.bankbarrel.webapp.testutils.AccountHelper;
 
@@ -28,13 +29,15 @@ public class TransferControllerTest {
   @Autowired
   private WebAppUserDao webAppUserDao;
 
+  @Autowired
+  private BankClientDao bankClientDao;
+
   @Test
   public void shouldPassTransferDtoWhenOpeningAccountPage() throws Exception {
-    /*enrollingHelper.enrollTestUser();
+    enrollingHelper.enrollTestUser();
     accountHelper.openThreeAccountsForUser("testuser");
-    String someAccountNumber = webAppUserDao.findByUsername("testuser").getClient().getAccounts().iterator().next().getNumber();
+    String someAccountNumber = bankClientDao.accounts(webAppUserDao.findByUsername("testuser").getClient()).iterator().next().getNumber();
     mockMvc.perform(MockMvcRequestBuilders.get("/user/testuser/account/" + someAccountNumber))
-        .andExpect(MockMvcResultMatchers.model().attributeExists("transferDto"));*/
-    //TODO
+        .andExpect(MockMvcResultMatchers.model().attributeExists("transferDto"));
   }
 }

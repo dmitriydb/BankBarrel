@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.shanalotte.bankbarrel.webapp.dto.serviceregistry.RegisteredServiceInfo;
 
 @Service
-@Profile("dev")
+@Profile({"dev", "test"})
 public class FakeServiceUrlBuilder implements IServiceUrlBuilder {
 
   public String buildUrl(RegisteredServiceInfo info) {

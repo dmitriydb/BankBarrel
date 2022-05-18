@@ -16,7 +16,7 @@ import ru.shanalotte.bankbarrel.webapp.user.WebAppUser;
  * Класс, который создает тестового пользователя с логином admin на время разработки.
  */
 @Service
-@Profile("dev")
+@Profile({"dev", "test"})
 public class DummyUserCreationConfig {
 
   private BankClientsEnrollingService bankClientsEnrollingService;

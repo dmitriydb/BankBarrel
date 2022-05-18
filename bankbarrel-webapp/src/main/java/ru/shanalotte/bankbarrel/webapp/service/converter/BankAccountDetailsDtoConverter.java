@@ -42,6 +42,9 @@ public class BankAccountDetailsDtoConverter {
     String number = account.getNumber();
     String description = account.getDescription();
     BankAccountDetailsDto dto = new BankAccountDetailsDto();
+    if (account.getBalance() == null) {
+      account.setBalance("0");
+    }
     dto.setBalance(new BigDecimal(account.getBalance()).setScale(2, RoundingMode.HALF_UP).toString());
     dto.setAdditionalType(additionalType);
     dto.setCurrency(currency);

@@ -1,7 +1,6 @@
 package ru.shanalotte.bankbarrel.webapp.service.converter;
 
 import org.springframework.stereotype.Service;
-import ru.shanalotte.bankbarrel.core.domain.BankAccount;
 import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
 import ru.shanalotte.bankbarrel.core.service.EnumToListingDtoItemConverter;
 import ru.shanalotte.bankbarrel.webapp.dto.account.BankAccountWebAppDto;

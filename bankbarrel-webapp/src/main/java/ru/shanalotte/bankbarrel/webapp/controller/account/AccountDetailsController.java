@@ -32,7 +32,13 @@ public class AccountDetailsController {
   /**
    * Конструктор со всеми зависимостями.
    */
-  public AccountDetailsController(WebAppUserDao webAppUserDao, BankAccountDao bankAccountDao, IBankAccountAccessAuthorizationService bankAccountAccessAuthorizationService, BankAccountDetailsDtoConverter bankAccountDetailsDtoConverter, AccountOpeningCurrenciesListingService accountOpeningCurrenciesListingService) {
+  public AccountDetailsController(WebAppUserDao webAppUserDao,
+                                  BankAccountDao bankAccountDao,
+                                  IBankAccountAccessAuthorizationService
+                                      bankAccountAccessAuthorizationService,
+                                  BankAccountDetailsDtoConverter bankAccountDetailsDtoConverter,
+                                  AccountOpeningCurrenciesListingService
+                                      accountOpeningCurrenciesListingService) {
     this.webAppUserDao = webAppUserDao;
     this.bankAccountDao = bankAccountDao;
     this.bankAccountAccessAuthorizationService = bankAccountAccessAuthorizationService;

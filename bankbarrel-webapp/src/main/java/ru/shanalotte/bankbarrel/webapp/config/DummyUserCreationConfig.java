@@ -1,5 +1,7 @@
 package ru.shanalotte.bankbarrel.webapp.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,8 @@ import ru.shanalotte.bankbarrel.webapp.user.WebAppUser;
 @Service
 @Profile({"dev", "test"})
 public class DummyUserCreationConfig {
+
+  private Logger logger = LoggerFactory.getLogger(DummyUserCreationConfig.class);
 
   private BankClientsEnrollingService bankClientsEnrollingService;
   private WebAppUserDao webAppUserDao;
@@ -39,6 +43,7 @@ public class DummyUserCreationConfig {
    */
   @Scheduled(initialDelay = 2000, fixedDelay = Integer.MAX_VALUE)
   public void createDummyUserAndFakeAccounts() {
+    logger.info("Creating dummy user");
     BankClientInfoDto dto = new BankClientInfoDto();
     dto.setEmail("admin@admin.ru");
     dto.setFirstName("Admin");

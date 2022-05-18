@@ -1,8 +1,18 @@
 package ru.shanalotte.bankbarrel.appserver.domain;
 
 import java.sql.Timestamp;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
+/**
+ * Класс, который инкапсулирует информацию о событии процесса открытия счета.
+ */
 @Entity
 @Table(name = "account_opening_history")
 public class AccountOpeningHistory {

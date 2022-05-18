@@ -2,11 +2,21 @@ package ru.shanalotte.bankbarrel.appserver.domain;
 
 import java.sql.Timestamp;
 import java.util.Objects;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import ru.shanalotte.bankbarrel.core.domain.BankAccount;
-import ru.shanalotte.bankbarrel.core.domain.BankAccountAdditionalType;
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
 
+/**
+ * Класс, который представляет собой событие открытия счета.
+ */
 @Entity
 @Table(name = "account_openings")
 public class AccountOpening {
@@ -117,8 +127,12 @@ public class AccountOpening {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
     AccountOpening that = (AccountOpening) o;
     return Objects.equals(id, that.id);
   }

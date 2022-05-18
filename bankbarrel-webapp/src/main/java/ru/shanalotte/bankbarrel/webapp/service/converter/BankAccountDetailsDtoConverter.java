@@ -33,19 +33,20 @@ public class BankAccountDetailsDtoConverter {
    * в сервис enumToListingDtoItemConverter, что в дальнейшем может создать ненужный coupling.
    */
   public BankAccountDetailsDto convert(BankAccountDto account) {
-    String type = enumToListingDtoItemConverter
+    final String type = enumToListingDtoItemConverter
         .convert(account.getType()).getValue();
     String additionalType = enumToListingDtoItemConverter
         .convert(account.getAdditionalType()).getValue();
     String currency = account.getCurrency();
-    String currencySign = currencyPresentationConverter.currencyToSign(currency);
-    String number = account.getNumber();
-    String description = account.getDescription();
+    final String currencySign = currencyPresentationConverter.currencyToSign(currency);
+    final String number = account.getNumber();
+    final String description = account.getDescription();
     BankAccountDetailsDto dto = new BankAccountDetailsDto();
     if (account.getBalance() == null) {
       account.setBalance("0");
     }
-    dto.setBalance(new BigDecimal(account.getBalance()).setScale(2, RoundingMode.HALF_UP).toString());
+    dto.setBalance(new BigDecimal(account.getBalance())
+        .setScale(2, RoundingMode.HALF_UP).toString());
     dto.setAdditionalType(additionalType);
     dto.setCurrency(currency);
     dto.setDescription(description);

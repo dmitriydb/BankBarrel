@@ -11,6 +11,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import ru.shanalotte.bankbarrel.webapp.dto.serviceregistry.RegisteredServiceInfo;
 
+/**
+ * Листенер, который срабатывает в момент поднятия приложения.
+ * Отправляет информацию о приложении в Service Registry.
+ */
 @Component
 @Profile("production")
 public class AppContextListener implements ApplicationListener<ContextRefreshedEvent> {

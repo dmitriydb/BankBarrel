@@ -1,8 +1,16 @@
 package ru.shanalotte.bankbarrel.appserver.domain;
 
 import java.util.Objects;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+/**
+ * Класс, который хранит информацию о статусе процесса открытия счета.
+ */
 @Entity
 @Table(name = "account_opening_status")
 public class AccountOpeningStatus {
@@ -31,8 +39,12 @@ public class AccountOpeningStatus {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
     AccountOpeningStatus that = (AccountOpeningStatus) o;
     return Objects.equals(id, that.id) && Objects.equals(status, that.status);
   }

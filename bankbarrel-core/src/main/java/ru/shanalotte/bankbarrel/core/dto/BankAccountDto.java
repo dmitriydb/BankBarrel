@@ -1,5 +1,8 @@
 package ru.shanalotte.bankbarrel.core.dto;
 
+/**
+ * DTO банковского счета.
+ */
 public class BankAccountDto {
 
   private Long owner;

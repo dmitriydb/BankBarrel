@@ -5,16 +5,26 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import ru.shanalotte.bankbarrel.appserver.repository.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import ru.shanalotte.bankbarrel.appserver.repository.BankAccountAdditionalTypeDao;
+import ru.shanalotte.bankbarrel.appserver.repository.BankAccountDao;
+import ru.shanalotte.bankbarrel.appserver.repository.BankAccountTypeDao;
+import ru.shanalotte.bankbarrel.appserver.repository.BankClientDao;
+import ru.shanalotte.bankbarrel.appserver.repository.CurrencyDao;
 import ru.shanalotte.bankbarrel.core.domain.BankAccount;
-import ru.shanalotte.bankbarrel.core.domain.BankAccountType;
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
 import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
 
+/**
+ * Контроллер для информации о банковских счетах.
+ */
 @RestController
 public class AccountController {
 
@@ -24,7 +34,14 @@ public class AccountController {
   private BankAccountDao bankAccountDao;
   private CurrencyDao currencyDao;
 
-  public AccountController(BankAccountTypeDao bankAccountTypeDao, BankAccountAdditionalTypeDao bankAccountAdditionalTypeDao, BankClientDao bankClientDao, BankAccountDao bankAccountDao, CurrencyDao currencyDao) {
+  /**
+   * Конструктор со всеми зависимостями.
+   */
+  public AccountController(BankAccountTypeDao bankAccountTypeDao,
+                           BankAccountAdditionalTypeDao bankAccountAdditionalTypeDao,
+                           BankClientDao bankClientDao,
+                           BankAccountDao bankAccountDao,
+                           CurrencyDao currencyDao) {
     this.bankAccountTypeDao = bankAccountTypeDao;
     this.bankAccountAdditionalTypeDao = bankAccountAdditionalTypeDao;
     this.bankClientDao = bankClientDao;
@@ -32,6 +49,9 @@ public class AccountController {
     this.currencyDao = currencyDao;
   }
 
+  /**
+   * Получение информации о банковском счете с определенным номером.
+   */
   @GetMapping("/accounts/{number}")
   public ResponseEntity<BankAccountDto> getAccountInfo(@PathVariable("number") String number) {
     BankAccount account = bankAccountDao.findByNumber(number);
@@ -50,6 +70,9 @@ public class AccountController {
     return new ResponseEntity<>(dto, HttpStatus.OK);
   }
 
+  /**
+   * Получение списка всех банковских счетов.
+   */
   @GetMapping("/accounts")
   public ResponseEntity<List<BankAccountDto>> getAllAccounts() {
     List<BankAccountDto> result = bankAccountDao.findAll()
@@ -68,6 +91,9 @@ public class AccountController {
     return new ResponseEntity<>(result, HttpStatus.OK);
   }
 
+  /**
+   * Удаление банковского счета по идентификатору (UUID).
+   */
   @DeleteMapping("/accounts/{id}")
   public ResponseEntity<?> deleteAccount(@PathVariable("id") String id) {
     Optional<BankAccount> account = bankAccountDao.findById(id);
@@ -81,6 +107,9 @@ public class AccountController {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
+  /**
+   * Получение списка счетов клиента банка с определенным ID.
+   */
   @GetMapping("/clients/{id}/accounts")
   public ResponseEntity<List<BankAccountDto>> getClientAccounts(@PathVariable("id") Long id) {
     if (!bankClientDao.findById(id).isPresent()) {
@@ -103,6 +132,9 @@ public class AccountController {
     return new ResponseEntity<>(result, HttpStatus.OK);
   }
 
+  /**
+   * Запрос на открытие нового банковского счета.
+   */
   @PostMapping("/accounts")
   public ResponseEntity<BankAccountDto> createAccount(@RequestBody BankAccountDto dto) {
     if (!bankClientDao.findById(dto.getOwner()).isPresent()) {

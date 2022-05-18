@@ -18,6 +18,9 @@ import ru.shanalotte.bankbarrel.webapp.service.BankAccountAccessAuthorizationSer
 import ru.shanalotte.bankbarrel.webapp.service.IBankAccountAccessAuthorizationService;
 import ru.shanalotte.bankbarrel.webapp.user.WebAppUser;
 
+/**
+ * Контроллер, который обрабатывает запросы на закрытие банковских счетов.
+ */
 @Controller
 public class AccountRemovingController {
 
@@ -25,14 +28,32 @@ public class AccountRemovingController {
   private IBankAccountAccessAuthorizationService bankAccountAccessAuthorizationService;
   private BankAccountDao bankAccountDao;
 
-  public AccountRemovingController(WebAppUserDao webAppUserDao, IBankAccountAccessAuthorizationService bankAccountAccessAuthorizationService, BankAccountDao bankAccountDao) {
+  /**
+   * Конструктор со всеми зависимостями.
+   */
+  public AccountRemovingController(WebAppUserDao webAppUserDao,
+                                   IBankAccountAccessAuthorizationService
+                                       bankAccountAccessAuthorizationService,
+                                   BankAccountDao bankAccountDao) {
     this.webAppUserDao = webAppUserDao;
     this.bankAccountAccessAuthorizationService = bankAccountAccessAuthorizationService;
     this.bankAccountDao = bankAccountDao;
   }
 
+  /**
+   * Обрабатывает запрос на удаление счета по номеру.
+   *
+   * @throws WebAppUserNotFound в случае, если запрос
+   *                                        был отправлен несуществующим пользователем
+   * @throws BankAccountNotExists в случае, если счет с таким номером не существует
+   * @throws UnathorizedAccessToBankAccount в случае,
+   *                                        если у пользователя не доступа к счету с таким номером
+   */
   @PostMapping("/account/{number}/delete")
-  public String removeAccount(@PathVariable("number") String accountNumber, @RequestParam("username") String username, Model model) throws WebAppUserNotFound, BankAccountNotExists, UnathorizedAccessToBankAccount {
+  public String removeAccount(@PathVariable("number") String accountNumber,
+                              @RequestParam("username") String username,
+                              Model model)
+      throws WebAppUserNotFound, BankAccountNotExists, UnathorizedAccessToBankAccount {
     if (!webAppUserDao.isUserExists(username)) {
       throw new WebAppUserNotFound(username);
     }
@@ -42,7 +63,8 @@ public class AccountRemovingController {
     if (account == null) {
       throw new BankAccountNotExists(accountNumber);
     }
-    if (!bankAccountAccessAuthorizationService.bankClientHasTheAccountWithNumber(bankClient, accountNumber)) {
+    if (!bankAccountAccessAuthorizationService
+        .bankClientHasTheAccountWithNumber(bankClient, accountNumber)) {
       throw new UnathorizedAccessToBankAccount(username + " to " + accountNumber);
     }
     bankAccountDao.delete(account);

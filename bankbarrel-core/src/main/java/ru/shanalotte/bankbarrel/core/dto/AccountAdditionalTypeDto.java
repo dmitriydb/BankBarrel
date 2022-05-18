@@ -1,5 +1,8 @@
 package ru.shanalotte.bankbarrel.core.dto;
 
+/**
+ * DTO для типа банковского счета 2 уровня.
+ */
 public class AccountAdditionalTypeDto {
   private Long id;
   private String type;

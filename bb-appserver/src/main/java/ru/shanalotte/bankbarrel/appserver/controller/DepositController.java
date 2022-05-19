@@ -2,6 +2,10 @@ package ru.shanalotte.bankbarrel.appserver.controller;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +35,7 @@ public class DepositController {
   private SimpleBankService bankService;
   private OperationSourceDao operationSourceDao;
   private DepositDao depositDao;
-
+  private static final Logger logger = LoggerFactory.getLogger(DepositController.class);
   /**
    * Конструктор со всеми зависимостями.
    */
@@ -52,6 +56,7 @@ public class DepositController {
    */
   @GetMapping("/deposit/{id}")
   public ResponseEntity<DepositDto> depositInfo(@PathVariable("id") Long id) {
+    logger.info("GET /deposit/{}", id);
     if (!depositDao.findById(id).isPresent()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -71,7 +76,9 @@ public class DepositController {
    * Создание вклада.
    */
   @PostMapping(value = "/deposit", consumes = "application/json", produces = "application/json")
-  public ResponseEntity<DepositDto> createDeposit(@RequestBody DepositDto dto) {
+  public ResponseEntity<DepositDto> createDeposit(@RequestBody DepositDto dto)
+      throws JsonProcessingException {
+    logger.info("POST /deposit {}", new ObjectMapper().writeValueAsString(dto));
     if (!bankAccountDao.findById(dto.getAccount()).isPresent()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

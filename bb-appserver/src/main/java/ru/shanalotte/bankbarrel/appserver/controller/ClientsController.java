@@ -2,6 +2,10 @@ package ru.shanalotte.bankbarrel.appserver.controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +25,7 @@ import ru.shanalotte.bankbarrel.core.dto.BankClientDto;
 public class ClientsController {
 
   private BankClientDao bankClientDao;
+  private static final Logger logger = LoggerFactory.getLogger(ClientsController.class);
 
   public ClientsController(BankClientDao bankClientDao) {
     this.bankClientDao = bankClientDao;
@@ -30,7 +35,9 @@ public class ClientsController {
    * Создание нового клиента.
    */
   @PostMapping("/clients")
-  public ResponseEntity<BankClientDto> createNewClient(@RequestBody BankClientDto dto) {
+  public ResponseEntity<BankClientDto> createNewClient(@RequestBody BankClientDto dto)
+      throws JsonProcessingException {
+    logger.info("POST /clients {}", new ObjectMapper().writeValueAsString(dto));
     BankClient client = new BankClient.Builder(dto.getGivenName(), dto.getFamilyName())
         .withEmail(dto.getEmail())
         .withTelephone(dto.getTelephone())
@@ -45,6 +52,7 @@ public class ClientsController {
    */
   @GetMapping("/clients")
   public ResponseEntity<List<BankClientDto>> getClientList() {
+    logger.info("GET /clients");
     List<BankClientDto> result = bankClientDao.findAll()
         .stream()
         .map(e -> {
@@ -64,6 +72,7 @@ public class ClientsController {
    */
   @GetMapping("/clients/{id}")
   public ResponseEntity<BankClientDto> getClientInfo(@PathVariable("id") Long id) {
+    logger.info("GET /clients/{}", id);
     if (!bankClientDao.findById(id).isPresent()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -83,6 +92,7 @@ public class ClientsController {
   @PutMapping("/clients/{id}")
   public ResponseEntity<BankClientDto> getClientInfo(@PathVariable("id") Long id,
                                                      @RequestBody BankClientDto dto) {
+    logger.info("PUT /clients/{}", id);
     if (!bankClientDao.findById(id).isPresent()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

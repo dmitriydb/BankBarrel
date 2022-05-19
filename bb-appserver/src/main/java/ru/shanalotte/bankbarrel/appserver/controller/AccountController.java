@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,6 +38,8 @@ public class AccountController {
   private BankAccountDao bankAccountDao;
   private CurrencyDao currencyDao;
 
+  private static final Logger logger = LoggerFactory.getLogger(AccountController.class);
+
   /**
    * Конструктор со всеми зависимостями.
    */
@@ -54,6 +60,7 @@ public class AccountController {
    */
   @GetMapping("/accounts/{number}")
   public ResponseEntity<BankAccountDto> getAccountInfo(@PathVariable("number") String number) {
+    logger.info("GET /accounts/{}", number);
     BankAccount account = bankAccountDao.findByNumber(number);
     if (account == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -75,6 +82,7 @@ public class AccountController {
    */
   @GetMapping("/accounts")
   public ResponseEntity<List<BankAccountDto>> getAllAccounts() {
+    logger.info("GET /accounts");
     List<BankAccountDto> result = bankAccountDao.findAll()
         .stream().map(account -> {
           BankAccountDto dto = new BankAccountDto();
@@ -96,6 +104,7 @@ public class AccountController {
    */
   @DeleteMapping("/accounts/{id}")
   public ResponseEntity<?> deleteAccount(@PathVariable("id") String id) {
+    logger.info("DELETE /accounts/{}", id);
     Optional<BankAccount> account = bankAccountDao.findById(id);
     if (!account.isPresent()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -112,6 +121,7 @@ public class AccountController {
    */
   @GetMapping("/clients/{id}/accounts")
   public ResponseEntity<List<BankAccountDto>> getClientAccounts(@PathVariable("id") Long id) {
+    logger.info("GET /clients/{}/accounts", id);
     if (!bankClientDao.findById(id).isPresent()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -136,7 +146,8 @@ public class AccountController {
    * Запрос на открытие нового банковского счета.
    */
   @PostMapping("/accounts")
-  public ResponseEntity<BankAccountDto> createAccount(@RequestBody BankAccountDto dto) {
+  public ResponseEntity<BankAccountDto> createAccount(@RequestBody BankAccountDto dto) throws JsonProcessingException {
+    logger.info("POST /accounts {}", new ObjectMapper().writeValueAsString(dto));
     if (!bankClientDao.findById(dto.getOwner()).isPresent()) {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }

@@ -6,6 +6,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,6 +31,7 @@ import ru.shanalotte.bankbarrel.core.dto.AccountTypeDto;
 @RestController
 public class AccountTypesController {
 
+  private static final Logger logger = LoggerFactory.getLogger(AccountTypesController.class);
   private BankAccountTypeDao bankAccountTypeDao;
   private BankAccountAdditionalTypeDao bankAccountAdditionalTypeDao;
 
@@ -41,6 +46,7 @@ public class AccountTypesController {
    */
   @GetMapping("/accounttypes")
   public ResponseEntity<List<AccountTypeDto>> getAccountTypes() {
+    logger.info("GET /accounttypes");
     List<BankAccountTypeEntity> accountTypes = bankAccountTypeDao.findAll();
     List<AccountTypeDto> result = new ArrayList<>();
     for (BankAccountTypeEntity entity : accountTypes) {
@@ -59,6 +65,7 @@ public class AccountTypesController {
    */
   @GetMapping("/accounttypes/{code}")
   public ResponseEntity<AccountTypeDto> getAccountTypeByCode(@PathVariable("code") String code) {
+    logger.info("GET /accounttypes/{}", code);
     BankAccountTypeEntity entity = bankAccountTypeDao.findByCode(code);
     if (entity == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -76,6 +83,7 @@ public class AccountTypesController {
   @GetMapping("/accounttypes/{code}/additionaltypes")
   public ResponseEntity<List<AccountAdditionalTypeDto>> getAdditionalTypes(
       @PathVariable("code") String code) {
+    logger.info("GET /accounttypes/{}/additionaltypes", code);
     BankAccountTypeEntity existingEntity = bankAccountTypeDao.findByCode(code);
     if (existingEntity == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -89,7 +97,7 @@ public class AccountTypesController {
       dto.setType(entity.getCode());
       dtos.add(dto);
     }
-    Collections.sort(dtos, Comparator.comparing(AccountAdditionalTypeDto::getId));
+    dtos.sort(Comparator.comparing(AccountAdditionalTypeDto::getId));
     return new ResponseEntity<>(dtos, HttpStatus.OK);
   }
 
@@ -100,6 +108,7 @@ public class AccountTypesController {
   public ResponseEntity<AccountAdditionalTypeDto> getAdditionalTypeInfo(
       @PathVariable("code") String code
   ) {
+    logger.info("GET /additionalaccounttypes/{}", code);
     BankAccountAdditionalTypeEntity existingEntity = bankAccountAdditionalTypeDao.findByCode(code);
     System.out.println(existingEntity);
     if (existingEntity == null) {
@@ -119,7 +128,9 @@ public class AccountTypesController {
       consumes = "application/json", produces = "application/json")
   public ResponseEntity<AccountAdditionalTypeDto> createAdditionalType(
       @PathVariable("code") String code,
-                       @RequestBody AccountAdditionalTypeDto dto) {
+                       @RequestBody AccountAdditionalTypeDto dto) throws JsonProcessingException {
+    logger.info("POST /accounttypes/{}/additionaltypes {}", code,
+        new ObjectMapper().writeValueAsString(dto));
     BankAccountTypeEntity entity = bankAccountTypeDao.findByCode(code);
     if (entity == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -149,7 +160,10 @@ public class AccountTypesController {
   @DeleteMapping(value = "/accounttypes/{code}/additionaltypes",
       consumes = "application/json", produces = "application/json")
   public ResponseEntity<?> deleteAdditionalType(@PathVariable("code") String code,
-                                                @RequestBody AccountAdditionalTypeDto dto) {
+                                                @RequestBody AccountAdditionalTypeDto dto)
+      throws JsonProcessingException {
+    logger.info("DELETE /accounttypes/{}/additionaltypes, {}", code,
+        new ObjectMapper().writeValueAsString(dto));
     BankAccountTypeEntity entity = bankAccountTypeDao.findByCode(code);
     if (entity == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -170,7 +184,10 @@ public class AccountTypesController {
    */
   @PostMapping(value = "/accounttypes",
       consumes = "application/json", produces = "application/json")
-  public ResponseEntity<AccountTypeDto> createNewAccountType(@RequestBody AccountTypeDto dto) {
+  public ResponseEntity<AccountTypeDto> createNewAccountType(@RequestBody AccountTypeDto dto)
+      throws JsonProcessingException {
+    logger.info("POST /accounttypes, {}",
+        new ObjectMapper().writeValueAsString(dto));
     BankAccountTypeEntity existingEntity = bankAccountTypeDao.findByCode(dto.getType());
     if (existingEntity != null) {
       return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -191,7 +208,10 @@ public class AccountTypesController {
    */
   @DeleteMapping(value = "/accounttypes",
       consumes = "application/json", produces = "application/json")
-  public ResponseEntity<?> deleteAccountType(@RequestBody AccountTypeDto dto) {
+  public ResponseEntity<?> deleteAccountType(@RequestBody AccountTypeDto dto)
+      throws JsonProcessingException {
+    logger.info("DELETE /accounttypes, {}",
+        new ObjectMapper().writeValueAsString(dto));
     BankAccountTypeEntity existingEntity = bankAccountTypeDao.findByCode(dto.getType());
     if (existingEntity == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);

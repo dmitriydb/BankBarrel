@@ -2,6 +2,8 @@ package ru.shanalotte.bankbarrel.core.service;
 
 import java.util.HashSet;
 import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.shanalotte.bankbarrel.core.domain.CurrencyRateRule;
@@ -12,6 +14,7 @@ import ru.shanalotte.bankbarrel.core.domain.CurrencyRateRule;
 @Service
 public class CurrencyRateService {
 
+  private static final Logger logger = LoggerFactory.getLogger(CurrencyRateService.class);
 
   private String defaultRateCurrency;
   private Set<CurrencyRateRule> currencyRateRules = new HashSet<>();
@@ -32,6 +35,7 @@ public class CurrencyRateService {
   }
 
   public void addRule(CurrencyRateRule rule) {
+    logger.info("Adding currency rate rule {}", rule);
     currencyRateRules.add(rule);
   }
 

@@ -34,9 +34,7 @@ public class CurrencyLoader {
   @Scheduled(initialDelay = 1000, fixedDelay = Integer.MAX_VALUE)
   public void loadCurrenciesInService() {
     for (CurrencyRateRule rule : currencyRateDao.findAll()) {
-      System.out.println("Adding rule " + rule);
       currencyRateService.addRule(rule);
     }
-    System.out.println(currencyRateService.getCurrencyRateRules().size() + " rules active");
   }
 }

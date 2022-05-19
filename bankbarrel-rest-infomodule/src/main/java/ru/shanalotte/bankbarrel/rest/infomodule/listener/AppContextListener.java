@@ -39,6 +39,5 @@ public class AppContextListener implements ApplicationListener<ContextRefreshedE
     RestTemplate restTemplate = new RestTemplate();
     String result = null;
     result = restTemplate.postForObject(URI.create(serviceRegistryUrl), serviceInfo, String.class);
-    System.out.println(result);
   }
 }

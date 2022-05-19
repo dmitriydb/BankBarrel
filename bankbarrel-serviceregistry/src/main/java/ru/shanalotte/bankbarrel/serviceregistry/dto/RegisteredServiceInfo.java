@@ -46,4 +46,6 @@ public class RegisteredServiceInfo {
   public void setPort(String port) {
     this.port = port;
   }
+
+
 }

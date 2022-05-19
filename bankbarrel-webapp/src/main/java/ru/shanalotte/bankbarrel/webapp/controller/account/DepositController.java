@@ -1,5 +1,7 @@
 package ru.shanalotte.bankbarrel.webapp.controller.account;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +24,8 @@ public class DepositController {
   private BankAccountAccessAuthorizationService bankAccountAccessAuthorizationService;
   private WebAppBankService bankService;
 
+  private static final Logger logger = LoggerFactory.getLogger(DepositController.class);
+
   /**
    * Конструктор со всеми зависимостями.
    */
@@ -43,6 +47,7 @@ public class DepositController {
                                @RequestParam("currency") String currency
   ) throws WebAppUserNotFound,
       UnathorizedAccessToBankAccount, BankAccountNotExists, UnknownCurrencyRate {
+    logger.info("Пользователь {} вносит {} {} на счет {}", username, amount, currency, accountNumber);
     BankAccountDto account = bankAccountAccessAuthorizationService
         .authorize(username, accountNumber);
     MonetaryAmount monetaryAmount = new MonetaryAmount(amount, currency);

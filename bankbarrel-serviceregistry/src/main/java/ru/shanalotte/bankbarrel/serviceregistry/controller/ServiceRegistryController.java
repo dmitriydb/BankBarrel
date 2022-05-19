@@ -1,6 +1,8 @@
 package ru.shanalotte.bankbarrel.serviceregistry.controller;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -8,6 +10,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,6 +35,8 @@ public class ServiceRegistryController {
 
   private RegisteredServiceRepository registeredServiceRepository;
 
+  private static final Logger logger = LoggerFactory.getLogger(ServiceRegistryController.class);
+
   public ServiceRegistryController(RegisteredServiceRepository registeredServiceRepository) {
     this.registeredServiceRepository = registeredServiceRepository;
   }
@@ -39,6 +45,7 @@ public class ServiceRegistryController {
   @GetMapping(value = "/services", produces = "application/json")
   public @ResponseBody
   List<RegisteredServiceInfo> registeredServicesList() {
+    logger.info("GET /services");
     List<RegisteredServiceInfo> list = registeredServiceRepository.findAll();
     return list;
   }
@@ -52,6 +59,7 @@ public class ServiceRegistryController {
   @GetMapping(value = "/services/{name}", produces = "application/json")
   public ResponseEntity<RegisteredServiceInfo> getServiceInfo(@Parameter(
       description = "Microservice name") @PathVariable("name") String serviceName) {
+    logger.info("GET /services/{}", serviceName);
     RegisteredServiceInfo info = registeredServiceRepository.findByName(serviceName);
     if (info == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -62,14 +70,18 @@ public class ServiceRegistryController {
   @Operation(description = "Create microservice information")
   @PostMapping(value = "/services", consumes = "application/json", produces = "application/json")
   public ResponseEntity<?> createService(@Schema(implementation = RegisteredServiceInfo.class)
-                                         @RequestBody RegisteredServiceInfo newService) {
+                                         @RequestBody RegisteredServiceInfo newService)
+      throws JsonProcessingException {
+    logger.info("POST /services/ data = {}", new ObjectMapper().writeValueAsString(newService));
     registeredServiceRepository.save(newService);
     return new ResponseEntity<>(HttpStatus.CREATED);
   }
 
   @Operation(description = "Update existing microservice info or create new one")
   @PutMapping(value = "/services", consumes = "application/json", produces = "application/json")
-  public ResponseEntity<?> updateService(@RequestBody RegisteredServiceInfo newService) {
+  public ResponseEntity<?> updateService(@RequestBody RegisteredServiceInfo newService)
+      throws JsonProcessingException {
+    logger.info("PUT /services/ data = {}", new ObjectMapper().writeValueAsString(newService));
     registeredServiceRepository.save(newService);
     return new ResponseEntity<String>(HttpStatus.OK);
   }
@@ -86,7 +98,9 @@ public class ServiceRegistryController {
           content = @Content)
   })
   @DeleteMapping(value = "/services", consumes = "application/json", produces = "application/json")
-  public ResponseEntity<?> deleteService(@RequestBody ServiceDeletionDto deletionDto) {
+  public ResponseEntity<?> deleteService(@RequestBody ServiceDeletionDto deletionDto)
+      throws JsonProcessingException {
+    logger.info("DELETE /services/ data = {}", new ObjectMapper().writeValueAsString(deletionDto));
     RegisteredServiceInfo info = registeredServiceRepository.findByName(deletionDto.getName());
     if (info == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);

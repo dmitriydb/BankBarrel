@@ -2,6 +2,10 @@ package ru.shanalotte.bankbarrel.appserver.controller;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +36,7 @@ public class TransferController {
   private SimpleBankService bankService;
   private OperationSourceDao operationSourceDao;
   private TransferDao transferDao;
+  private static final Logger logger = LoggerFactory.getLogger(TransferController.class);
 
   /**
    * Конструктор со всеми зависимостями.
@@ -52,6 +57,7 @@ public class TransferController {
    */
   @GetMapping("/transfer/{id}")
   public ResponseEntity<TransferDto> transferInfo(@PathVariable("id") Long id) {
+    logger.info("GET /transfer/{}", id);
     if (!transferDao.findById(id).isPresent()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -72,7 +78,9 @@ public class TransferController {
    * Инициировать процесс денежного перевода.
    */
   @PostMapping(value = "/transfer", consumes = "application/json", produces = "application/json")
-  public ResponseEntity<TransferDto> createTransfer(@RequestBody TransferDto dto) {
+  public ResponseEntity<TransferDto> createTransfer(@RequestBody TransferDto dto)
+      throws JsonProcessingException {
+    logger.info("POST /transfer {}", new ObjectMapper().writeValueAsString(dto));
     System.out.println(dto);
     if (!bankAccountDao.findById(dto.getFromAccount()).isPresent()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);

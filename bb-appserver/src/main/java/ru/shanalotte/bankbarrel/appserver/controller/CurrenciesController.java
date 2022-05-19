@@ -2,6 +2,10 @@ package ru.shanalotte.bankbarrel.appserver.controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,6 +28,7 @@ import ru.shanalotte.bankbarrel.core.dto.CurrencyRateDto;
 @RestController
 public class CurrenciesController {
 
+  private static final Logger logger = LoggerFactory.getLogger(CurrenciesController.class);
   private CurrencyDao currencyDao;
   private CurrencyRateDao currencyRateDao;
 
@@ -40,7 +45,9 @@ public class CurrenciesController {
    */
   @PostMapping("/currencies/{currency}/rate")
   public ResponseEntity<CurrencyRateDto> createCurrencyRate(
-      @PathVariable("currency") String currency, @RequestBody CurrencyRateDto dto) {
+      @PathVariable("currency") String currency, @RequestBody CurrencyRateDto dto)
+      throws JsonProcessingException {
+    logger.info("POST /currencies/{}/rate {}", currency, new ObjectMapper().writeValueAsString(dto));
     Currency currencyEntity = currencyDao.findByCode(currency);
     if (currencyEntity == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -63,7 +70,8 @@ public class CurrenciesController {
   @PutMapping("/currencies/{currency}/rate")
   public ResponseEntity<CurrencyRateDto> updateCurrencyRate(
       @PathVariable("currency") String currency,
-      @RequestBody CurrencyRateDto dto) {
+      @RequestBody CurrencyRateDto dto) throws JsonProcessingException {
+    logger.info("PUT /currencies/{}/rate {}", currency, new ObjectMapper().writeValueAsString(dto));
     Currency currencyEntity = currencyDao.findByCode(currency);
     if (currencyEntity == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -86,6 +94,7 @@ public class CurrenciesController {
   @GetMapping("/currencies/{currency}/rate")
   public ResponseEntity<CurrencyRateDto> getCurrencyRate(
       @PathVariable("currency") String currency) {
+    logger.info("GET /currencies/{}/rate", currency);
     CurrencyRateRule currencyRateRule = currencyRateDao.findByCurrency(currency);
     if (currencyRateRule == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -102,6 +111,7 @@ public class CurrenciesController {
    */
   @GetMapping("/currencies")
   public ResponseEntity<List<CurrencyDto>> currencyList() {
+    logger.info("GET /currencies");
     List<Currency> currencies = currencyDao.findAll();
     List<CurrencyDto> dto = currencies.stream().map(c -> {
       CurrencyDto cdto = new CurrencyDto();
@@ -116,7 +126,9 @@ public class CurrenciesController {
    * Добавление новой валюты.
    */
   @PostMapping(value = "/currencies", consumes = "application/json", produces = "application/json")
-  public ResponseEntity<Currency> createNewCurrency(@RequestBody CurrencyDto dto) {
+  public ResponseEntity<Currency> createNewCurrency(@RequestBody CurrencyDto dto)
+      throws JsonProcessingException {
+    logger.info("POST /currencies {}", new ObjectMapper().writeValueAsString(dto));
     String code = dto.getCode();
     Currency currency = new Currency();
     currency.setCode(code);
@@ -129,6 +141,7 @@ public class CurrenciesController {
    */
   @DeleteMapping("/currencies/{id}")
   public ResponseEntity<?> deleteCurrency(@PathVariable("id") Long id) {
+    logger.info("DELETE /currencies/{}", id);
     Currency currency = currencyDao.getById(id);
     if (currency == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -1,5 +1,7 @@
 package ru.shanalotte.bankbarrel.webapp.controller.account;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +27,7 @@ public class AccountRemovingController {
   private BankAccountAccessAuthorizationService bankAccountAccessAuthorizationService;
   private BankAccountDao bankAccountDao;
 
+  private static final Logger logger = LoggerFactory.getLogger(AccountRemovingController.class);
   /**
    * Конструктор со всеми зависимостями.
    */
@@ -51,17 +54,21 @@ public class AccountRemovingController {
                               @RequestParam("username") String username,
                               Model model)
       throws WebAppUserNotFound, BankAccountNotExists, UnathorizedAccessToBankAccount {
+    logger.info("Пользователь с именем {} пытается удалить счет {}", username, accountNumber);
     if (!webAppUserDao.isUserExists(username)) {
+      logger.warn("Пользователь с именем {} не существует", username);
       throw new WebAppUserNotFound(username);
     }
     WebAppUser webAppUser = webAppUserDao.findByUsername(username);
     BankClientDto bankClient = webAppUser.getClient();
     BankAccountDto account = bankAccountDao.findByNumber(accountNumber);
     if (account == null) {
+      logger.warn("Счет с номером {} не существует", accountNumber);
       throw new BankAccountNotExists(accountNumber);
     }
     if (!bankAccountAccessAuthorizationService
         .bankClientHasTheAccountWithNumber(bankClient, accountNumber)) {
+      logger.warn("У пользователя {} нет доступа к счету {}", username, accountNumber);
       throw new UnathorizedAccessToBankAccount(username + " to " + accountNumber);
     }
     bankAccountDao.delete(account);

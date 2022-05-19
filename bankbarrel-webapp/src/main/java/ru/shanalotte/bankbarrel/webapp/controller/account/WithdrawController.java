@@ -24,6 +24,8 @@ public class WithdrawController {
   private BankAccountAccessAuthorizationService bankAccountAccessAuthorizationService;
   private WebAppBankService bankService;
 
+
+
   /**
    * Конструктор со всеми зависимостями.
    */

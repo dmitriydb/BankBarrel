@@ -1,6 +1,10 @@
 package ru.shanalotte.bankbarrel.webapp.controller.account;
 
 import javax.validation.Valid;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,6 +27,7 @@ public class AccountCreationController {
 
   private WebAppUserDao webAppUserDao;
   private BankAccountCreationService bankAccountCreationService;
+  private static final Logger logger = LoggerFactory.getLogger(AccountCreationController.class);
 
   public AccountCreationController(WebAppUserDao webAppUserDao,
                                    BankAccountCreationService bankAccountCreationService) {
@@ -38,14 +43,17 @@ public class AccountCreationController {
   @PostMapping("/account/create")
   public String openAccount(Model model, @RequestParam("username") String username,
                             @Valid @ModelAttribute("accountOpeningDto") AccountOpeningDto dto,
-                            BindingResult bindingResult) throws WebAppUserNotFound {
+                            BindingResult bindingResult) throws WebAppUserNotFound,
+      JsonProcessingException {
+    logger.info("Пользователь {} пытается открыть счет {}", username,
+        new ObjectMapper().writeValueAsString(dto));
     WebAppUser webAppUser = webAppUserDao.findByUsername(username);
     if (webAppUser == null) {
+      logger.warn("Пользователь с именем {} не найден", username);
       throw new WebAppUserNotFound(username);
     }
     BankClientDto bankClient = webAppUser.getClient();
     bankAccountCreationService.createAccount(dto, bankClient);
-
     return "redirect:/user/" + username;
   }
 

@@ -9,6 +9,5 @@ import ru.shanalotte.bankbarrel.serviceregistry.dto.RegisteredServiceInfo;
  */
 @Repository
 public interface RegisteredServiceRepository extends JpaRepository<RegisteredServiceInfo, String> {
-
   RegisteredServiceInfo findByName(String name);
 }

@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -23,6 +25,7 @@ import ru.shanalotte.bankbarrel.core.service.EnumToListingDtoItemConverter;
 public class AccountTypesController {
 
   private EnumToListingDtoItemConverter enumToListingDtoItemConverter;
+ private static final Logger logger = LoggerFactory.getLogger(AccountTypesController.class);
 
   public AccountTypesController(EnumToListingDtoItemConverter enumToListingDtoItemConverter) {
     this.enumToListingDtoItemConverter = enumToListingDtoItemConverter;
@@ -35,6 +38,7 @@ public class AccountTypesController {
   @GetMapping("/accounttypes")
   @Operation(description = "Получить названия типов банковских счетов")
   public List<ListingDtoItem> accountTypes() {
+    logger.info("GET /accounttypes");
     List<ListingDtoItem> listingDtoItems = new ArrayList<>();
     try {
       for (BankAccountType bankAccountType : BankAccountType.values()) {
@@ -59,6 +63,7 @@ public class AccountTypesController {
   public ResponseEntity<List<ListingDtoItem>> additionalTypes(
       @Parameter(description = "Тип счета 1 уровня")
                   @PathVariable("code") String code) {
+    logger.info("GET /accounttype/{}/additionaltypes", code);
     List<ListingDtoItem> listingDtoItems = new ArrayList<>();
     try {
       BankAccountType type = BankAccountType.valueOf(code);

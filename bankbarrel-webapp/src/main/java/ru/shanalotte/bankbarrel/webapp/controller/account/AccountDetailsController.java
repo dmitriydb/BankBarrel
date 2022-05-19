@@ -1,5 +1,7 @@
 package ru.shanalotte.bankbarrel.webapp.controller.account;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +29,7 @@ public class AccountDetailsController {
   private BankAccountAccessAuthorizationService bankAccountAccessAuthorizationService;
   private BankAccountDetailsDtoConverter bankAccountDetailsDtoConverter;
   private AccountOpeningCurrenciesListingService accountOpeningCurrenciesListingService;
+  private static final Logger logger = LoggerFactory.getLogger(AccountDetailsController.class);
 
   /**
    * Конструктор со всеми зависимостями.
@@ -59,12 +62,15 @@ public class AccountDetailsController {
   public String openAccountPage(Model model, @PathVariable("number") String accountNumber,
                                 @PathVariable("username") String username)
       throws WebAppUserNotFound, UnathorizedAccessToBankAccount, BankAccountNotExists {
+    logger.info("Пользователь {} пытается открыть страницу счета {}", username, accountNumber);
 
     if (!webAppUserDao.isUserExists(username)) {
+      logger.warn("Пользователь с именем {} не существует", username);
       throw new WebAppUserNotFound(username);
     }
 
     if (bankAccountDao.findByNumber(accountNumber) == null) {
+      logger.warn("Счет с номером {} не существует", accountNumber);
       throw new BankAccountNotExists(username + " to " + accountNumber);
     }
 
@@ -80,6 +86,7 @@ public class AccountDetailsController {
       model.addAttribute("transferDto", new TransferDto());
       return "account";
     } else {
+      logger.warn("У пользователя {} нет доступа к счету {}", username, accountNumber);
       throw new UnathorizedAccessToBankAccount(username + " to " + accountNumber);
     }
   }

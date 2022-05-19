@@ -1,6 +1,9 @@
 package ru.shanalotte.bankbarrel.core.service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,8 @@ import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRate;
  */
 @Service
 public class SimpleBankService implements BankService {
+
+  private static final Logger logger = LoggerFactory.getLogger(SimpleBankService.class);
 
   @Autowired
   private CurrencyRateService currencyRateService;
@@ -53,23 +58,39 @@ public class SimpleBankService implements BankService {
    */
   public void deposit(BankAccount account, MonetaryAmount amount) throws UnknownCurrencyRate {
     try {
+      logger.debug("Trying to deposit {} {} to account {}",
+          amount.getValue(), amount.getCurrency(), account.getNumber());
       //account value to default currency
       String currency = account.getCurrency();
       BigDecimal value = account.getValue();
       BigDecimal accountConvertedValue =
           currencyConverterService.convertToDefaultCurrency(currencyRateService, currency, value);
+      logger.debug("Account initial balance = {} {}", account.getValue().setScale(
+          2, RoundingMode.HALF_UP),
+          account.getCurrency());
+      logger.debug("{} {} = {} {}", account.getValue().setScale(
+              2, RoundingMode.HALF_UP),
+          account.getCurrency(), accountConvertedValue.setScale(2, RoundingMode.HALF_UP),
+          defaultMonetaryAmountCurrency);
       //amount value to default currency
       String amountCurrency = amount.getCurrency();
       BigDecimal amountValue = amount.getValue();
       BigDecimal amountConvertedValue = currencyConverterService
           .convertToDefaultCurrency(currencyRateService, amountCurrency, amountValue);
+      logger.debug("{} {} = {} {}", amount.getValue().setScale(
+              2, RoundingMode.HALF_UP),
+          amount.getCurrency(), amountConvertedValue.setScale(2, RoundingMode.HALF_UP),
+          defaultMonetaryAmountCurrency);
       //adding
       BigDecimal newValue = accountConvertedValue.add(amountConvertedValue);
       //new value to account currency
       BigDecimal newAccountValue = currencyConverterService
           .convertFromDefaultCurrency(currencyRateService, account.getCurrency(), newValue);
       account.setValue(newAccountValue);
+      logger.debug("Account balance after deposit = {} {}", account.getValue()
+          .setScale(2, RoundingMode.HALF_UP), account.getCurrency());
     } catch (CurrencyNotFoundException exception) {
+      logger.error("Currency {} not found", amount.getCurrency());
       throw new UnknownCurrencyRate(amount.getCurrency());
     }
   }
@@ -86,27 +107,47 @@ public class SimpleBankService implements BankService {
   public void withdraw(BankAccount account, MonetaryAmount amount)
       throws InsufficientFundsException, UnknownCurrencyRate {
     try {
+      logger.debug("Trying to withdraw {} {} from account {}",
+          amount.getValue(), amount.getCurrency(), account.getNumber());
       //account value in default currency
       String currency = account.getCurrency();
       BigDecimal value = account.getValue();
       BigDecimal accountConvertedValue = currencyConverterService
           .convertToDefaultCurrency(currencyRateService, currency, value);
       //amount value to default currency
+      logger.debug("Account initial balance = {} {}", account.getValue().setScale(
+              2, RoundingMode.HALF_UP),
+          account.getCurrency());
+      logger.debug("{} {} = {} {}", account.getValue().setScale(
+              2, RoundingMode.HALF_UP),
+          account.getCurrency(), accountConvertedValue.setScale(2, RoundingMode.HALF_UP),
+          defaultMonetaryAmountCurrency);
       String amountCurrency = amount.getCurrency();
       BigDecimal amountValue = amount.getValue();
       BigDecimal amountConvertedValue = currencyConverterService
           .convertToDefaultCurrency(currencyRateService, amountCurrency, amountValue);
+      logger.debug("{} {} = {} {}", amount.getValue().setScale(
+              2, RoundingMode.HALF_UP),
+          amount.getCurrency(), amountConvertedValue.setScale(2, RoundingMode.HALF_UP),
+          defaultMonetaryAmountCurrency);
       //substracting
 
       if (accountConvertedValue.compareTo(amountConvertedValue) < 0) {
-        throw new InsufficientFundsException(account.toString() + " " + amount.toString());
+        logger.error("Not sufficients funds (expected {} actual {})",
+            amountConvertedValue.setScale(2, RoundingMode.HALF_UP),
+            accountConvertedValue.setScale(2, RoundingMode.HALF_UP)
+        );
+        throw new InsufficientFundsException(account + " " + amount);
       }
       BigDecimal newValue = accountConvertedValue.subtract(amountConvertedValue);
       //new value to account currency
       BigDecimal newAccountValue = currencyConverterService
           .convertFromDefaultCurrency(currencyRateService, account.getCurrency(), newValue);
       account.setValue(newAccountValue);
+      logger.debug("Account balance after withdraw = {} {}", account.getValue()
+          .setScale(2, RoundingMode.HALF_UP), account.getCurrency());
     } catch (CurrencyNotFoundException exception) {
+      logger.error("Currency {} not found", amount.getCurrency());
       throw new UnknownCurrencyRate(amount.getCurrency());
     }
   }

@@ -1,5 +1,8 @@
 package ru.shanalotte.bankbarrel.core.dto;
 
+/**
+ * DTO для класса OperationSource.
+ */
 public class OperationSourceDto {
   public Long id;
   public String name;

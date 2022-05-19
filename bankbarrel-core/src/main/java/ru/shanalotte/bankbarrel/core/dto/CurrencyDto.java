@@ -3,6 +3,9 @@ package ru.shanalotte.bankbarrel.core.dto;
 import java.util.Currency;
 import java.util.Objects;
 
+/**
+ * DTO валюты.
+ */
 public class CurrencyDto {
 
   private Long id;
@@ -26,8 +29,12 @@ public class CurrencyDto {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
     CurrencyDto that = (CurrencyDto) o;
     return Objects.equals(id, that.id) && Objects.equals(code, that.code);
   }

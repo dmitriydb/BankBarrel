@@ -2,11 +2,19 @@ package ru.shanalotte.bankbarrel.appserver.domain;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.Objects;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import ru.shanalotte.bankbarrel.core.domain.BankAccount;
-import ru.shanalotte.bankbarrel.core.domain.BankClient;
 
+/**
+ * Денежный вклад.
+ */
 @Entity
 @Table(name = "money_deposit")
 public class MoneyDeposit {

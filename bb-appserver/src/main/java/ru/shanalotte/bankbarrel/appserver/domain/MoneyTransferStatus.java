@@ -1,8 +1,16 @@
 package ru.shanalotte.bankbarrel.appserver.domain;
 
 import java.util.Objects;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+/**
+ * Возможный статус события в ходе обработки денежного перевода.
+ */
 @Entity
 @Table(name = "money_transfer_status")
 public class MoneyTransferStatus {
@@ -31,8 +39,12 @@ public class MoneyTransferStatus {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
     MoneyTransferStatus that = (MoneyTransferStatus) o;
     return Objects.equals(id, that.id) && Objects.equals(status, that.status);
   }

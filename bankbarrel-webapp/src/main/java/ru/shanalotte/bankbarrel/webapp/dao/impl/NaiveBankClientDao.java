@@ -1,12 +1,12 @@
 package ru.shanalotte.bankbarrel.webapp.dao.impl;
 
-import java.net.URI;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.client.RestTemplate;
-import ru.shanalotte.bankbarrel.core.domain.BankClient;
 import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
 import ru.shanalotte.bankbarrel.core.dto.BankClientDto;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankClientDao;
@@ -18,9 +18,8 @@ import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankClientDao;
 @Profile("test")
 public class NaiveBankClientDao implements BankClientDao {
 
-  private Set<BankClientDto> bankClients = new HashSet<>();
   private static long NEXT_ID = 0;
-
+  private Set<BankClientDto> bankClients = new HashSet<>();
   private AccountHolder accountHolder;
 
   public NaiveBankClientDao(AccountHolder accountHolder) {
@@ -29,7 +28,7 @@ public class NaiveBankClientDao implements BankClientDao {
 
   @Override
   public int count() {
-  return bankClients.size();
+    return bankClients.size();
   }
 
   @Override

@@ -7,6 +7,10 @@ import ru.shanalotte.bankbarrel.appserver.repository.CurrencyRateDao;
 import ru.shanalotte.bankbarrel.core.domain.CurrencyRateRule;
 import ru.shanalotte.bankbarrel.core.service.CurrencyRateService;
 
+/**
+ * Сервис, который загружает существующие курсы валюты из БД
+ * во время запуска приложения.
+ */
 @Service
 public class CurrencyLoader {
 
@@ -14,12 +18,19 @@ public class CurrencyLoader {
   private CurrencyRateDao currencyRateDao;
   private CurrencyRateService currencyRateService;
 
-  public CurrencyLoader(CurrencyDao currencyDao, CurrencyRateDao currencyRateDao, CurrencyRateService currencyRateService) {
+  /**
+   * Конструктор со всеми зависимостями.
+   */
+  public CurrencyLoader(CurrencyDao currencyDao, CurrencyRateDao currencyRateDao,
+                        CurrencyRateService currencyRateService) {
     this.currencyDao = currencyDao;
     this.currencyRateDao = currencyRateDao;
     this.currencyRateService = currencyRateService;
   }
 
+  /**
+   * Загружает валюты 1 раз при запуске приложения.
+   */
   @Scheduled(initialDelay = 1000, fixedDelay = Integer.MAX_VALUE)
   public void loadCurrenciesInService() {
     for (CurrencyRateRule rule : currencyRateDao.findAll()) {

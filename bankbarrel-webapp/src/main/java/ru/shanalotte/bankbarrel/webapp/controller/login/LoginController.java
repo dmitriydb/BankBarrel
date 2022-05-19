@@ -28,7 +28,8 @@ public class LoginController {
    * @throws WebAppUserNotFound кидает, если такого пользователя не существует. (HTTP 401)
    */
   @PostMapping("/login")
-  public String processLogin(RedirectAttributes redirectAttributes, @RequestParam("username") String username) throws WebAppUserNotFound {
+  public String processLogin(RedirectAttributes redirectAttributes,
+                             @RequestParam("username") String username) throws WebAppUserNotFound {
     if (StringUtils.isBlank(username)) {
       redirectAttributes.addFlashAttribute("message", "webapp.login.fillusername");
       return "redirect:/";

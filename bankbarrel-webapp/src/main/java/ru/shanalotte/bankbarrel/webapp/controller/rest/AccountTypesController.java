@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import ru.shanalotte.bankbarrel.core.dto.ListingDtoItem;
-import ru.shanalotte.bankbarrel.webapp.dto.serviceregistry.RegisteredServiceInfo;
-import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.IServiceRegistryProxy;
-import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.IServiceUrlBuilder;
+import ru.shanalotte.bankbarrel.core.dto.serviceregistry.RegisteredServiceInfo;
+import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.ServiceRegistryProxy;
+import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.ServiceUrlBuilder;
 
 /**
  * Контроллер, который возвращает json с возможными типами банковских счетов 1 и 2 уровня.
@@ -23,11 +23,11 @@ import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.IServiceUrlBuilde
 @RestController
 public class AccountTypesController {
 
-  private IServiceRegistryProxy serviceRegistryProxy;
-  private IServiceUrlBuilder serviceUrlBuilder;
+  private ServiceRegistryProxy serviceRegistryProxy;
+  private ServiceUrlBuilder serviceUrlBuilder;
 
-  public AccountTypesController(IServiceRegistryProxy serviceRegistryProxy,
-                                IServiceUrlBuilder serviceUrlBuilder) {
+  public AccountTypesController(ServiceRegistryProxy serviceRegistryProxy,
+                                ServiceUrlBuilder serviceUrlBuilder) {
     this.serviceRegistryProxy = serviceRegistryProxy;
     this.serviceUrlBuilder = serviceUrlBuilder;
   }
@@ -41,7 +41,7 @@ public class AccountTypesController {
     List<ListingDtoItem> listingDtoItems = new ArrayList<>();
     RestTemplate restTemplate = new RestTemplate();
     RegisteredServiceInfo registeredServiceInfo = serviceRegistryProxy.getRestInfoModuleInfo();
-    String url = serviceUrlBuilder.buildUrl(registeredServiceInfo);
+    String url = serviceUrlBuilder.buildServiceUrl(registeredServiceInfo);
     listingDtoItems = restTemplate.getForObject(URI.create(url + "/accounttypes"), List.class);
     return listingDtoItems;
   }
@@ -57,7 +57,7 @@ public class AccountTypesController {
     List<ListingDtoItem> listingDtoItems = new ArrayList<>();
     RestTemplate restTemplate = new RestTemplate();
     RegisteredServiceInfo registeredServiceInfo = serviceRegistryProxy.getRestInfoModuleInfo();
-    String url = serviceUrlBuilder.buildUrl(registeredServiceInfo);
+    String url = serviceUrlBuilder.buildServiceUrl(registeredServiceInfo);
     ResponseEntity<ListingDtoItem[]> response =
         restTemplate.getForEntity(
             url + "/accounttype/" + code + "/additionaltypes",

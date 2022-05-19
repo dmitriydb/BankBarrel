@@ -1,7 +1,5 @@
 package ru.shanalotte.bankbarrel.webapp.controller.user;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,7 +39,11 @@ public class UserPageController {
    * Конструктор со всеми зависимостями.
    */
   public UserPageController(
-      WebAppUserDao webAppUserDao, BankClientDao bankClientDao, AccountTypeListingService accountTypeListingService, AccountAdditionalTypesListingService accountAdditionalTypesListingService, AccountOpeningCurrenciesListingService accountOpeningCurrenciesListingService, BankAccountDtoConverter bankAccountDtoConverter) {
+      WebAppUserDao webAppUserDao, BankClientDao bankClientDao,
+      AccountTypeListingService accountTypeListingService,
+      AccountAdditionalTypesListingService accountAdditionalTypesListingService,
+      AccountOpeningCurrenciesListingService accountOpeningCurrenciesListingService,
+      BankAccountDtoConverter bankAccountDtoConverter) {
     this.serverPort = serverPort;
     this.webAppUserDao = webAppUserDao;
     this.bankClientDao = bankClientDao;
@@ -73,7 +75,7 @@ public class UserPageController {
     WebAppUser webAppUser = webAppUserDao.findByUsername(username);
     List<BankAccountWebAppDto> accountDtos = bankClientDao.accounts(webAppUser.getClient())
             .stream().map(dto -> bankAccountDtoConverter.convert(dto)).collect(Collectors.toList());
-        model.addAttribute("accounts", accountDtos);
+    model.addAttribute("accounts", accountDtos);
     return "user-page";
   }
 }

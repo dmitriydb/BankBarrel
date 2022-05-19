@@ -15,7 +15,7 @@ public interface BankClientDao {
 
   BankClientDto findByGivenName(String givenName);
 
-  List<BankAccountDto> accounts (BankClientDto clientDto);
+  List<BankAccountDto> accounts(BankClientDto clientDto);
 
   Long idByDto(BankClientDto dto);
 }

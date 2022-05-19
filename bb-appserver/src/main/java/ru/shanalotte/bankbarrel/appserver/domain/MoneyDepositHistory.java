@@ -1,8 +1,19 @@
 package ru.shanalotte.bankbarrel.appserver.domain;
 
 import java.sql.Timestamp;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
+/**
+ * Объект, который инкапсулирует событие, случившееся
+ * в ходе процесса обработки денежного вклада.
+ */
 @Entity
 @Table(name = "money_deposit_history")
 public class MoneyDepositHistory {

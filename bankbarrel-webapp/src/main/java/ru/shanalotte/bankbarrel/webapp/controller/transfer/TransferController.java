@@ -8,12 +8,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ru.shanalotte.bankbarrel.core.domain.BankAccount;
 import ru.shanalotte.bankbarrel.core.domain.MonetaryAmount;
 import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
 import ru.shanalotte.bankbarrel.core.exception.InsufficientFundsException;
 import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRate;
-import ru.shanalotte.bankbarrel.core.service.BankService;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankAccountDao;
 import ru.shanalotte.bankbarrel.webapp.dto.transfer.TransferDto;
 import ru.shanalotte.bankbarrel.webapp.exception.BankAccountNotExists;
@@ -21,8 +19,6 @@ import ru.shanalotte.bankbarrel.webapp.exception.BankAccountNotFound;
 import ru.shanalotte.bankbarrel.webapp.exception.UnathorizedAccessToBankAccount;
 import ru.shanalotte.bankbarrel.webapp.exception.WebAppUserNotFound;
 import ru.shanalotte.bankbarrel.webapp.service.BankAccountAccessAuthorizationService;
-import ru.shanalotte.bankbarrel.webapp.service.IBankAccountAccessAuthorizationService;
-import ru.shanalotte.bankbarrel.webapp.service.IWebAppBankService;
 import ru.shanalotte.bankbarrel.webapp.service.WebAppBankService;
 
 /**
@@ -31,16 +27,24 @@ import ru.shanalotte.bankbarrel.webapp.service.WebAppBankService;
 @Controller
 public class TransferController {
 
-  private IBankAccountAccessAuthorizationService bankAccountAccessAuthorizationService;
+  private BankAccountAccessAuthorizationService bankAccountAccessAuthorizationService;
   private BankAccountDao bankAccountDao;
-  private IWebAppBankService bankService;
+  private WebAppBankService bankService;
 
-  public TransferController(IBankAccountAccessAuthorizationService bankAccountAccessAuthorizationService, BankAccountDao bankAccountDao, IWebAppBankService bankService) {
+  /**
+   * Конструктор со всеми зависимостями.
+   */
+  public TransferController(BankAccountAccessAuthorizationService
+                                bankAccountAccessAuthorizationService,
+                            BankAccountDao bankAccountDao, WebAppBankService bankService) {
     this.bankAccountAccessAuthorizationService = bankAccountAccessAuthorizationService;
     this.bankAccountDao = bankAccountDao;
     this.bankService = bankService;
   }
 
+  /**
+   * Контроллер операций денежных переводов в веб-приложении.
+   */
   @PostMapping("/transfer")
   public String processTransfer(RedirectAttributes redirectAttributes, Model model,
                                 @Valid @ModelAttribute("transferDto") TransferDto dto,
@@ -67,7 +71,6 @@ public class TransferController {
     } catch (InsufficientFundsException e) {
       redirectAttributes.addFlashAttribute("message", "webapp.error.withdraw.notsufficientfunds");
     }
-
     return "redirect:/user/" + username + "/account/" + accountFromNumber;
   }
 }

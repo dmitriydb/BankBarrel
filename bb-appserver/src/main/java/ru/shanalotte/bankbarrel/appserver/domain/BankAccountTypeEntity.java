@@ -4,10 +4,17 @@ package ru.shanalotte.bankbarrel.appserver.domain;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import javax.persistence.*;
-import ru.shanalotte.bankbarrel.core.domain.BankAccountAdditionalType;
-import ru.shanalotte.bankbarrel.core.domain.BankAccountType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
+/**
+ * Тип банковского счета 1 уровня.
+ */
 @Entity
 @Table(name = "bank_account_types")
 public class BankAccountTypeEntity {
@@ -54,8 +61,12 @@ public class BankAccountTypeEntity {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
     BankAccountTypeEntity that = (BankAccountTypeEntity) o;
     return Objects.equals(id, that.id) && code == that.code;
   }

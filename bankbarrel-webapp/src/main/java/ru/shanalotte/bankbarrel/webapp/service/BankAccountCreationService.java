@@ -6,8 +6,8 @@ import ru.shanalotte.bankbarrel.webapp.config.FakeAccountNumberGenerator;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankAccountDao;
 import ru.shanalotte.bankbarrel.webapp.dto.account.AccountOpeningDto;
 import ru.shanalotte.bankbarrel.webapp.service.converter.AccountTypesNameConverter;
-import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.IServiceRegistryProxy;
-import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.IServiceUrlBuilder;
+import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.ServiceRegistryProxy;
+import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.ServiceUrlBuilder;
 
 /**
  * Сервис, который открывает новые банковские счета.
@@ -18,8 +18,8 @@ public class BankAccountCreationService {
   private AccountTypesNameConverter accountTypesNameConverter;
   private BankAccountDao bankAccountDao;
   private FakeAccountNumberGenerator fakeAccountNumberGenerator;
-  private IServiceUrlBuilder serviceUrlBuilder;
-  private IServiceRegistryProxy serviceRegistryProxy;
+  private ServiceUrlBuilder serviceUrlBuilder;
+  private ServiceRegistryProxy serviceRegistryProxy;
 
   /**
    * Конструктор со всеми зависимостями.
@@ -27,8 +27,8 @@ public class BankAccountCreationService {
   public BankAccountCreationService(AccountTypesNameConverter accountTypesNameConverter,
                                     BankAccountDao bankAccountDao,
                                     FakeAccountNumberGenerator fakeAccountNumberGenerator,
-                                    IServiceUrlBuilder serviceUrlBuilder,
-                                    IServiceRegistryProxy serviceRegistryProxy) {
+                                    ServiceUrlBuilder serviceUrlBuilder,
+                                    ServiceRegistryProxy serviceRegistryProxy) {
     this.accountTypesNameConverter = accountTypesNameConverter;
     this.bankAccountDao = bankAccountDao;
     this.fakeAccountNumberGenerator = fakeAccountNumberGenerator;

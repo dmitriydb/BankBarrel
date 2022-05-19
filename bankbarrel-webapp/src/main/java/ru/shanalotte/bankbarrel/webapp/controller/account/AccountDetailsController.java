@@ -13,7 +13,6 @@ import ru.shanalotte.bankbarrel.webapp.exception.BankAccountNotExists;
 import ru.shanalotte.bankbarrel.webapp.exception.UnathorizedAccessToBankAccount;
 import ru.shanalotte.bankbarrel.webapp.exception.WebAppUserNotFound;
 import ru.shanalotte.bankbarrel.webapp.service.BankAccountAccessAuthorizationService;
-import ru.shanalotte.bankbarrel.webapp.service.IBankAccountAccessAuthorizationService;
 import ru.shanalotte.bankbarrel.webapp.service.converter.BankAccountDetailsDtoConverter;
 import ru.shanalotte.bankbarrel.webapp.service.listing.AccountOpeningCurrenciesListingService;
 
@@ -25,7 +24,7 @@ public class AccountDetailsController {
 
   private WebAppUserDao webAppUserDao;
   private BankAccountDao bankAccountDao;
-  private IBankAccountAccessAuthorizationService bankAccountAccessAuthorizationService;
+  private BankAccountAccessAuthorizationService bankAccountAccessAuthorizationService;
   private BankAccountDetailsDtoConverter bankAccountDetailsDtoConverter;
   private AccountOpeningCurrenciesListingService accountOpeningCurrenciesListingService;
 
@@ -34,7 +33,7 @@ public class AccountDetailsController {
    */
   public AccountDetailsController(WebAppUserDao webAppUserDao,
                                   BankAccountDao bankAccountDao,
-                                  IBankAccountAccessAuthorizationService
+                                  BankAccountAccessAuthorizationService
                                       bankAccountAccessAuthorizationService,
                                   BankAccountDetailsDtoConverter bankAccountDetailsDtoConverter,
                                   AccountOpeningCurrenciesListingService

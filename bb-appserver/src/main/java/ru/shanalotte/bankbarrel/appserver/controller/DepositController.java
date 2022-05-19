@@ -4,9 +4,12 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import ru.shanalotte.bankbarrel.appserver.domain.MoneyDeposit;
-import ru.shanalotte.bankbarrel.appserver.domain.OperationSource;
 import ru.shanalotte.bankbarrel.appserver.repository.BankAccountDao;
 import ru.shanalotte.bankbarrel.appserver.repository.CurrencyDao;
 import ru.shanalotte.bankbarrel.appserver.repository.DepositDao;
@@ -15,18 +18,28 @@ import ru.shanalotte.bankbarrel.core.domain.BankAccount;
 import ru.shanalotte.bankbarrel.core.domain.MonetaryAmount;
 import ru.shanalotte.bankbarrel.core.dto.DepositDto;
 import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRate;
-import ru.shanalotte.bankbarrel.core.service.BankService;
+import ru.shanalotte.bankbarrel.core.service.SimpleBankService;
 
+/**
+ * Контроллер для операций денежных вкладов.
+ */
 @RestController
 public class DepositController {
 
   private BankAccountDao bankAccountDao;
   private CurrencyDao currencyDao;
-  private BankService bankService;
+  private SimpleBankService bankService;
   private OperationSourceDao operationSourceDao;
   private DepositDao depositDao;
 
-  public DepositController(BankAccountDao bankAccountDao, CurrencyDao currencyDao, BankService bankService, OperationSourceDao operationSourceDao, DepositDao depositDao) {
+  /**
+   * Конструктор со всеми зависимостями.
+   */
+  public DepositController(BankAccountDao bankAccountDao,
+                           CurrencyDao currencyDao,
+                           SimpleBankService bankService,
+                           OperationSourceDao operationSourceDao,
+                           DepositDao depositDao) {
     this.bankAccountDao = bankAccountDao;
     this.currencyDao = currencyDao;
     this.bankService = bankService;
@@ -34,6 +47,9 @@ public class DepositController {
     this.depositDao = depositDao;
   }
 
+  /**
+   * Получить информацию о вкладе с определенным ID.
+   */
   @GetMapping("/deposit/{id}")
   public ResponseEntity<DepositDto> depositInfo(@PathVariable("id") Long id) {
     if (!depositDao.findById(id).isPresent()) {
@@ -51,6 +67,9 @@ public class DepositController {
     return new ResponseEntity<>(dto, HttpStatus.OK);
   }
 
+  /**
+   * Создание вклада.
+   */
   @PostMapping(value = "/deposit", consumes = "application/json", produces = "application/json")
   public ResponseEntity<DepositDto> createDeposit(@RequestBody DepositDto dto) {
     if (!bankAccountDao.findById(dto.getAccount()).isPresent()) {

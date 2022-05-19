@@ -1,5 +1,8 @@
-package ru.shanalotte.bankbarrel.rest.infomodule.dto;
+package ru.shanalotte.bankbarrel.core.dto.serviceregistry;
 
+/**
+ * Класс (DTO), который хранит информацию о расположении микросервиса.
+ */
 public class RegisteredServiceInfo {
   private String name;
   private String host;

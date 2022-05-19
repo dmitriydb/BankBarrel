@@ -5,8 +5,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.shanalotte.bankbarrel.core.domain.BankAccount;
-import ru.shanalotte.bankbarrel.core.domain.BankClient;
 import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
 import ru.shanalotte.bankbarrel.core.dto.BankClientDto;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankAccountDao;
@@ -15,7 +13,6 @@ import ru.shanalotte.bankbarrel.webapp.exception.BankAccountNotExists;
 import ru.shanalotte.bankbarrel.webapp.exception.UnathorizedAccessToBankAccount;
 import ru.shanalotte.bankbarrel.webapp.exception.WebAppUserNotFound;
 import ru.shanalotte.bankbarrel.webapp.service.BankAccountAccessAuthorizationService;
-import ru.shanalotte.bankbarrel.webapp.service.IBankAccountAccessAuthorizationService;
 import ru.shanalotte.bankbarrel.webapp.user.WebAppUser;
 
 /**
@@ -25,14 +22,14 @@ import ru.shanalotte.bankbarrel.webapp.user.WebAppUser;
 public class AccountRemovingController {
 
   private WebAppUserDao webAppUserDao;
-  private IBankAccountAccessAuthorizationService bankAccountAccessAuthorizationService;
+  private BankAccountAccessAuthorizationService bankAccountAccessAuthorizationService;
   private BankAccountDao bankAccountDao;
 
   /**
    * Конструктор со всеми зависимостями.
    */
   public AccountRemovingController(WebAppUserDao webAppUserDao,
-                                   IBankAccountAccessAuthorizationService
+                                   BankAccountAccessAuthorizationService
                                        bankAccountAccessAuthorizationService,
                                    BankAccountDao bankAccountDao) {
     this.webAppUserDao = webAppUserDao;

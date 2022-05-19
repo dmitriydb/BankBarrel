@@ -2,31 +2,39 @@ package ru.shanalotte.bankbarrel.webapp.dao.impl;
 
 import java.net.URI;
 import java.util.Arrays;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
 import ru.shanalotte.bankbarrel.core.dto.BankClientDto;
+import ru.shanalotte.bankbarrel.core.dto.serviceregistry.RegisteredServiceInfo;
 import ru.shanalotte.bankbarrel.webapp.config.FakeAccountNumberGenerator;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankAccountDao;
 import ru.shanalotte.bankbarrel.webapp.dto.account.AccountOpeningDto;
-import ru.shanalotte.bankbarrel.webapp.dto.serviceregistry.RegisteredServiceInfo;
 import ru.shanalotte.bankbarrel.webapp.dto.transfer.TransferDto;
 import ru.shanalotte.bankbarrel.webapp.exception.BankAccountNotFound;
-import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.IServiceUrlBuilder;
-import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.ServiceRegistryProxy;
+import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.ServiceUrlBuilder;
+import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.WebApiServiceRegistryProxy;
 
+/**
+ * DAO для банковских счетов в веб-приложении.
+ * Использует интеграцию с микросервисом bb-webapi-gateway через REST.
+ */
 @Repository
 @Profile({"dev", "production"})
 public class RealBankAccountDao implements BankAccountDao {
 
-  private ServiceRegistryProxy serviceRegistryProxy;
-  private IServiceUrlBuilder serviceUrlBuilder;
+  private WebApiServiceRegistryProxy serviceRegistryProxy;
+  private ServiceUrlBuilder serviceUrlBuilder;
   private FakeAccountNumberGenerator fakeAccountNumberGenerator;
 
-  public RealBankAccountDao(ServiceRegistryProxy serviceRegistryProxy, IServiceUrlBuilder serviceUrlBuilder, FakeAccountNumberGenerator fakeAccountNumberGenerator) {
+  /**
+   * Конструктор со всеми зависимостями.
+   */
+  public RealBankAccountDao(WebApiServiceRegistryProxy serviceRegistryProxy,
+                            ServiceUrlBuilder serviceUrlBuilder,
+                            FakeAccountNumberGenerator fakeAccountNumberGenerator) {
     this.serviceRegistryProxy = serviceRegistryProxy;
     this.serviceUrlBuilder = serviceUrlBuilder;
     this.fakeAccountNumberGenerator = fakeAccountNumberGenerator;
@@ -35,12 +43,13 @@ public class RealBankAccountDao implements BankAccountDao {
   @Override
   public void save(BankAccountDto account) {
     RegisteredServiceInfo webApiInfo = serviceRegistryProxy.getWebApiInfo();
-    String url = serviceUrlBuilder.buildUrl(webApiInfo) + "/accounts";
+    String url = serviceUrlBuilder.buildServiceUrl(webApiInfo) + "/accounts";
     RestTemplate restTemplate = new RestTemplate();
 
     for (int i = 0; i < 100; i++) {
       try {
-        ResponseEntity<BankAccountDto> bankAccountDtoResponseEntity = restTemplate.postForEntity(URI.create(url), account, BankAccountDto.class);
+        ResponseEntity<BankAccountDto> bankAccountDtoResponseEntity =
+            restTemplate.postForEntity(URI.create(url), account, BankAccountDto.class);
         break;
       } catch (Exception ex) {
         account.setNumber(fakeAccountNumberGenerator.generateNumber());
@@ -51,17 +60,22 @@ public class RealBankAccountDao implements BankAccountDao {
   @Override
   public BankAccountDto findByNumber(String number) {
     RestTemplate restTemplate = new RestTemplate();
-    String url = serviceUrlBuilder.buildUrl(serviceRegistryProxy.getWebApiInfo()) + "/accounts";
-    BankAccountDto[] list = restTemplate.getForEntity(URI.create(url), BankAccountDto[].class).getBody();
+    String url =
+        serviceUrlBuilder.buildServiceUrl(serviceRegistryProxy.getWebApiInfo()) + "/accounts";
+    BankAccountDto[] list =
+        restTemplate.getForEntity(URI.create(url), BankAccountDto[].class).getBody();
     return Arrays.stream(list).filter(e -> e.getNumber().equals(number)).findFirst().orElse(null);
   }
 
   @Override
   public void delete(BankAccountDto account) {
     RestTemplate restTemplate = new RestTemplate();
-    String url = serviceUrlBuilder.buildUrl(serviceRegistryProxy.getWebApiInfo()) + "/accounts";
-    BankAccountDto[] list = restTemplate.getForEntity(URI.create(url), BankAccountDto[].class).getBody();
-    BankAccountDto dto = Arrays.stream(list).filter(e -> e.getNumber().equals(account.getNumber())).findFirst().get();
+    String url =
+        serviceUrlBuilder.buildServiceUrl(serviceRegistryProxy.getWebApiInfo()) + "/accounts";
+    BankAccountDto[] list = restTemplate.getForEntity(URI.create(url),
+        BankAccountDto[].class).getBody();
+    BankAccountDto dto = Arrays.stream(list).filter(
+        e -> e.getNumber().equals(account.getNumber())).findFirst().get();
     System.out.println("Deleting " + url + "/" + dto.getIdentifier());
     restTemplate.delete(url + "/" + dto.getIdentifier());
   }
@@ -69,17 +83,23 @@ public class RealBankAccountDao implements BankAccountDao {
   @Override
   public BankAccountDto findByTransferDto(TransferDto dto) throws BankAccountNotFound {
     RestTemplate restTemplate = new RestTemplate();
-    String url = serviceUrlBuilder.buildUrl(serviceRegistryProxy.getWebApiInfo()) + "/accounts";
-    BankAccountDto[] list = restTemplate.getForEntity(URI.create(url), BankAccountDto[].class).getBody();
-    return Arrays.stream(list).filter(e -> e.getNumber().equals(dto.getAccountNumber())).findFirst().get();
+    String url =
+        serviceUrlBuilder.buildServiceUrl(serviceRegistryProxy.getWebApiInfo()) + "/accounts";
+    BankAccountDto[] list = restTemplate.getForEntity(URI.create(url),
+        BankAccountDto[].class).getBody();
+    return Arrays.stream(list).filter(e -> e.getNumber().equals(
+        dto.getAccountNumber())).findFirst().get();
   }
 
   @Override
   public void createAccount(AccountOpeningDto dto, BankClientDto bankClient) {
-    String url = serviceUrlBuilder.buildUrl(serviceRegistryProxy.getWebApiInfo()) + "/clients";
+    String url =
+        serviceUrlBuilder.buildServiceUrl(serviceRegistryProxy.getWebApiInfo()) + "/clients";
     RestTemplate restTemplate = new RestTemplate();
-    ResponseEntity<BankClientDto[]> responseEntity = restTemplate.getForEntity(URI.create(url), BankClientDto[].class);
-    BankClientDto client = Arrays.stream(responseEntity.getBody()).filter(e -> e.equals(bankClient)).findFirst().get();
+    ResponseEntity<BankClientDto[]> responseEntity =
+        restTemplate.getForEntity(URI.create(url), BankClientDto[].class);
+    BankClientDto client = Arrays.stream(
+        responseEntity.getBody()).filter(e -> e.equals(bankClient)).findFirst().get();
     BankAccountDto bankAccount = new BankAccountDto();
     bankAccount.setOwner(client.getId());
     bankAccount.setNumber(fakeAccountNumberGenerator.generateNumber());

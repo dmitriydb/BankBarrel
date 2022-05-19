@@ -2,6 +2,9 @@ package ru.shanalotte.bankbarrel.core.dto;
 
 import java.math.BigDecimal;
 
+/**
+ * DTO денежных переводов.
+ */
 public class TransferDto {
   private Long id;
   private String fromAccount;

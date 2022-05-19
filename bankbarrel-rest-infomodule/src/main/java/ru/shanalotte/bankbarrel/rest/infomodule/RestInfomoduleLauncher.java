@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * В данный момент используется для получения json-ов с информацией о существующих
  * типах банковских счетов.
  */
-@SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 public class RestInfomoduleLauncher {
   public static void main(String[] args) {
     SpringApplication.run(RestInfomoduleLauncher.class, args);

@@ -9,6 +9,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
+/**
+ * Лаунчер веб-приложения.
+ */
 @SpringBootApplication
 @ComponentScan("ru.shanalotte.bankbarrel.appserver")
 @ComponentScan("ru.shanalotte.bankbarrel.core")

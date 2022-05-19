@@ -4,11 +4,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import ru.shanalotte.bankbarrel.appserver.repository.BankClientDao;
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
 import ru.shanalotte.bankbarrel.core.dto.BankClientDto;
 
+/**
+ * Контроллер для информации о клиентах.
+ */
 @RestController
 public class ClientsController {
 
@@ -18,6 +26,9 @@ public class ClientsController {
     this.bankClientDao = bankClientDao;
   }
 
+  /**
+   * Создание нового клиента.
+   */
   @PostMapping("/clients")
   public ResponseEntity<BankClientDto> createNewClient(@RequestBody BankClientDto dto) {
     BankClient client = new BankClient.Builder(dto.getGivenName(), dto.getFamilyName())
@@ -29,6 +40,9 @@ public class ClientsController {
     return new ResponseEntity<>(dto, HttpStatus.CREATED);
   }
 
+  /**
+   * Получение списка клиентов.
+   */
   @GetMapping("/clients")
   public ResponseEntity<List<BankClientDto>> getClientList() {
     List<BankClientDto> result = bankClientDao.findAll()
@@ -45,6 +59,9 @@ public class ClientsController {
     return new ResponseEntity<>(result, HttpStatus.OK);
   }
 
+  /**
+   * Получение информации о клиенте с определенноым ID.
+   */
   @GetMapping("/clients/{id}")
   public ResponseEntity<BankClientDto> getClientInfo(@PathVariable("id") Long id) {
     if (!bankClientDao.findById(id).isPresent()) {
@@ -60,8 +77,12 @@ public class ClientsController {
     return new ResponseEntity<>(dto, HttpStatus.OK);
   }
 
+  /**
+   * Изменение информации клиента с определенным ID.
+   */
   @PutMapping("/clients/{id}")
-  public ResponseEntity<BankClientDto> getClientInfo(@PathVariable("id") Long id, @RequestBody BankClientDto dto) {
+  public ResponseEntity<BankClientDto> getClientInfo(@PathVariable("id") Long id,
+                                                     @RequestBody BankClientDto dto) {
     if (!bankClientDao.findById(id).isPresent()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

@@ -7,6 +7,9 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+/**
+ * Класс (Entity), который хранит информацию о расположении микросервиса.
+ */
 @Entity
 @Table(name = "registered_services")
 public class RegisteredServiceInfo {

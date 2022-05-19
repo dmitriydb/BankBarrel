@@ -1,23 +1,15 @@
 package ru.shanalotte.bankbarrel.webapp.dao.impl;
 
-import java.net.URI;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.client.RestTemplate;
-import ru.shanalotte.bankbarrel.core.domain.BankAccount;
 import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
 import ru.shanalotte.bankbarrel.core.dto.BankClientDto;
 import ru.shanalotte.bankbarrel.webapp.config.FakeAccountNumberGenerator;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankAccountDao;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankClientDao;
 import ru.shanalotte.bankbarrel.webapp.dto.account.AccountOpeningDto;
-import ru.shanalotte.bankbarrel.webapp.dto.serviceregistry.RegisteredServiceInfo;
 import ru.shanalotte.bankbarrel.webapp.dto.transfer.TransferDto;
 import ru.shanalotte.bankbarrel.webapp.exception.BankAccountNotFound;
 
@@ -34,7 +26,11 @@ public class NaiveBankAccountDao implements BankAccountDao {
   private BankClientDao bankClientDao;
   private AccountHolder accountHolder;
 
-  public NaiveBankAccountDao(FakeAccountNumberGenerator fakeAccountNumberGenerator, BankClientDao bankClientDao, AccountHolder accountHolder) {
+  /**
+   * Конструктор со всеми зависимостями.
+   */
+  public NaiveBankAccountDao(FakeAccountNumberGenerator fakeAccountNumberGenerator,
+                             BankClientDao bankClientDao, AccountHolder accountHolder) {
     this.fakeAccountNumberGenerator = fakeAccountNumberGenerator;
     this.bankClientDao = bankClientDao;
     this.accountHolder = accountHolder;
@@ -52,7 +48,8 @@ public class NaiveBankAccountDao implements BankAccountDao {
 
   @Override
   public void delete(BankAccountDto account) {
-    BankAccountDto dto = bankAccounts.stream().filter(e -> e.getNumber().equals(account.getNumber())).findFirst().get();
+    BankAccountDto dto = bankAccounts.stream().filter(
+        e -> e.getNumber().equals(account.getNumber())).findFirst().get();
     for (BankClientDto client : accountHolder.getAccounts().keySet()) {
       if (accountHolder.getAccounts().get(client).contains(account)) {
         accountHolder.getAccounts().get(client).remove(account);
@@ -63,7 +60,8 @@ public class NaiveBankAccountDao implements BankAccountDao {
 
   @Override
   public BankAccountDto findByTransferDto(TransferDto dto) throws BankAccountNotFound {
-    return bankAccounts.stream().filter(e -> e.getNumber().equals(dto.getAccountNumber())).findFirst().get();
+    return bankAccounts.stream().filter(
+        e -> e.getNumber().equals(dto.getAccountNumber())).findFirst().get();
   }
 
   @Override

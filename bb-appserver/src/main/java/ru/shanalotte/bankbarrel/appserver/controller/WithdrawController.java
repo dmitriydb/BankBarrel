@@ -4,28 +4,43 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import ru.shanalotte.bankbarrel.appserver.domain.MoneyDeposit;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import ru.shanalotte.bankbarrel.appserver.domain.MoneyWithdraw;
-import ru.shanalotte.bankbarrel.appserver.repository.*;
+import ru.shanalotte.bankbarrel.appserver.repository.BankAccountDao;
+import ru.shanalotte.bankbarrel.appserver.repository.CurrencyDao;
+import ru.shanalotte.bankbarrel.appserver.repository.OperationSourceDao;
+import ru.shanalotte.bankbarrel.appserver.repository.WithdrawDao;
 import ru.shanalotte.bankbarrel.core.domain.BankAccount;
 import ru.shanalotte.bankbarrel.core.domain.MonetaryAmount;
-import ru.shanalotte.bankbarrel.core.dto.DepositDto;
 import ru.shanalotte.bankbarrel.core.dto.WithdrawDto;
 import ru.shanalotte.bankbarrel.core.exception.InsufficientFundsException;
 import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRate;
-import ru.shanalotte.bankbarrel.core.service.BankService;
+import ru.shanalotte.bankbarrel.core.service.SimpleBankService;
 
+/**
+ * Контроллер операций снятий денежных средств.
+ */
 @RestController
 public class WithdrawController {
 
   private BankAccountDao bankAccountDao;
   private CurrencyDao currencyDao;
-  private BankService bankService;
+  private SimpleBankService bankService;
   private OperationSourceDao operationSourceDao;
   private WithdrawDao withdrawDao;
 
-  public WithdrawController(BankAccountDao bankAccountDao, CurrencyDao currencyDao, BankService bankService, OperationSourceDao operationSourceDao, WithdrawDao withdrawDao) {
+  /**
+   * Конструктор со всеми зависимостями.
+   */
+  public WithdrawController(BankAccountDao bankAccountDao,
+                            CurrencyDao currencyDao,
+                            SimpleBankService bankService,
+                            OperationSourceDao operationSourceDao,
+                            WithdrawDao withdrawDao) {
     this.bankAccountDao = bankAccountDao;
     this.currencyDao = currencyDao;
     this.bankService = bankService;
@@ -33,6 +48,9 @@ public class WithdrawController {
     this.withdrawDao = withdrawDao;
   }
 
+  /**
+   * Получение информации о снятии средств по ID.
+   */
   @GetMapping("/withdraw/{id}")
   public ResponseEntity<WithdrawDto> withdrawInfo(@PathVariable("id") Long id) {
     if (!withdrawDao.findById(id).isPresent()) {
@@ -50,6 +68,9 @@ public class WithdrawController {
     return new ResponseEntity<>(dto, HttpStatus.OK);
   }
 
+  /**
+   * Инициация операции снятия средств.
+   */
   @PostMapping(value = "/withdraw", consumes = "application/json", produces = "application/json")
   public ResponseEntity<WithdrawDto> createWithdraw(@RequestBody WithdrawDto dto) {
     if (!bankAccountDao.findById(dto.getAccount()).isPresent()) {

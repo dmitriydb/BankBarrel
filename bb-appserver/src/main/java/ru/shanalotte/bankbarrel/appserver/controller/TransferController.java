@@ -4,29 +4,42 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import ru.shanalotte.bankbarrel.appserver.domain.MoneyTransfer;
-import ru.shanalotte.bankbarrel.appserver.domain.MoneyWithdraw;
-import ru.shanalotte.bankbarrel.appserver.repository.*;
+import ru.shanalotte.bankbarrel.appserver.repository.BankAccountDao;
+import ru.shanalotte.bankbarrel.appserver.repository.CurrencyDao;
+import ru.shanalotte.bankbarrel.appserver.repository.OperationSourceDao;
+import ru.shanalotte.bankbarrel.appserver.repository.TransferDao;
 import ru.shanalotte.bankbarrel.core.domain.BankAccount;
 import ru.shanalotte.bankbarrel.core.domain.MonetaryAmount;
 import ru.shanalotte.bankbarrel.core.dto.TransferDto;
-import ru.shanalotte.bankbarrel.core.dto.WithdrawDto;
 import ru.shanalotte.bankbarrel.core.exception.InsufficientFundsException;
 import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRate;
-import ru.shanalotte.bankbarrel.core.service.BankService;
+import ru.shanalotte.bankbarrel.core.service.SimpleBankService;
 
+/**
+ * Контроллер операций денежных переводов.
+ */
 @RestController
 public class TransferController {
 
   private BankAccountDao bankAccountDao;
   private CurrencyDao currencyDao;
-  private BankService bankService;
+  private SimpleBankService bankService;
   private OperationSourceDao operationSourceDao;
   private TransferDao transferDao;
 
+  /**
+   * Конструктор со всеми зависимостями.
+   */
+
   public TransferController(BankAccountDao bankAccountDao, CurrencyDao currencyDao,
-                            BankService bankService, OperationSourceDao operationSourceDao, TransferDao transferDao) {
+                            SimpleBankService bankService,
+                            OperationSourceDao operationSourceDao, TransferDao transferDao) {
     this.bankAccountDao = bankAccountDao;
     this.currencyDao = currencyDao;
     this.bankService = bankService;
@@ -34,6 +47,9 @@ public class TransferController {
     this.transferDao = transferDao;
   }
 
+  /**
+   * Получить информацию о денежном переводе по его ID.
+   */
   @GetMapping("/transfer/{id}")
   public ResponseEntity<TransferDto> transferInfo(@PathVariable("id") Long id) {
     if (!transferDao.findById(id).isPresent()) {
@@ -52,6 +68,9 @@ public class TransferController {
     return new ResponseEntity<>(dto, HttpStatus.OK);
   }
 
+  /**
+   * Инициировать процесс денежного перевода.
+   */
   @PostMapping(value = "/transfer", consumes = "application/json", produces = "application/json")
   public ResponseEntity<TransferDto> createTransfer(@RequestBody TransferDto dto) {
     System.out.println(dto);
@@ -79,7 +98,8 @@ public class TransferController {
     moneyTransfer.setAmount(dto.getAmount());
     moneyTransfer.setOperationSource(operationSourceDao.findByName(dto.getSource()));
     try {
-      bankService.transfer(fromAccount, toAccount, new MonetaryAmount(dto.getAmount(), dto.getCurrency()));
+      bankService.transfer(fromAccount, toAccount,
+          new MonetaryAmount(dto.getAmount(), dto.getCurrency()));
       bankAccountDao.save(fromAccount);
       bankAccountDao.save(toAccount);
       moneyTransfer.setResult("SUCCESS");

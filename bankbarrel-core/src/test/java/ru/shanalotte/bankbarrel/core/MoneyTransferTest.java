@@ -9,14 +9,14 @@ import ru.shanalotte.bankbarrel.core.domain.BankAccount;
 import ru.shanalotte.bankbarrel.core.domain.MonetaryAmount;
 import ru.shanalotte.bankbarrel.core.exception.InsufficientFundsException;
 import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRate;
-import ru.shanalotte.bankbarrel.core.service.BankService;
+import ru.shanalotte.bankbarrel.core.service.SimpleBankService;
 
 public class MoneyTransferTest {
 
   @Test
   public void shouldThrowExceptionIfInsufficientFunds() {
     BankAccount bankAccount = DummyService.createDummyCheckingBankAccount();
-    BankService bankService = DummyService.dummyBankService();
+    SimpleBankService bankService = DummyService.dummyBankService();
     assertThrows(InsufficientFundsException.class, () -> {
       bankService.withdraw(bankAccount, new MonetaryAmount(1, "USD"));
     });
@@ -25,7 +25,7 @@ public class MoneyTransferTest {
   @Test
   public void shouldThrowExceptionIfInsufficientFunds2() throws UnknownCurrencyRate {
     BankAccount bankAccount = DummyService.createDummyCheckingBankAccount();
-    BankService bankService = DummyService.dummyBankService();
+    SimpleBankService bankService = DummyService.dummyBankService();
     bankService.deposit(bankAccount, new MonetaryAmount(0.12320, "USD"));
     assertThrows(InsufficientFundsException.class, () -> {
       bankService.withdraw(bankAccount, new MonetaryAmount(0.12321, "USD"));
@@ -35,7 +35,7 @@ public class MoneyTransferTest {
   @Test
   public void shouldNotThrowExceptionIfSufficientFunds() throws UnknownCurrencyRate {
     BankAccount bankAccount = DummyService.createDummyCheckingBankAccount();
-    BankService bankService = DummyService.dummyBankService();
+    SimpleBankService bankService = DummyService.dummyBankService();
     bankService.deposit(bankAccount, new MonetaryAmount(0.12321, "USD"));
     assertDoesNotThrow(() -> {
       bankService.withdraw(bankAccount, new MonetaryAmount(0.12321, "USD"));
@@ -46,7 +46,7 @@ public class MoneyTransferTest {
   public void shouldThrowWhenTransferingFromInsufficientAccount(){
     BankAccount bankAccount = DummyService.createDummyCheckingBankAccount();
     BankAccount bankAccount2 = DummyService.createDummyCheckingBankAccount();
-    BankService bankService = DummyService.dummyBankService();
+    SimpleBankService bankService = DummyService.dummyBankService();
     assertThrows(InsufficientFundsException.class, () -> {
       bankService.transfer(bankAccount, bankAccount2, new MonetaryAmount(1, "USD"));
     });
@@ -56,7 +56,7 @@ public class MoneyTransferTest {
   public void successfulTransfering() throws InsufficientFundsException, UnknownCurrencyRate {
     BankAccount bankAccount = DummyService.createDummyCheckingBankAccount();
     BankAccount bankAccount2 = DummyService.createDummyCheckingBankAccount();
-    BankService bankService = DummyService.dummyBankService();
+    SimpleBankService bankService = DummyService.dummyBankService();
     bankService.deposit(bankAccount, new MonetaryAmount(0.66, "USD"));
     assertThat(bankAccount.toMonetaryAmount().getValue()).isEqualByComparingTo(new BigDecimal("0.66"));
     assertThat(bankAccount2.toMonetaryAmount().getValue()).isEqualByComparingTo(new BigDecimal("0"));

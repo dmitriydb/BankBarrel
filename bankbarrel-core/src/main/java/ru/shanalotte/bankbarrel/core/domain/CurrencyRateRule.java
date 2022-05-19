@@ -1,7 +1,10 @@
 package ru.shanalotte.bankbarrel.core.domain;
 
 import java.math.BigDecimal;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import ru.shanalotte.bankbarrel.core.misc.PropertiesLoader;
 
 /**
@@ -11,8 +14,7 @@ import ru.shanalotte.bankbarrel.core.misc.PropertiesLoader;
 @Entity
 @Table(name = "currency_rates")
 public class CurrencyRateRule {
-  public CurrencyRateRule() {
-  }
+
   private BigDecimal rate;
   /**
    * true for currencies that are bigger that USD, false otherwise.
@@ -23,6 +25,8 @@ public class CurrencyRateRule {
   @Id
   private String currency;
 
+  public CurrencyRateRule() {
+  }
 
   public void setRate(BigDecimal rate) {
     this.rate = rate;

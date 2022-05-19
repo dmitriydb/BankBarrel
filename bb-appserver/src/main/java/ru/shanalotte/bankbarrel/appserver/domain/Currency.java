@@ -1,9 +1,16 @@
 package ru.shanalotte.bankbarrel.appserver.domain;
 
 import java.util.Objects;
-import javax.persistence.*;
-import ru.shanalotte.bankbarrel.core.dto.CurrencyDto;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+/**
+ * Валюта.
+ */
 @Entity
 @Table(name = "currencies")
 public class Currency {
@@ -32,8 +39,12 @@ public class Currency {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
     Currency currency = (Currency) o;
     return Objects.equals(code, currency.code);
   }

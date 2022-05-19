@@ -6,15 +6,25 @@ import ru.shanalotte.bankbarrel.core.service.EnumToListingDtoItemConverter;
 import ru.shanalotte.bankbarrel.webapp.dto.account.BankAccountWebAppDto;
 
 
+/**
+ * Сервис для конвертации BankAccountDto из модуля bankbarrel-core
+ * в BankAccountWebAppDto модуля bb-webapp.
+ */
 @Service
 public class BankAccountDtoConverter {
 
   private EnumToListingDtoItemConverter enumToListingDtoItemConverter;
 
+  /**
+   * Конструктор со всеми зависимостями.
+   */
   public BankAccountDtoConverter(EnumToListingDtoItemConverter enumToListingDtoItemConverter) {
     this.enumToListingDtoItemConverter = enumToListingDtoItemConverter;
   }
 
+  /**
+   * Метод конвертации.
+   */
   public BankAccountWebAppDto convert(BankAccountDto account) {
     String type = enumToListingDtoItemConverter
         .convert(account.getType()).getValue();

@@ -4,7 +4,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import ru.shanalotte.bankbarrel.appserver.domain.Currency;
 import ru.shanalotte.bankbarrel.appserver.repository.CurrencyDao;
 import ru.shanalotte.bankbarrel.appserver.repository.CurrencyRateDao;
@@ -12,21 +18,29 @@ import ru.shanalotte.bankbarrel.core.domain.CurrencyRateRule;
 import ru.shanalotte.bankbarrel.core.dto.CurrencyDto;
 import ru.shanalotte.bankbarrel.core.dto.CurrencyRateDto;
 
+/**
+ * Контроллер для доступа к информации о валютах.
+ */
 @RestController
 public class CurrenciesController {
 
   private CurrencyDao currencyDao;
   private CurrencyRateDao currencyRateDao;
 
+  /**
+   * Конструктор со всеми зависимостями.
+   */
   public CurrenciesController(CurrencyDao currencyDao, CurrencyRateDao currencyRateDao) {
     this.currencyDao = currencyDao;
     this.currencyRateDao = currencyRateDao;
   }
 
-
+  /**
+   * Добавление курса валюты.
+   */
   @PostMapping("/currencies/{currency}/rate")
-  public ResponseEntity<CurrencyRateDto> createCurrencyRate(@PathVariable("currency") String currency,
-                                                         @RequestBody CurrencyRateDto dto) {
+  public ResponseEntity<CurrencyRateDto> createCurrencyRate(
+      @PathVariable("currency") String currency, @RequestBody CurrencyRateDto dto) {
     Currency currencyEntity = currencyDao.findByCode(currency);
     if (currencyEntity == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -43,9 +57,13 @@ public class CurrenciesController {
     return new ResponseEntity<>(result, HttpStatus.CREATED);
   }
 
+  /**
+   * Изменение курса валюты.
+   */
   @PutMapping("/currencies/{currency}/rate")
-  public ResponseEntity<CurrencyRateDto> updateCurrencyRate(@PathVariable("currency") String currency,
-                                                         @RequestBody CurrencyRateDto dto) {
+  public ResponseEntity<CurrencyRateDto> updateCurrencyRate(
+      @PathVariable("currency") String currency,
+      @RequestBody CurrencyRateDto dto) {
     Currency currencyEntity = currencyDao.findByCode(currency);
     if (currencyEntity == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -62,9 +80,12 @@ public class CurrenciesController {
     return new ResponseEntity<>(result, HttpStatus.OK);
   }
 
-
+  /**
+   * Информация о курсе валюты.
+   */
   @GetMapping("/currencies/{currency}/rate")
-  public ResponseEntity<CurrencyRateDto> getCurrencyRate(@PathVariable("currency") String currency) {
+  public ResponseEntity<CurrencyRateDto> getCurrencyRate(
+      @PathVariable("currency") String currency) {
     CurrencyRateRule currencyRateRule = currencyRateDao.findByCurrency(currency);
     if (currencyRateRule == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -76,6 +97,9 @@ public class CurrenciesController {
     return new ResponseEntity<>(dto, HttpStatus.OK);
   }
 
+  /**
+   * Получение списка валют.
+   */
   @GetMapping("/currencies")
   public ResponseEntity<List<CurrencyDto>> currencyList() {
     List<Currency> currencies = currencyDao.findAll();
@@ -88,6 +112,9 @@ public class CurrenciesController {
     return new ResponseEntity<>(dto, HttpStatus.OK);
   }
 
+  /**
+   * Добавление новой валюты.
+   */
   @PostMapping(value = "/currencies", consumes = "application/json", produces = "application/json")
   public ResponseEntity<Currency> createNewCurrency(@RequestBody CurrencyDto dto) {
     String code = dto.getCode();
@@ -97,6 +124,9 @@ public class CurrenciesController {
     return new ResponseEntity<>(currency, HttpStatus.CREATED);
   }
 
+  /**
+   * Удаление валюты по ID.
+   */
   @DeleteMapping("/currencies/{id}")
   public ResponseEntity<?> deleteCurrency(@PathVariable("id") Long id) {
     Currency currency = currencyDao.getById(id);

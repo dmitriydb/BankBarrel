@@ -1,6 +1,5 @@
 package ru.shanalotte.bankbarrel.core;
 
-import java.math.BigDecimal;
 import java.math.RoundingMode;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -8,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import ru.shanalotte.bankbarrel.core.domain.*;
 import ru.shanalotte.bankbarrel.core.exception.InsufficientFundsException;
 import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRate;
-import ru.shanalotte.bankbarrel.core.service.BankService;
+import ru.shanalotte.bankbarrel.core.service.SimpleBankService;
 import ru.shanalotte.bankbarrel.core.service.CurrencyConverterService;
 import ru.shanalotte.bankbarrel.core.service.CurrencyRateService;
 
@@ -31,7 +30,7 @@ public class MonetaryAmountTest {
     currencyRateService.addRule(rule);
     currencyRateService.addRule(rule2);
     BankAccount bankAccount = DummyService.createDummyCheckingBankAccount();
-    BankService bankService = new BankService(currencyRateService, new CurrencyConverterService(10), "USD");
+    SimpleBankService bankService = new SimpleBankService(currencyRateService, new CurrencyConverterService(10), "USD");
     bankService.deposit(bankAccount, new MonetaryAmount(1, "USD"));
     bankService.deposit(bankAccount, new MonetaryAmount(20, "RUB"));
     assertThat(bankAccount.toMonetaryAmount()).isEqualTo(new MonetaryAmount(2, "USD"));
@@ -46,7 +45,7 @@ public class MonetaryAmountTest {
         .withType(BankAccountType.CHECKING)
         .withAdditionalType(BankAccountAdditionalType.PREMIUM)
         .build();
-    BankService bankService = DummyService.dummyBankService();
+    SimpleBankService bankService = DummyService.dummyBankService();
     bankService.deposit(bankAccount, new MonetaryAmount(10000, "RUB"));
     assertThat(bankAccount.toMonetaryAmount().getValue().setScale(4, RoundingMode.HALF_UP)).isEqualByComparingTo(new MonetaryAmount(10000, "RUB").getValue());
   }
@@ -59,7 +58,7 @@ public class MonetaryAmountTest {
         .withType(BankAccountType.CHECKING)
         .withAdditionalType(BankAccountAdditionalType.PREMIUM)
         .build();
-    BankService bankService = DummyService.dummyBankService();
+    SimpleBankService bankService = DummyService.dummyBankService();
     bankService.deposit(bankAccount, new MonetaryAmount(1000, "RUB"));
     bankService.deposit(bankAccount, new MonetaryAmount(1, "USD"));
     bankService.deposit(bankAccount, new MonetaryAmount(300, "KZT"));
@@ -67,7 +66,7 @@ public class MonetaryAmountTest {
 
   @Test
   public void withdraw() throws InsufficientFundsException, UnknownCurrencyRate {
-    BankService bankService = DummyService.dummyBankService();
+    SimpleBankService bankService = DummyService.dummyBankService();
     BankAccount account = DummyService.createDummyCheckingBankAccount();
     bankService.deposit(account, new MonetaryAmount(10, "USD"));
     System.out.println(account.balance());
@@ -78,7 +77,7 @@ public class MonetaryAmountTest {
 
   @Test
   public void unknownCurrency() {
-    BankService bankService = DummyService.dummyBankService();
+    SimpleBankService bankService = DummyService.dummyBankService();
     BankAccount bankAccount = DummyService.createDummyCheckingBankAccount();
     assertThrows(UnknownCurrencyRate.class, () -> {
       bankService.deposit(bankAccount, new MonetaryAmount(123, "XXX"));

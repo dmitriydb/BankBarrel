@@ -3,7 +3,7 @@ package ru.shanalotte.bankbarrel.core;
 import static ru.shanalotte.bankbarrel.core.CustomerCreationData.validName;
 import static ru.shanalotte.bankbarrel.core.CustomerCreationData.validSurname;
 import ru.shanalotte.bankbarrel.core.domain.*;
-import ru.shanalotte.bankbarrel.core.service.BankService;
+import ru.shanalotte.bankbarrel.core.service.SimpleBankService;
 import ru.shanalotte.bankbarrel.core.service.CurrencyConverterService;
 import ru.shanalotte.bankbarrel.core.service.CurrencyRateService;
 
@@ -44,8 +44,8 @@ public class DummyService {
     return currencyRateService;
   }
 
-  public static BankService dummyBankService() {
-    BankService bankService = new BankService(defaultCurrencyRateService(), new CurrencyConverterService(10), "USD");
+  public static SimpleBankService dummyBankService() {
+    SimpleBankService bankService = new SimpleBankService(defaultCurrencyRateService(), new CurrencyConverterService(10), "USD");
     return bankService;
   }
 }

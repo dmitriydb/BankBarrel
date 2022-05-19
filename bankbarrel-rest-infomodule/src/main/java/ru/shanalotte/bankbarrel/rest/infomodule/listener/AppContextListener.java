@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import ru.shanalotte.bankbarrel.rest.infomodule.dto.RegisteredServiceInfo;
+import ru.shanalotte.bankbarrel.core.dto.serviceregistry.RegisteredServiceInfo;
 
 /**
  * Листенер, который срабатывает в момент поднятия приложения.

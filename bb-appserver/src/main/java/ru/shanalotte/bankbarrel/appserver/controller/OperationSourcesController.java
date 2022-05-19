@@ -10,6 +10,9 @@ import ru.shanalotte.bankbarrel.appserver.domain.OperationSource;
 import ru.shanalotte.bankbarrel.appserver.repository.OperationSourceDao;
 import ru.shanalotte.bankbarrel.core.dto.OperationSourceDto;
 
+/**
+ * Контроллер для операция с источниками операций с API.
+ */
 @RestController
 public class OperationSourcesController {
 
@@ -19,6 +22,9 @@ public class OperationSourcesController {
     this.operationSourceDao = operationSourceDao;
   }
 
+  /**
+   * Получение всех возможных источников операций с WEB API.
+   */
   @GetMapping("/operations/sources")
   public ResponseEntity<List<OperationSourceDto>> getOperationSources() {
     List<OperationSourceDto> dtos = operationSourceDao.findAll()

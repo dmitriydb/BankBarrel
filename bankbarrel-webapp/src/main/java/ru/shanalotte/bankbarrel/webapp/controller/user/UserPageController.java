@@ -2,6 +2,8 @@ package ru.shanalotte.bankbarrel.webapp.controller.user;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,6 +37,8 @@ public class UserPageController {
   private AccountOpeningCurrenciesListingService accountOpeningCurrenciesListingService;
   private BankAccountDtoConverter bankAccountDtoConverter;
 
+  private static final Logger logger = LoggerFactory.getLogger(UserPageController.class);
+
   /**
    * Конструктор со всеми зависимостями.
    */
@@ -61,7 +65,9 @@ public class UserPageController {
   @GetMapping("/user/{username}")
   public String userPage(@PathVariable("username") String username, Model model)
       throws WebAppUserNotFound {
+    logger.info("Пользователь {} заходит в свой личный кабинет", username);
     if (!webAppUserDao.isUserExists(username)) {
+      logger.warn("Пользователь {} не существует", username);
       throw new WebAppUserNotFound(username);
     }
     model.addAttribute("serverPort", serverPort);

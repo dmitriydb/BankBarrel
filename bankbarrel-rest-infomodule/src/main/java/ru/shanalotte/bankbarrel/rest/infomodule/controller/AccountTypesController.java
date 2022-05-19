@@ -24,8 +24,8 @@ import ru.shanalotte.bankbarrel.core.service.EnumToListingDtoItemConverter;
 @RestController
 public class AccountTypesController {
 
+  private static final Logger logger = LoggerFactory.getLogger(AccountTypesController.class);
   private EnumToListingDtoItemConverter enumToListingDtoItemConverter;
- private static final Logger logger = LoggerFactory.getLogger(AccountTypesController.class);
 
   public AccountTypesController(EnumToListingDtoItemConverter enumToListingDtoItemConverter) {
     this.enumToListingDtoItemConverter = enumToListingDtoItemConverter;
@@ -62,7 +62,7 @@ public class AccountTypesController {
       + "если тип банковского счета 1 уровня с таким кодом не существует")
   public ResponseEntity<List<ListingDtoItem>> additionalTypes(
       @Parameter(description = "Тип счета 1 уровня")
-                  @PathVariable("code") String code) {
+      @PathVariable("code") String code) {
     logger.info("GET /accounttype/{}/additionaltypes", code);
     List<ListingDtoItem> listingDtoItems = new ArrayList<>();
     try {

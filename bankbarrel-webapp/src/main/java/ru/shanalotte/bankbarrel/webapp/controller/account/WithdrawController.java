@@ -1,5 +1,7 @@
 package ru.shanalotte.bankbarrel.webapp.controller.account;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +26,7 @@ public class WithdrawController {
   private BankAccountAccessAuthorizationService bankAccountAccessAuthorizationService;
   private WebAppBankService bankService;
 
-
+  private static final Logger logger = LoggerFactory.getLogger(WithdrawController.class);
 
   /**
    * Конструктор со всеми зависимостями.
@@ -47,14 +49,20 @@ public class WithdrawController {
                                RedirectAttributes redirectAttributes
   ) throws WebAppUserNotFound,
       UnathorizedAccessToBankAccount, BankAccountNotExists {
+    logger.info("Пользователь {} снимает {} {} со счета {}", username,
+        amount, currency, accountNumber);
+
     BankAccountDto account =
         bankAccountAccessAuthorizationService.authorize(username, accountNumber);
     MonetaryAmount monetaryAmount = new MonetaryAmount(amount, currency);
     try {
       bankService.withdraw(account, monetaryAmount);
     } catch (InsufficientFundsException e) {
+      logger.warn("Недостаточно средств для операции: пользователь {}, счет {}, снятие {} {}",
+          username, accountNumber, amount, currency);
       redirectAttributes.addFlashAttribute("message", "webapp.error.withdraw.notsufficientfunds");
     } catch (UnknownCurrencyRate e) {
+      logger.warn("Неизвестная валюта {}", currency);
       redirectAttributes.addFlashAttribute("message", "webapp.error.unknowncurrency");
     }
 

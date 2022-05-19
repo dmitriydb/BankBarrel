@@ -1,6 +1,10 @@
 package ru.shanalotte.bankbarrel.webapp.controller.transfer;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,6 +35,8 @@ public class TransferController {
   private BankAccountDao bankAccountDao;
   private WebAppBankService bankService;
 
+  private static final Logger logger = LoggerFactory.getLogger(TransferController.class);
+
   /**
    * Конструктор со всеми зависимостями.
    */
@@ -52,9 +58,13 @@ public class TransferController {
                                 @RequestParam("username") String username,
                                 @RequestParam("accountFromNumber") String accountFromNumber)
       throws UnathorizedAccessToBankAccount, WebAppUserNotFound,
-      BankAccountNotExists {
+      BankAccountNotExists, JsonProcessingException {
+    logger.info("Пользователь {} пытается перевести {} {} со счета {} на счет {}",
+        username, dto.getAmount(), dto.getCurrency(),
+        accountFromNumber, dto.getAccountNumber());
     if (bindingResult.hasErrors()) {
       redirectAttributes.addFlashAttribute("message", "webapp.transfer.fillparameterscorrectly");
+      logger.warn("Ошибка в DTO перевода {}", new ObjectMapper().writeValueAsString(dto));
       return "redirect:/user/" + username + "/account/" + accountFromNumber;
     }
     try {
@@ -65,10 +75,14 @@ public class TransferController {
       bankService.transfer(fromAccount, toAccount, monetaryAmount);
       redirectAttributes.addFlashAttribute("successMessage", "webapp.transfer.success");
     } catch (BankAccountNotFound e) {
+      logger.warn("Счет с номером {} или {} не найдены", accountFromNumber, dto.getAccountNumber());
       redirectAttributes.addFlashAttribute("message", "webapp.transfer.toaccountnotexists");
     } catch (UnknownCurrencyRate unknownCurrencyRate) {
+      logger.warn("Валюта {} не существует", dto.getCurrency());
       redirectAttributes.addFlashAttribute("message", "webapp.error.unknowncurrency");
     } catch (InsufficientFundsException e) {
+      logger.warn("На счете {} недостаточно средств для перевода {} {}", accountFromNumber,
+          dto.getAmount(), dto.getCurrency());
       redirectAttributes.addFlashAttribute("message", "webapp.error.withdraw.notsufficientfunds");
     }
     return "redirect:/user/" + username + "/account/" + accountFromNumber;

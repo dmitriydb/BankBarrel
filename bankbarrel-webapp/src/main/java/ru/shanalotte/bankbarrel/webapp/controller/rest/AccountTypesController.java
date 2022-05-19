@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,6 +27,7 @@ public class AccountTypesController {
 
   private ServiceRegistryProxy serviceRegistryProxy;
   private ServiceUrlBuilder serviceUrlBuilder;
+  private static final Logger logger = LoggerFactory.getLogger(AccountTypesController.class);
 
   public AccountTypesController(ServiceRegistryProxy serviceRegistryProxy,
                                 ServiceUrlBuilder serviceUrlBuilder) {
@@ -38,6 +41,7 @@ public class AccountTypesController {
   @CrossOrigin(origins = "http://localhost:8890")
   @GetMapping("/accounttypes")
   public List<ListingDtoItem> accountTypes() {
+    logger.info("GET /accounttypes");
     List<ListingDtoItem> listingDtoItems = new ArrayList<>();
     RestTemplate restTemplate = new RestTemplate();
     RegisteredServiceInfo registeredServiceInfo = serviceRegistryProxy.getRestInfoModuleInfo();
@@ -54,6 +58,7 @@ public class AccountTypesController {
   @CrossOrigin(origins = "http://localhost:8890")
   @GetMapping("/accounttype/{code}/additionaltypes")
   public ResponseEntity<List<ListingDtoItem>> additionalTypes(@PathVariable("code") String code) {
+    logger.info("GET /accounttype/{}/additionaltypes", code);
     List<ListingDtoItem> listingDtoItems = new ArrayList<>();
     RestTemplate restTemplate = new RestTemplate();
     RegisteredServiceInfo registeredServiceInfo = serviceRegistryProxy.getRestInfoModuleInfo();

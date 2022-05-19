@@ -31,6 +31,7 @@ public class AccountRemovingController {
   /**
    * Конструктор со всеми зависимостями.
    */
+
   public AccountRemovingController(WebAppUserDao webAppUserDao,
                                    BankAccountAccessAuthorizationService
                                        bankAccountAccessAuthorizationService,

@@ -1,9 +1,9 @@
 package ru.shanalotte.bankbarrel.appserver.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -47,7 +47,8 @@ public class CurrenciesController {
   public ResponseEntity<CurrencyRateDto> createCurrencyRate(
       @PathVariable("currency") String currency, @RequestBody CurrencyRateDto dto)
       throws JsonProcessingException {
-    logger.info("POST /currencies/{}/rate {}", currency, new ObjectMapper().writeValueAsString(dto));
+    logger.info("POST /currencies/{}/rate {}", currency,
+        new ObjectMapper().writeValueAsString(dto));
     Currency currencyEntity = currencyDao.findByCode(currency);
     if (currencyEntity == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);

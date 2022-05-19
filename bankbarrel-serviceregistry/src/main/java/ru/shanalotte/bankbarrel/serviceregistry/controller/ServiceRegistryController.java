@@ -41,6 +41,9 @@ public class ServiceRegistryController {
     this.registeredServiceRepository = registeredServiceRepository;
   }
 
+  /**
+   * Получение списка микросервисов.
+   */
   @Operation(description = "Get registered microservices list")
   @GetMapping(value = "/services", produces = "application/json")
   public @ResponseBody
@@ -67,6 +70,9 @@ public class ServiceRegistryController {
     return new ResponseEntity<>(info, HttpStatus.OK);
   }
 
+  /**
+   * Создание информации о микросервисе.
+   */
   @Operation(description = "Create microservice information")
   @PostMapping(value = "/services", consumes = "application/json", produces = "application/json")
   public ResponseEntity<?> createService(@Schema(implementation = RegisteredServiceInfo.class)
@@ -77,6 +83,9 @@ public class ServiceRegistryController {
     return new ResponseEntity<>(HttpStatus.CREATED);
   }
 
+  /**
+   * Обновление информации о микросервисе.
+  */
   @Operation(description = "Update existing microservice info or create new one")
   @PutMapping(value = "/services", consumes = "application/json", produces = "application/json")
   public ResponseEntity<?> updateService(@RequestBody RegisteredServiceInfo newService)

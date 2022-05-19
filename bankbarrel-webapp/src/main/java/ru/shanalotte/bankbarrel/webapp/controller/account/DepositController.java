@@ -47,7 +47,8 @@ public class DepositController {
                                @RequestParam("currency") String currency
   ) throws WebAppUserNotFound,
       UnathorizedAccessToBankAccount, BankAccountNotExists, UnknownCurrencyRate {
-    logger.info("Пользователь {} вносит {} {} на счет {}", username, amount, currency, accountNumber);
+    logger.info("Пользователь {} вносит {} {} на счет {}",
+        username, amount, currency, accountNumber);
     BankAccountDto account = bankAccountAccessAuthorizationService
         .authorize(username, accountNumber);
     MonetaryAmount monetaryAmount = new MonetaryAmount(amount, currency);

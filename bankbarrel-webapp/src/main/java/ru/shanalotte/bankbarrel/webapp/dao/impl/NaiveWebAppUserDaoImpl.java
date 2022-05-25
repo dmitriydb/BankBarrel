@@ -2,6 +2,8 @@ package ru.shanalotte.bankbarrel.webapp.dao.impl;
 
 import java.util.HashSet;
 import java.util.Set;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.WebAppUserDao;
 import ru.shanalotte.bankbarrel.webapp.user.WebAppUser;
@@ -11,6 +13,7 @@ import ru.shanalotte.bankbarrel.webapp.user.WebAppUser;
  * Хранит всё в памяти.
  */
 @Repository
+@Profile("test")
 public class NaiveWebAppUserDaoImpl implements WebAppUserDao {
   private Set<WebAppUser> existingUsers = new HashSet<>();
 

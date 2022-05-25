@@ -43,6 +43,10 @@ public class DummyUserCreationConfig {
    */
   @Scheduled(initialDelay = 2000, fixedDelay = Integer.MAX_VALUE)
   public void createDummyUserAndFakeAccounts() {
+    if (webAppUserDao.isUserExists("admin")) {
+      logger.info("Not creating dummy user {}, already exists", "admin");
+      return;
+    }
     logger.info("Creating dummy user");
     BankClientInfoDto dto = new BankClientInfoDto();
     dto.setEmail("admin@admin.ru");

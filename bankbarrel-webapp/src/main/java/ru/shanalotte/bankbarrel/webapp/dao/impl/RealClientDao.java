@@ -66,7 +66,8 @@ public class RealClientDao implements BankClientDao {
         serviceUrlBuilder.buildServiceUrl(serviceRegistryProxy.getWebApiInfo()) + "/clients";
     BankClientDto[] list = restTemplate.getForEntity(
         URI.create(url), BankClientDto[].class).getBody();
-    BankClientDto dto = Arrays.stream(list).filter(e -> e.equals(clientDto)).findFirst().get();
+    System.out.println(clientDto);
+    BankClientDto dto = Arrays.stream(list).filter(e -> e.getId().equals(clientDto.getId())).findFirst().get();
     url = serviceUrlBuilder.buildServiceUrl(
         serviceRegistryProxy.getWebApiInfo()) + "/clients/" + dto.getId() + "/accounts";
     BankAccountDto[] accountsList = restTemplate.getForEntity(
@@ -76,6 +77,9 @@ public class RealClientDao implements BankClientDao {
 
   @Override
   public Long idByDto(BankClientDto dto) {
+    if (dto.getId() != null) {
+      return dto.getId();
+    }
     RestTemplate restTemplate = new RestTemplate();
     String url =
         serviceUrlBuilder.buildServiceUrl(serviceRegistryProxy.getWebApiInfo()) + "/clients";

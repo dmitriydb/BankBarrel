@@ -17,6 +17,7 @@ INSERT INTO webapp_operation_type (name) VALUES
 ('LOGOUT'),
 ('ACCOUNT_OPENING'),
 ('ACCOUNT_PAGE_ACCESS'),
+('USER_PAGE_ACCESS'),
 ('PROFILE_ACCESS'),
 ('DEPOSIT'),
 ('WITHDRAW'),
@@ -29,13 +30,21 @@ status varchar(255) unique not null
 );
 
 INSERT INTO webapp_operation_status (operation_type, status) VALUES
-('REGISTRATION', 'INIT'),
-('REGISTRATION', 'SUCCESS'),
-('REGISTRATION', 'WRONGDATA');
+('REGISTRATION', 'REGISTRATION_PENDING'),
+('REGISTRATION', 'REGISTRATION_SUCCESS'),
+('REGISTRATION', 'REGISTRATION_WRONG_DATA'),
+('REGISTRATION', 'REGISTRATION_USER_ALREADY_EXISTS'),
+('REGISTRATION', 'REGISTRATION_CHECKING_DATA'),
+('LOGIN', 'LOGIN_PENDING'),
+('LOGIN', 'LOGIN_SUCCESS'),
+('LOGIN', 'LOGIN_USERNAME_NOT_EXISTS'),
+('LOGIN', 'LOGIN_CHECKING_DATA'),
+('LOGIN', 'LOGIN_WRONG_DATA')
+;
 
 CREATE TABLE webapp_operation (
 operation_id serial primary key,
-init_user integer references webapp_user(id),
+init_user integer,
 operation_type varchar(255) references webapp_operation_type(name),
 operation_status varchar(255) references webapp_operation_status(status),
 finished boolean,

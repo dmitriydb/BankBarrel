@@ -33,6 +33,8 @@ public class BankClientsEnrollingService {
     bankClientDto.setTelephone(dto.getTelephone());
     bankClientDto.setEmail(dto.getEmail());
     bankClientDao.save(bankClientDto);
+    Long clientId = bankClientDao.idByDto(bankClientDto);
+    bankClientDto.setId(clientId);
     return bankClientDto;
   }
 }

@@ -24,7 +24,11 @@ public class WebAppUserRowMapper implements RowMapper<WebAppUser> {
     webAppUser.setId(rs.getLong("id"));
     webAppUser.getBankClient().setId(rs.getLong("client_id"));
     webAppUser.setUsername(rs.getString("username"));
-    webAppUser.setLastLoginTs(rs.getTimestamp("last_login_ts").toLocalDateTime());
+    if (rs.getTimestamp("last_login_ts") == null) {
+      webAppUser.setLastLoginTs(null);
+    } else {
+      webAppUser.setLastLoginTs(rs.getTimestamp("last_login_ts").toLocalDateTime());
+    }
     webAppUser.setRegistrationTs(rs.getTimestamp("registration_ts").toLocalDateTime());
     return webAppUser;
   }

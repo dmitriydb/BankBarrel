@@ -14,6 +14,7 @@
         <module>bankbarrel-rest-infomodule</module>
         <module>bankbarrel-serviceregistry</module>
         <module>bb-appserver</module>
+        <module>bb-monitoring-webapp</module>
     </modules>
 
     <properties>

@@ -2,6 +2,8 @@ package ru.shanalotte.bankbarrel.webapp.dao.impl;
 
 import java.net.URI;
 import java.util.Arrays;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
@@ -25,6 +27,7 @@ import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.WebApiServiceRegi
 @Profile({"dev", "production"})
 public class RealBankAccountDao implements BankAccountDao {
 
+  private static final Logger logger = LoggerFactory.getLogger(RealBankAccountDao.class);
   private WebApiServiceRegistryProxy serviceRegistryProxy;
   private ServiceUrlBuilder serviceUrlBuilder;
   private FakeAccountNumberGenerator fakeAccountNumberGenerator;
@@ -95,11 +98,13 @@ public class RealBankAccountDao implements BankAccountDao {
   public void createAccount(AccountOpeningDto dto, BankClientDto bankClient) {
     String url =
         serviceUrlBuilder.buildServiceUrl(serviceRegistryProxy.getWebApiInfo()) + "/clients";
+    logger.debug("Using url {}", url);
+    logger.debug("Bank client dto: {}", bankClient);
     RestTemplate restTemplate = new RestTemplate();
     ResponseEntity<BankClientDto[]> responseEntity =
         restTemplate.getForEntity(URI.create(url), BankClientDto[].class);
     BankClientDto client = Arrays.stream(
-        responseEntity.getBody()).filter(e -> e.equals(bankClient)).findFirst().get();
+        responseEntity.getBody()).filter(e -> e.getId().equals(bankClient.getId())).findFirst().get();
     BankAccountDto bankAccount = new BankAccountDto();
     bankAccount.setOwner(client.getId());
     bankAccount.setNumber(fakeAccountNumberGenerator.generateNumber());

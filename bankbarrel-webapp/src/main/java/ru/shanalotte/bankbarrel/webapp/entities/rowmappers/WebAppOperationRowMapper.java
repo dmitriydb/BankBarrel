@@ -17,7 +17,7 @@ public class WebAppOperationRowMapper implements RowMapper<WebAppOperation> {
     webAppOperation.setFinished(rs.getBoolean("finished"));
     webAppOperation.setStartTime(rs.getTimestamp("startTs"));
     webAppOperation.setStartTime(rs.getTimestamp("finishedTs"));
-    webAppOperation.setJson(rs.getString("request_json"));
+    webAppOperation.setJson(rs.getString("requestjson"));
     return webAppOperation;
   }
 }

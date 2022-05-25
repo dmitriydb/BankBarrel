@@ -169,25 +169,20 @@ public class LoginAndEnrollTest {
     );
 
     int usersAfter = webAppUserDao.count();
-    ;
     int customersAfter = bankClientDao.count();
     assertThat(usersAfter - usersBefore).isEqualTo(1);
     assertThat(customersAfter - customersBefore).isEqualTo(1);
-
     //enrolling with the same username again
-
     mockMvc.perform(post("/enroll")
             .param("username", "FullPledgeClient5")
             .param("firstName", "FullPledgeClient5name")
             .param("lastName", "a")
             .param("email", "a@xcyz")
         )
-        .andExpect(MockMvcResultMatchers.flash().attribute("message", containsString("already exists")))
+        .andExpect(MockMvcResultMatchers.flash().attribute("message", containsString("exists")))
         .andExpect(MockMvcResultMatchers.flash().attributeExists("dto"));
-
     int usersAfterAfter = webAppUserDao.count();
     int customersAfterAfter = bankClientDao.count();
-
     assertThat(usersAfterAfter - usersAfter).isEqualTo(0);
     assertThat(customersAfterAfter - customersAfter).isEqualTo(0);
   }
@@ -200,14 +195,12 @@ public class LoginAndEnrollTest {
         .param("lastName", "a")
         .param("email", "a@xcyz")
     ).andExpect(MockMvcResultMatchers.model().hasErrors());
-
     mockMvc.perform(post("/enroll")
         .param("username", "a132")
         .param("firstName", "a")
         .param("lastName", "")
         .param("email", "a@xcyz")
     ).andExpect(MockMvcResultMatchers.model().hasErrors());
-
     mockMvc.perform(post("/enroll")
         .param("username", "a132")
         .param("firstName", "a")

@@ -1,6 +1,7 @@
 package ru.shanalotte.bankbarrel.webapp.user;
 
 import java.time.LocalDateTime;
+import org.springframework.cglib.core.Local;
 import ru.shanalotte.bankbarrel.core.domain.BankClient;
 import ru.shanalotte.bankbarrel.core.dto.BankClientDto;
 
@@ -17,6 +18,7 @@ public class WebAppUser {
 
   public WebAppUser(String username, BankClientDto bankClient) {
     this.username = username;
+    System.out.println(bankClient.toString());
     this.bankClient = bankClient;
   }
 

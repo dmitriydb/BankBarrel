@@ -1,0 +1,119 @@
+version: "3.9"
+
+networks:
+    bb-network:
+        external: true
+services:
+  bb-serviceregistry-db:
+    container_name: bb-serviceregistry-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DATABASE: serviceregistry
+    image: postgres
+    volumes:
+    - ./dbs:/docker-entrypoint-initdb.d
+    networks:
+    - bb-network
+  bb-serviceregistry:
+    container_name: bb-serviceregistry
+    build: 
+      context: D:\ideaProjects\BankBarrel\bankbarrel-serviceregistry\.
+      dockerfile: Dockerfile
+    ports:
+    - 8181:8181
+    depends_on:
+    - bb-serviceregistry-db
+    networks:
+    - bb-network
+  bb-appserver-db:
+    container_name: bb-appserver-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    image: postgres
+    volumes:
+    - ./dba:/docker-entrypoint-initdb.d
+    networks:
+    - bb-network
+    depends_on:
+    - bb-serviceregistry-db
+    - bb-serviceregistry
+  bb-appserver:
+    container_name: bb-appserver
+    build: 
+      context: D:\ideaProjects\BankBarrel\bb-appserver\.
+      dockerfile: Dockerfile
+    ports:
+    - 8886:8886
+    depends_on:
+    - bb-serviceregistry-db
+    - bb-serviceregistry
+    - bb-appserver-db
+    networks:
+    - bb-network
+  bb-rest-infomodule:
+    container_name: bb-rest-infomodule
+    build:
+      context: D:\ideaProjects\BankBarrel\bankbarrel-rest-infomodule\.
+      dockerfile: Dockerfile
+    ports: 
+    - 8887:8887
+    depends_on:
+    - bb-serviceregistry-db
+    - bb-serviceregistry
+    - bb-appserver
+    - bb-appserver-db
+    networks:
+    - bb-network
+  bb-webapp-db:
+    container_name: bb-webapp-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    image: postgres
+    volumes:
+    - ./dbw:/docker-entrypoint-initdb.d
+    networks:
+    - bb-network
+    depends_on:
+    - bb-serviceregistry-db
+    - bb-serviceregistry
+    - bb-appserver
+    - bb-appserver-db
+    - bb-rest-infomodule
+  bb-webapp:
+    container_name: bb-webapp
+    build: 
+      context: D:\ideaProjects\BankBarrel\bankbarrel-webapp\.
+      dockerfile: Dockerfile
+    ports: 
+    - 8888:8888
+    depends_on:
+    - bb-serviceregistry-db
+    - bb-serviceregistry
+    - bb-appserver
+    - bb-appserver-db
+    - bb-rest-infomodule
+    - bb-webapp-db
+    networks:
+    - bb-network
+  bb-mom-monitoring-webapp:
+    container_name: bb-mom-monitoring-webapp
+    ports: 
+    - 8162:8161
+    image: webcenter/activemq
+    depends_on:
+    - bb-serviceregistry-db
+    - bb-serviceregistry
+    networks:
+    - bb-network
+  bb-monitoring-webapp:
+    container_name: bb-monitoring-webapp
+    build: 
+      context: D:\ideaProjects\BankBarrel\bb-monitoring-webapp\.
+      dockerfile: Dockerfile
+    depends_on:
+    - bb-mom-monitoring-webapp
+    networks:
+    - bb-network

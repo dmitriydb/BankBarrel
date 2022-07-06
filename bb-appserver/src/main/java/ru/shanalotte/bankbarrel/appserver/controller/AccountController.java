@@ -7,6 +7,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.headers.Header;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -30,15 +38,15 @@ import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
  * Контроллер для информации о банковских счетах.
  */
 @RestController
-public class AccountController {
+@Tag(name = "BankAccounts", description = "Банковские счета")
+ public class AccountController {
 
+  private static final Logger logger = LoggerFactory.getLogger(AccountController.class);
   private BankAccountTypeDao bankAccountTypeDao;
   private BankAccountAdditionalTypeDao bankAccountAdditionalTypeDao;
   private BankClientDao bankClientDao;
   private BankAccountDao bankAccountDao;
   private CurrencyDao currencyDao;
-
-  private static final Logger logger = LoggerFactory.getLogger(AccountController.class);
 
   /**
    * Конструктор со всеми зависимостями.
@@ -58,8 +66,12 @@ public class AccountController {
   /**
    * Получение информации о банковском счете с определенным номером.
    */
+  @Operation(summary = "Получить информацию о банковском счете по номеру")
   @GetMapping("/accounts/{number}")
-  public ResponseEntity<BankAccountDto> getAccountInfo(@PathVariable("number") String number) {
+  public ResponseEntity<BankAccountDto> getAccountInfo(
+      @Parameter(description = "Номер счета", example = "40700000500000000001", required = true
+      )
+      @PathVariable("number") String number) {
     logger.info("GET /accounts/{}", number);
     BankAccount account = bankAccountDao.findByNumber(number);
     if (account == null) {
@@ -81,6 +93,7 @@ public class AccountController {
    * Получение списка всех банковских счетов.
    */
   @GetMapping("/accounts")
+  @Operation(summary = "Получить информацию о всех банковских счетах")
   public ResponseEntity<List<BankAccountDto>> getAllAccounts() {
     logger.info("GET /accounts");
     List<BankAccountDto> result = bankAccountDao.findAll()
@@ -102,8 +115,11 @@ public class AccountController {
   /**
    * Удаление банковского счета по идентификатору (UUID).
    */
+  @Operation(summary = "Удалить банковский счет по ID")
+  @ApiResponse(responseCode = "404", description = "Счет с таким ID не существует")
+  @ApiResponse(responseCode = "200", description = "Счет успешно удален")
   @DeleteMapping("/accounts/{id}")
-  public ResponseEntity<?> deleteAccount(@PathVariable("id") String id) {
+  public ResponseEntity<?> deleteAccount(@Parameter(description = "ID удаляемого счетa") @PathVariable("id") String id) {
     logger.info("DELETE /accounts/{}", id);
     Optional<BankAccount> account = bankAccountDao.findById(id);
     if (!account.isPresent()) {
@@ -119,8 +135,10 @@ public class AccountController {
   /**
    * Получение списка счетов клиента банка с определенным ID.
    */
+  @Operation(summary = "Получить список счетов клиента по его ID")
+  @ApiResponse(responseCode = "404", description = "Клиент с указанным ID не найден")
   @GetMapping("/clients/{id}/accounts")
-  public ResponseEntity<List<BankAccountDto>> getClientAccounts(@PathVariable("id") Long id) {
+  public ResponseEntity<List<BankAccountDto>> getClientAccounts(@PathVariable("id") @Parameter(description = "ID клиента") Long id) {
     logger.info("GET /clients/{}/accounts", id);
     if (!bankClientDao.findById(id).isPresent()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -145,7 +163,11 @@ public class AccountController {
   /**
    * Запрос на открытие нового банковского счета.
    */
+  @Operation(summary = "Открыть новый счет")
   @PostMapping("/accounts")
+  @ApiResponse(responseCode = "400", description = "В случае, если данные не прошли валидацию. Возможные причины: "
+      + "1) неверный ID клиента 2) неверный тип счета 3) неверный код валюты")
+  @ApiResponse(responseCode = "401", description = "Счет с таким номером уже существует")
   public ResponseEntity<BankAccountDto> createAccount(@RequestBody BankAccountDto dto)
       throws JsonProcessingException {
     logger.info("POST /accounts {}", new ObjectMapper().writeValueAsString(dto));

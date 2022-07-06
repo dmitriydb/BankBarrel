@@ -2,6 +2,8 @@ package ru.shanalotte.bankbarrel.appserver.controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import ru.shanalotte.bankbarrel.core.dto.OperationSourceDto;
  * Контроллер для операция с источниками операций с API.
  */
 @RestController
+@Tag(name = "OperationSources", description = "Источники операций")
 public class OperationSourcesController {
 
   private OperationSourceDao operationSourceDao;
@@ -28,6 +31,7 @@ public class OperationSourcesController {
   /**
    * Получение всех возможных источников операций с WEB API.
    */
+  @Operation(summary = "Получить список всех источников операций")
   @GetMapping("/operations/sources")
   public ResponseEntity<List<OperationSourceDto>> getOperationSources() {
     logger.info("GET /operations/sources");

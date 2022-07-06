@@ -4,6 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -29,6 +32,7 @@ import ru.shanalotte.bankbarrel.core.service.SimpleBankService;
  * Контроллер операций снятий денежных средств.
  */
 @RestController
+@Tag(name = "Withdraws", description = "Снятия средств")
 public class WithdrawController {
 
   private BankAccountDao bankAccountDao;
@@ -56,8 +60,9 @@ public class WithdrawController {
   /**
    * Получение информации о снятии средств по ID.
    */
+  @Operation(summary = "Получить информацию о снятии средств по ID")
   @GetMapping("/withdraw/{id}")
-  public ResponseEntity<WithdrawDto> withdrawInfo(@PathVariable("id") Long id) {
+  public ResponseEntity<WithdrawDto> withdrawInfo(@Parameter(description = "ID снятия средств") @PathVariable("id") Long id) {
     logger.info("GET /withdraw/{}", id);
     if (!withdrawDao.findById(id).isPresent()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -77,6 +82,7 @@ public class WithdrawController {
   /**
    * Инициация операции снятия средств.
    */
+  @Operation(summary = "Создать снятие средств")
   @PostMapping(value = "/withdraw", consumes = "application/json", produces = "application/json")
   public ResponseEntity<WithdrawDto> createWithdraw(@RequestBody WithdrawDto dto)
       throws JsonProcessingException {

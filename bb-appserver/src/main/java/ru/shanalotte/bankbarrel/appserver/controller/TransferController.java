@@ -4,6 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -29,6 +32,7 @@ import ru.shanalotte.bankbarrel.core.service.SimpleBankService;
  * Контроллер операций денежных переводов.
  */
 @RestController
+@Tag(name = "Transfers", description = "Переводы")
 public class TransferController {
 
   private BankAccountDao bankAccountDao;
@@ -55,8 +59,9 @@ public class TransferController {
   /**
    * Получить информацию о денежном переводе по его ID.
    */
+  @Operation(summary = "Получить информацию о переводе")
   @GetMapping("/transfer/{id}")
-  public ResponseEntity<TransferDto> transferInfo(@PathVariable("id") Long id) {
+  public ResponseEntity<TransferDto> transferInfo(@Parameter(description = "ID перевода") @PathVariable("id") Long id) {
     logger.info("GET /transfer/{}", id);
     if (!transferDao.findById(id).isPresent()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -77,6 +82,7 @@ public class TransferController {
   /**
    * Инициировать процесс денежного перевода.
    */
+  @Operation(summary = "Создать перевод")
   @PostMapping(value = "/transfer", consumes = "application/json", produces = "application/json")
   public ResponseEntity<TransferDto> createTransfer(@RequestBody TransferDto dto)
       throws JsonProcessingException {

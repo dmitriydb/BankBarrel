@@ -4,6 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.stream.Collectors;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -26,6 +29,7 @@ import ru.shanalotte.bankbarrel.core.dto.CurrencyRateDto;
  * Контроллер для доступа к информации о валютах.
  */
 @RestController
+@Tag(name = "Currencies", description = "Валюты")
 public class CurrenciesController {
 
   private static final Logger logger = LoggerFactory.getLogger(CurrenciesController.class);
@@ -43,9 +47,10 @@ public class CurrenciesController {
   /**
    * Добавление курса валюты.
    */
+  @Operation(summary = "Добавление курса валюты")
   @PostMapping("/currencies/{currency}/rate")
   public ResponseEntity<CurrencyRateDto> createCurrencyRate(
-      @PathVariable("currency") String currency, @RequestBody CurrencyRateDto dto)
+      @Parameter(description = "Код валюты") @PathVariable("currency") String currency, @RequestBody CurrencyRateDto dto)
       throws JsonProcessingException {
     logger.info("POST /currencies/{}/rate {}", currency,
         new ObjectMapper().writeValueAsString(dto));
@@ -68,9 +73,10 @@ public class CurrenciesController {
   /**
    * Изменение курса валюты.
    */
+  @Operation(summary = "Изменение курса валюты")
   @PutMapping("/currencies/{currency}/rate")
   public ResponseEntity<CurrencyRateDto> updateCurrencyRate(
-      @PathVariable("currency") String currency,
+      @Parameter(description = "Код валюты") @PathVariable("currency") String currency,
       @RequestBody CurrencyRateDto dto) throws JsonProcessingException {
     logger.info("PUT /currencies/{}/rate {}", currency, new ObjectMapper().writeValueAsString(dto));
     Currency currencyEntity = currencyDao.findByCode(currency);
@@ -92,9 +98,10 @@ public class CurrenciesController {
   /**
    * Информация о курсе валюты.
    */
+  @Operation(summary = "Получить информацию о валюте")
   @GetMapping("/currencies/{currency}/rate")
   public ResponseEntity<CurrencyRateDto> getCurrencyRate(
-      @PathVariable("currency") String currency) {
+      @Parameter(description = "Код валюты") @PathVariable("currency") String currency) {
     logger.info("GET /currencies/{}/rate", currency);
     CurrencyRateRule currencyRateRule = currencyRateDao.findByCurrency(currency);
     if (currencyRateRule == null) {
@@ -110,6 +117,7 @@ public class CurrenciesController {
   /**
    * Получение списка валют.
    */
+  @Operation(summary = "Получить список всех валют")
   @GetMapping("/currencies")
   public ResponseEntity<List<CurrencyDto>> currencyList() {
     logger.info("GET /currencies");
@@ -126,6 +134,7 @@ public class CurrenciesController {
   /**
    * Добавление новой валюты.
    */
+  @Operation(summary = "Добавление новой валюты")
   @PostMapping(value = "/currencies", consumes = "application/json", produces = "application/json")
   public ResponseEntity<Currency> createNewCurrency(@RequestBody CurrencyDto dto)
       throws JsonProcessingException {
@@ -140,8 +149,9 @@ public class CurrenciesController {
   /**
    * Удаление валюты по ID.
    */
+  @Operation(summary = "Удаление валюты")
   @DeleteMapping("/currencies/{id}")
-  public ResponseEntity<?> deleteCurrency(@PathVariable("id") Long id) {
+  public ResponseEntity<?> deleteCurrency(@Parameter(description = "ID валюты") @PathVariable("id") Long id) {
     logger.info("DELETE /currencies/{}", id);
     Currency currency = currencyDao.getById(id);
     if (currency == null) {

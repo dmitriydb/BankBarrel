@@ -4,6 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.tags.Tags;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -28,6 +32,7 @@ import ru.shanalotte.bankbarrel.core.service.SimpleBankService;
  * Контроллер для операций денежных вкладов.
  */
 @RestController
+@Tag(name = "Deposits", description = "Вклады")
 public class DepositController {
 
   private BankAccountDao bankAccountDao;
@@ -56,7 +61,8 @@ public class DepositController {
    * Получить информацию о вкладе с определенным ID.
    */
   @GetMapping("/deposit/{id}")
-  public ResponseEntity<DepositDto> depositInfo(@PathVariable("id") Long id) {
+  @Operation(summary = "Получить информацию о вкладе")
+  public ResponseEntity<DepositDto> depositInfo(@Parameter(description = "ID вклада") @PathVariable("id") Long id) {
     logger.info("GET /deposit/{}", id);
     if (!depositDao.findById(id).isPresent()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -76,6 +82,7 @@ public class DepositController {
   /**
    * Создание вклада.
    */
+  @Operation(summary = "Создать вклад")
   @PostMapping(value = "/deposit", consumes = "application/json", produces = "application/json")
   public ResponseEntity<DepositDto> createDeposit(@RequestBody DepositDto dto)
       throws JsonProcessingException {

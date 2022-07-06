@@ -8,6 +8,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -29,6 +32,7 @@ import ru.shanalotte.bankbarrel.core.dto.AccountTypeDto;
  * Контроллер для запросов к типам банковских счетов 1 уровня.
  */
 @RestController
+@Tag(name = "AccountTypes", description = "Типы банковских счетов")
 public class AccountTypesController {
 
   private static final Logger logger = LoggerFactory.getLogger(AccountTypesController.class);
@@ -44,6 +48,7 @@ public class AccountTypesController {
   /**
    * Получение информации о всех типах счетов 1 уровня.
    */
+  @Operation(summary = "Получить информацию о всех типах банковских счетов 1 уровня")
   @GetMapping("/accounttypes")
   public ResponseEntity<List<AccountTypeDto>> getAccountTypes() {
     logger.info("GET /accounttypes");
@@ -63,8 +68,10 @@ public class AccountTypesController {
   /**
    * Получение информации о типе банковского счета 1 уровня по коду.
    */
+  @Operation(summary = "Получить информацию о типе банковского счета 1 уровня")
   @GetMapping("/accounttypes/{code}")
-  public ResponseEntity<AccountTypeDto> getAccountTypeByCode(@PathVariable("code") String code) {
+  public ResponseEntity<AccountTypeDto> getAccountTypeByCode(@Parameter(description = "Код типа счета 1 уровня", example = "CHECKING")
+                                                             @PathVariable("code") String code) {
     logger.info("GET /accounttypes/{}", code);
     BankAccountTypeEntity entity = bankAccountTypeDao.findByCode(code);
     if (entity == null) {
@@ -80,9 +87,10 @@ public class AccountTypesController {
   /**
    * Получение информации о подтипах типа банковского счета 1 уровня по коду.
    */
+  @Operation(summary = "Получить информацию о подтипах банковского счета 1 уровня")
   @GetMapping("/accounttypes/{code}/additionaltypes")
   public ResponseEntity<List<AccountAdditionalTypeDto>> getAdditionalTypes(
-      @PathVariable("code") String code) {
+     @Parameter(description = "Код типа счета 1 уровня", example = "CHECKING") @PathVariable("code") String code) {
     logger.info("GET /accounttypes/{}/additionaltypes", code);
     BankAccountTypeEntity existingEntity = bankAccountTypeDao.findByCode(code);
     if (existingEntity == null) {
@@ -104,9 +112,10 @@ public class AccountTypesController {
   /**
    * Получение информации о типе банковского счета 2 уровня по коду.
    */
+  @Operation(summary = "Получить информацию о типе банковского счета 2 уровня")
   @GetMapping("/additionalaccounttypes/{code}")
   public ResponseEntity<AccountAdditionalTypeDto> getAdditionalTypeInfo(
-      @PathVariable("code") String code
+      @Parameter(description = "Код типа счета 2 уровня", example = "Premium") @PathVariable("code") String code
   ) {
     logger.info("GET /additionalaccounttypes/{}", code);
     BankAccountAdditionalTypeEntity existingEntity = bankAccountAdditionalTypeDao.findByCode(code);
@@ -124,11 +133,12 @@ public class AccountTypesController {
   /**
    * Добавление подтипа типу банковского счета 1 уровня.
    */
+  @Operation(summary = "Добавление подтипа типу счета 1 уровня")
   @PostMapping(value = "/accounttypes/{code}/additionaltypes",
       consumes = "application/json", produces = "application/json")
   public ResponseEntity<AccountAdditionalTypeDto> createAdditionalType(
-      @PathVariable("code") String code,
-                       @RequestBody AccountAdditionalTypeDto dto) throws JsonProcessingException {
+      @Parameter(description = "Код типа счета 1 уровня") @PathVariable("code") String code,
+      @RequestBody AccountAdditionalTypeDto dto) throws JsonProcessingException {
     logger.info("POST /accounttypes/{}/additionaltypes {}", code,
         new ObjectMapper().writeValueAsString(dto));
     BankAccountTypeEntity entity = bankAccountTypeDao.findByCode(code);
@@ -157,9 +167,10 @@ public class AccountTypesController {
   /**
    * Удаление подтипа из типа банковского счета 1 уровня.
    */
+  @Operation(summary = "Удаление подтипа из типа счета 1 уровня")
   @DeleteMapping(value = "/accounttypes/{code}/additionaltypes",
       consumes = "application/json", produces = "application/json")
-  public ResponseEntity<?> deleteAdditionalType(@PathVariable("code") String code,
+  public ResponseEntity<?> deleteAdditionalType(@Parameter(description = "Код типа счета 1 уровня") @PathVariable("code") String code,
                                                 @RequestBody AccountAdditionalTypeDto dto)
       throws JsonProcessingException {
     logger.info("DELETE /accounttypes/{}/additionaltypes, {}", code,
@@ -182,6 +193,7 @@ public class AccountTypesController {
   /**
    * Создание банковского счета 1 уровня.
    */
+  @Operation(summary = "Создание типа счета 1 уровня")
   @PostMapping(value = "/accounttypes",
       consumes = "application/json", produces = "application/json")
   public ResponseEntity<AccountTypeDto> createNewAccountType(@RequestBody AccountTypeDto dto)
@@ -206,6 +218,7 @@ public class AccountTypesController {
   /**
    * Удаление банковского счета 1 уровня.
    */
+  @Operation(summary = "Удаление типа счета 1 уровня")
   @DeleteMapping(value = "/accounttypes",
       consumes = "application/json", produces = "application/json")
   public ResponseEntity<?> deleteAccountType(@RequestBody AccountTypeDto dto)

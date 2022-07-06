@@ -4,6 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.stream.Collectors;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -22,6 +25,7 @@ import ru.shanalotte.bankbarrel.core.dto.BankClientDto;
  * Контроллер для информации о клиентах.
  */
 @RestController
+@Tag(name = "Clients", description = "Клиенты")
 public class ClientsController {
 
   private BankClientDao bankClientDao;
@@ -34,6 +38,7 @@ public class ClientsController {
   /**
    * Создание нового клиента.
    */
+  @Operation(summary = "Добавить клиента")
   @PostMapping("/clients")
   public ResponseEntity<BankClientDto> createNewClient(@RequestBody BankClientDto dto)
       throws JsonProcessingException {
@@ -50,6 +55,7 @@ public class ClientsController {
   /**
    * Получение списка клиентов.
    */
+  @Operation(summary = "Получить список клиентов")
   @GetMapping("/clients")
   public ResponseEntity<List<BankClientDto>> getClientList() {
     logger.info("GET /clients");
@@ -70,8 +76,9 @@ public class ClientsController {
   /**
    * Получение информации о клиенте с определенноым ID.
    */
+  @Operation(summary = "Получить информацию о клиенте")
   @GetMapping("/clients/{id}")
-  public ResponseEntity<BankClientDto> getClientInfo(@PathVariable("id") Long id) {
+  public ResponseEntity<BankClientDto> getClientInfo(@Parameter(description = "ID клиента") @PathVariable("id") Long id) {
     logger.info("GET /clients/{}", id);
     if (!bankClientDao.findById(id).isPresent()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -89,8 +96,9 @@ public class ClientsController {
   /**
    * Изменение информации клиента с определенным ID.
    */
+  @Operation(summary = "Обновить информацию о клиенте")
   @PutMapping("/clients/{id}")
-  public ResponseEntity<BankClientDto> getClientInfo(@PathVariable("id") Long id,
+  public ResponseEntity<BankClientDto> getClientInfo(@Parameter(description = "ID клиента") @PathVariable("id") Long id,
                                                      @RequestBody BankClientDto dto) {
     logger.info("PUT /clients/{}", id);
     if (!bankClientDao.findById(id).isPresent()) {

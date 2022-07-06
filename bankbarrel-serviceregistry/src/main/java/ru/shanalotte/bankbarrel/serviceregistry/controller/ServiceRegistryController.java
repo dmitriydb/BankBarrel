@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -33,9 +34,8 @@ import ru.shanalotte.bankbarrel.serviceregistry.repository.RegisteredServiceRepo
 @RestController
 public class ServiceRegistryController {
 
-  private RegisteredServiceRepository registeredServiceRepository;
-
   private static final Logger logger = LoggerFactory.getLogger(ServiceRegistryController.class);
+  private RegisteredServiceRepository registeredServiceRepository;
 
   public ServiceRegistryController(RegisteredServiceRepository registeredServiceRepository) {
     this.registeredServiceRepository = registeredServiceRepository;
@@ -44,24 +44,25 @@ public class ServiceRegistryController {
   /**
    * Получение списка микросервисов.
    */
-  @Operation(description = "Get registered microservices list")
+  @Operation(description = "Получить список зарегистрированных микросервисов", summary = "Получить список зарегистрированных микросервисов")
   @GetMapping(value = "/services", produces = "application/json")
   public @ResponseBody
   List<RegisteredServiceInfo> registeredServicesList() {
     logger.info("GET /services");
-    List<RegisteredServiceInfo> list = registeredServiceRepository.findAll();
-    return list;
+    return registeredServiceRepository.findAll();
   }
 
   /**
-  Получение информации о микросервисе по имени.
+   * Получение информации о микросервисе по имени.
    */
+  @Operation(description = "Получить информацию о состоянии микросервиса по имени сервиса", summary = "Получить информацию о сервисе по имени")
   @ApiResponse(responseCode = "404",
-      description = "Service with such name is not registered", content = @Content)
-  @Operation(description = "Get microservice info by name")
+      description = "Сервис с таким именем не найден", content = @Content)
   @GetMapping(value = "/services/{name}", produces = "application/json")
   public ResponseEntity<RegisteredServiceInfo> getServiceInfo(@Parameter(
-      description = "Microservice name") @PathVariable("name") String serviceName) {
+      description = "Microservice name", examples = @ExampleObject(
+      name = "bb-webapp", value = "bb-webapp", summary = "bb-webapp", description = "Получить информацию о сервисе с именем bb-webapp"
+  )) @PathVariable("name") String serviceName) {
     logger.info("GET /services/{}", serviceName);
     RegisteredServiceInfo info = registeredServiceRepository.findByName(serviceName);
     if (info == null) {
@@ -73,10 +74,9 @@ public class ServiceRegistryController {
   /**
    * Создание информации о микросервисе.
    */
-  @Operation(description = "Create microservice information")
+  @Operation(description = "Регистрация сервиса в реестре", summary = "Регистрация сервера в реестре")
   @PostMapping(value = "/services", consumes = "application/json", produces = "application/json")
-  public ResponseEntity<?> createService(@Schema(implementation = RegisteredServiceInfo.class)
-                                         @RequestBody RegisteredServiceInfo newService)
+  public ResponseEntity<?> createService(@RequestBody RegisteredServiceInfo newService)
       throws JsonProcessingException {
     logger.info("POST /services/ data = {}", new ObjectMapper().writeValueAsString(newService));
     registeredServiceRepository.save(newService);
@@ -85,8 +85,9 @@ public class ServiceRegistryController {
 
   /**
    * Обновление информации о микросервисе.
-  */
-  @Operation(description = "Update existing microservice info or create new one")
+   */
+  @Operation(description = "Обновление информации о сервисе или создание нового", summary = "Обновление информации о сервисе")
+  @ApiResponse(responseCode = "200", description = "Обновление информации или создание нового сервиса произошло успешно")
   @PutMapping(value = "/services", consumes = "application/json", produces = "application/json")
   public ResponseEntity<?> updateService(@RequestBody RegisteredServiceInfo newService)
       throws JsonProcessingException {
@@ -98,12 +99,12 @@ public class ServiceRegistryController {
   /**
    * Удалить информацию о микросервисе.
    */
-  @Operation(description = "Delete microservice info")
+  @Operation(description = "Удаление информации о сервисе", summary = "Удаление информации о сервисе")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "404",
-          description = "Service with such name is not registered", content = @Content),
+          description = "Сервис с таким именем не найден", content = @Content),
       @ApiResponse(responseCode = "200",
-          description = "Service with such name was found AND successfully deleted",
+          description = "Сервис успешно удален",
           content = @Content)
   })
   @DeleteMapping(value = "/services", consumes = "application/json", produces = "application/json")

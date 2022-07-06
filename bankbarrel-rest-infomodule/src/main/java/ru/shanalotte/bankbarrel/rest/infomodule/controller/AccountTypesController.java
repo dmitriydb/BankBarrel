@@ -2,6 +2,7 @@ package ru.shanalotte.bankbarrel.rest.infomodule.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,7 @@ public class AccountTypesController {
    */
   @CrossOrigin(origins = "http://localhost:8888")
   @GetMapping("/accounttypes")
-  @Operation(description = "Получить названия типов банковских счетов")
+  @Operation(description = "Получить типы банковских счетов 1 уровня", summary = "Получить типы счетов 1 уровня")
   public List<ListingDtoItem> accountTypes() {
     logger.info("GET /accounttypes");
     List<ListingDtoItem> listingDtoItems = new ArrayList<>();
@@ -57,11 +58,24 @@ public class AccountTypesController {
    */
   @CrossOrigin(origins = "http://localhost:8888")
   @GetMapping("/accounttype/{code}/additionaltypes")
-  @Operation(description = "Получить названия типов банковских счетов 2 уровня")
+  @Operation(description = "Получить типы банковских счетов 2 уровня", summary = "Получить типы счетов 2 уровня")
   @ApiResponse(responseCode = "404", description = "Возвращает в случае, "
       + "если тип банковского счета 1 уровня с таким кодом не существует")
   public ResponseEntity<List<ListingDtoItem>> additionalTypes(
-      @Parameter(description = "Тип счета 1 уровня")
+      @Parameter(description = "Тип счета 1 уровня", examples = {
+          @ExampleObject(
+              name = "CHECKING",
+              description = "Получить список типов сберегательных счетов",
+              value = "CHECKING",
+              summary = "CHECKING"
+          ),
+          @ExampleObject(
+              name = "SAVING",
+              description = "Получить список типов накопительных счетов",
+              value = "SAVING",
+              summary = "SAVING"
+          )
+      })
       @PathVariable("code") String code) {
     logger.info("GET /accounttype/{}/additionaltypes", code);
     List<ListingDtoItem> listingDtoItems = new ArrayList<>();

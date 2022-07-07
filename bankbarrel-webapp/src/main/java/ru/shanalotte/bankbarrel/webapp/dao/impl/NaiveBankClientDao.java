@@ -15,7 +15,7 @@ import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankClientDao;
  * Заглушка для DAO клиентов банка. Хранит всё в памяти.
  */
 @Repository
-@Profile("test")
+@Profile({"test", "dev"})
 public class NaiveBankClientDao implements BankClientDao {
 
   private static long NEXT_ID = 0;

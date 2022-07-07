@@ -15,7 +15,7 @@ import ru.shanalotte.bankbarrel.core.dto.BankClientDto;
  * добавляют/удаляют информацию о счетах пользователей во время интеграционного тестирования.
  */
 @Service
-@Profile("test")
+@Profile({"test", "dev"})
 public class AccountHolder {
 
   private Map<BankClientDto, List<BankAccountDto>> accounts = new HashMap<>();

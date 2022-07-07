@@ -13,7 +13,7 @@ import ru.shanalotte.bankbarrel.webapp.user.WebAppUser;
  * Хранит всё в памяти.
  */
 @Repository
-@Profile("test")
+@Profile({"test", "dev"})
 public class NaiveWebAppUserDaoImpl implements WebAppUserDao {
   private Set<WebAppUser> existingUsers = new HashSet<>();
 

@@ -10,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
-import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -25,6 +24,7 @@ import ru.shanalotte.bankbarrel.webapp.dto.bankclient.BankClientInfoDto;
 import ru.shanalotte.bankbarrel.webapp.entities.WebAppOperation;
 import ru.shanalotte.bankbarrel.webapp.entities.WebAppOperationHistory;
 import ru.shanalotte.bankbarrel.webapp.service.BankClientsEnrollingService;
+import ru.shanalotte.bankbarrel.webapp.service.monitoring.activity.UserActivityMonitoringService;
 import ru.shanalotte.bankbarrel.webapp.user.WebAppUser;
 
 /**
@@ -38,7 +38,7 @@ public class EnrollController {
   private MessageSource messageSource;
   private WebAppOperationDao webAppOperationDao;
   private WebAppOperationHistoryDao webAppOperationHistoryDao;
-  private JmsTemplate jmsTemplate;
+  private UserActivityMonitoringService userActivityMonitoringService;
 
   private static final Logger logger = LoggerFactory.getLogger(EnrollController.class);
 
@@ -50,13 +50,13 @@ public class EnrollController {
                           MessageSource messageSource,
                           WebAppOperationDao webAppOperationDao,
                           WebAppOperationHistoryDao webAppOperationHistoryDao,
-                          JmsTemplate jmsTemplate) {
+                          UserActivityMonitoringService userActivityMonitoringService) {
     this.webAppUserDao = webAppUserDao;
     this.bankClientsEnrollingService = bankClientsEnrollingService;
     this.messageSource = messageSource;
     this.webAppOperationDao = webAppOperationDao;
     this.webAppOperationHistoryDao = webAppOperationHistoryDao;
-    this.jmsTemplate = jmsTemplate;
+    this.userActivityMonitoringService = userActivityMonitoringService;
   }
 
   /**
@@ -71,7 +71,7 @@ public class EnrollController {
                               @Valid @ModelAttribute("dto") BankClientInfoDto dto,
                               BindingResult bindingResult) throws JsonProcessingException {
     String json = new ObjectMapper().writeValueAsString(dto);
-    jmsTemplate.convertAndSend("enrolls", json);
+    userActivityMonitoringService.auditEnroll(json);
     logger.info("Попытка регистрации клиента {}", json);
     WebAppOperation webAppOperation = new WebAppOperation();
     webAppOperation.setStartTime(Timestamp.valueOf(LocalDateTime.now()));

@@ -24,7 +24,7 @@ import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.WebApiServiceRegi
  * Использует интеграцию с микросервисом bb-webapi-gateway через REST.
  */
 @Repository
-@Profile({"dev", "production"})
+@Profile({"production"})
 public class RealBankAccountDao implements BankAccountDao {
 
   private static final Logger logger = LoggerFactory.getLogger(RealBankAccountDao.class);

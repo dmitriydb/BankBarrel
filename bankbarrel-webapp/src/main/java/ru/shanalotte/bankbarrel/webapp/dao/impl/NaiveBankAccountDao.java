@@ -17,7 +17,7 @@ import ru.shanalotte.bankbarrel.webapp.exception.BankAccountNotFound;
  * Заглушка для DAO клиентов банка. Хранит всё в памяти.
  */
 @Repository
-@Profile("test")
+@Profile({"test", "dev"})
 public class NaiveBankAccountDao implements BankAccountDao {
 
   private Set<BankAccountDto> bankAccounts = new HashSet<>();

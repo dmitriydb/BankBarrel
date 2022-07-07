@@ -19,7 +19,7 @@ import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.WebApiServiceRegi
  * Использует интеграцию с REST через Web Api Gateway.
  */
 @Repository
-@Profile({"dev", "production"})
+@Profile({"production"})
 public class RealClientDao implements BankClientDao {
 
   private ServiceUrlBuilder serviceUrlBuilder;

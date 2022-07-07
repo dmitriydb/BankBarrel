@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +15,7 @@ import ru.shanalotte.bankbarrel.webapp.dao.interfaces.WebAppUserDao;
 import ru.shanalotte.bankbarrel.webapp.entities.WebAppOperation;
 import ru.shanalotte.bankbarrel.webapp.entities.WebAppOperationHistory;
 import ru.shanalotte.bankbarrel.webapp.exception.WebAppUserNotFound;
+import ru.shanalotte.bankbarrel.webapp.service.monitoring.activity.UserActivityMonitoringService;
 
 /**
  * Controller for the login process.
@@ -26,18 +26,18 @@ public class LoginController {
   private WebAppUserDao webAppUserDao;
   private WebAppOperationDao webAppOperationDao;
   private WebAppOperationHistoryDao webAppOperationHistoryDao;
-  private JmsTemplate jmsTemplate;
+  private UserActivityMonitoringService userActivityMonitoringService;
 
   private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
   public LoginController(WebAppUserDao webAppUserDao,
                          WebAppOperationDao webAppOperationDao,
                          WebAppOperationHistoryDao webAppOperationHistoryDao,
-                         JmsTemplate jmsTemplate) {
+                         UserActivityMonitoringService userActivityMonitoringService) {
     this.webAppUserDao = webAppUserDao;
     this.webAppOperationDao = webAppOperationDao;
     this.webAppOperationHistoryDao = webAppOperationHistoryDao;
-    this.jmsTemplate = jmsTemplate;
+    this.userActivityMonitoringService = userActivityMonitoringService;
   }
 
   /**
@@ -50,7 +50,7 @@ public class LoginController {
   @PostMapping("/login")
   public String processLogin(RedirectAttributes redirectAttributes,
                              @RequestParam("username") String username) throws WebAppUserNotFound {
-    jmsTemplate.convertAndSend("logins", username);
+    userActivityMonitoringService.auditLogin(username);
     WebAppOperation webAppOperation = new WebAppOperation();
     webAppOperation.setStartTime(Timestamp.valueOf(LocalDateTime.now()));
     webAppOperation.setJson(username);

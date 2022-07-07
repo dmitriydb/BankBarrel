@@ -12,7 +12,7 @@ import ru.shanalotte.bankbarrel.webapp.entities.rowmappers.WebAppUserRowMapper;
 import ru.shanalotte.bankbarrel.webapp.user.WebAppUser;
 
 @Repository
-@Profile({"dev", "production"})
+@Profile({"production"})
 public class RealWebAppUserDao implements WebAppUserDao {
 
   /**

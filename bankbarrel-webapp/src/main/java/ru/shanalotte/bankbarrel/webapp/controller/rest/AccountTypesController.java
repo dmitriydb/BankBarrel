@@ -46,6 +46,7 @@ public class AccountTypesController {
     RestTemplate restTemplate = new RestTemplate();
     RegisteredServiceInfo registeredServiceInfo = serviceRegistryProxy.getRestInfoModuleInfo();
     String url = serviceUrlBuilder.buildServiceUrl(registeredServiceInfo);
+    logger.info(url);
     listingDtoItems = restTemplate.getForObject(URI.create(url + "/accounttypes"), List.class);
     return listingDtoItems;
   }

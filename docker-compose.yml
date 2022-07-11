@@ -26,6 +26,17 @@ services:
     - bb-serviceregistry-db
     networks:
     - bb-network
+  bb-jwt-provider:
+    container_name: bb-jwt-provider
+    build:
+      context: D:\ideaProjects\BankBarrel\bb-jwt-provider\.
+      dockerfile: Dockerfile
+    ports:
+      - 8892:8892
+    depends_on:
+      - bb-serviceregistry
+    networks:
+      - bb-network
   bb-appserver-db:
     container_name: bb-appserver-db
     environment:

@@ -12,4 +12,6 @@ public interface ServiceRegistryProxy {
   RegisteredServiceInfo getRestInfoModuleInfo();
 
   RegisteredServiceInfo getWebApiInfo();
+
+  RegisteredServiceInfo getJwtProviderInfo();
 }

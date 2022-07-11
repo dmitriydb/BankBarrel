@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import ru.shanalotte.bankbarrel.core.dto.ListingDtoItem;
 import ru.shanalotte.bankbarrel.core.dto.serviceregistry.RegisteredServiceInfo;
+import ru.shanalotte.bankbarrel.webapp.service.jwt.JwtTokenStorer;
 import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.ServiceRegistryProxy;
 import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.ServiceUrlBuilder;
 
@@ -27,12 +31,17 @@ public class AccountTypesController {
 
   private ServiceRegistryProxy serviceRegistryProxy;
   private ServiceUrlBuilder serviceUrlBuilder;
+  private JwtTokenStorer jwtTokenStorer;
+
   private static final Logger logger = LoggerFactory.getLogger(AccountTypesController.class);
 
+
   public AccountTypesController(ServiceRegistryProxy serviceRegistryProxy,
-                                ServiceUrlBuilder serviceUrlBuilder) {
+                                ServiceUrlBuilder serviceUrlBuilder,
+                                JwtTokenStorer jwtTokenStorer) {
     this.serviceRegistryProxy = serviceRegistryProxy;
     this.serviceUrlBuilder = serviceUrlBuilder;
+    this.jwtTokenStorer = jwtTokenStorer;
   }
 
   /**
@@ -45,10 +54,16 @@ public class AccountTypesController {
     List<ListingDtoItem> listingDtoItems = new ArrayList<>();
     RestTemplate restTemplate = new RestTemplate();
     RegisteredServiceInfo registeredServiceInfo = serviceRegistryProxy.getRestInfoModuleInfo();
+    logger.info(registeredServiceInfo.toString());
     String url = serviceUrlBuilder.buildServiceUrl(registeredServiceInfo);
     logger.info(url);
-    listingDtoItems = restTemplate.getForObject(URI.create(url + "/accounttypes"), List.class);
-    return listingDtoItems;
+    HttpHeaders headers = new HttpHeaders();
+    System.out.println("Token = " + jwtTokenStorer.getToken());
+    headers.set("Authorization", jwtTokenStorer.getToken());
+    HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
+    ResponseEntity<List> response = restTemplate.exchange(
+        url + "/accounttypes", HttpMethod.GET, requestEntity, List.class);
+    return response.getBody();
   }
 
   /**
@@ -64,10 +79,12 @@ public class AccountTypesController {
     RestTemplate restTemplate = new RestTemplate();
     RegisteredServiceInfo registeredServiceInfo = serviceRegistryProxy.getRestInfoModuleInfo();
     String url = serviceUrlBuilder.buildServiceUrl(registeredServiceInfo);
-    ResponseEntity<ListingDtoItem[]> response =
-        restTemplate.getForEntity(
-            url + "/accounttype/" + code + "/additionaltypes",
-            ListingDtoItem[].class);
+    System.out.println("Token = " + jwtTokenStorer.getToken());
+    HttpHeaders headers = new HttpHeaders();
+    headers.set("Authorization", jwtTokenStorer.getToken());
+    HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
+    ResponseEntity<ListingDtoItem[]> response = restTemplate.exchange(
+        url + "/accounttype/" + code + "/additionaltypes", HttpMethod.GET, requestEntity, ListingDtoItem[].class);
     return new ResponseEntity<>(
         Arrays.stream(response.getBody()).collect(Collectors.toList()), HttpStatus.OK
     );

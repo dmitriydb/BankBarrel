@@ -15,6 +15,7 @@
         <module>bankbarrel-serviceregistry</module>
         <module>bb-appserver</module>
         <module>bb-monitoring-webapp</module>
+        <module>bb-jwt-provider</module>
     </modules>
 
     <properties>

@@ -17,7 +17,7 @@ import ru.shanalotte.bankbarrel.core.dto.serviceregistry.RegisteredServiceInfo;
  * Использует интеграцию с REST в Web Api Gateway.
  */
 @Service
-@Profile({"production", "dev"})
+@Profile({"production"})
 public class WebApiServiceRegistryProxy implements ServiceRegistryProxy {
 
   private Map<String, RegisteredServiceInfo> registeredServices = new HashMap<>();
@@ -50,4 +50,8 @@ public class WebApiServiceRegistryProxy implements ServiceRegistryProxy {
     return registeredServices.get("bb-gateway-webapi");
   }
 
+  @Override
+  public RegisteredServiceInfo getJwtProviderInfo() {
+    return registeredServices.get("bb-jwt-provider");
+  }
 }

@@ -35,6 +35,7 @@ import org.springframework.stereotype.Component;
         title = "Rest infomodule api"
     )
 )
+@ComponentScan("ru.shanalotte.bankbarrel.rest.infomodule")
 public class RestInfomoduleLauncher {
   public static void main(String[] args) {
     SpringApplication.run(RestInfomoduleLauncher.class, args);

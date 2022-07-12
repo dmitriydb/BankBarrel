@@ -1,7 +1,11 @@
 package ru.shanalotte.bankbarrel.webapp.service;
 
 import java.net.URI;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ru.shanalotte.bankbarrel.core.domain.MonetaryAmount;
@@ -11,6 +15,7 @@ import ru.shanalotte.bankbarrel.core.dto.TransferDto;
 import ru.shanalotte.bankbarrel.core.dto.WithdrawDto;
 import ru.shanalotte.bankbarrel.core.exception.InsufficientFundsException;
 import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRate;
+import ru.shanalotte.bankbarrel.webapp.service.jwt.JwtTokenStorer;
 import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.ServiceRegistryProxy;
 import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.ServiceUrlBuilder;
 
@@ -24,11 +29,15 @@ public class WebAppWebApiBankService implements WebAppBankService {
 
   private ServiceUrlBuilder serviceUrlBuilder;
   private ServiceRegistryProxy registryProxy;
+  private JwtTokenStorer jwtTokenStorer;
 
+  @Autowired
   public WebAppWebApiBankService(ServiceUrlBuilder serviceUrlBuilder,
-                                 ServiceRegistryProxy registryProxy) {
+                                 ServiceRegistryProxy registryProxy,
+                                 JwtTokenStorer jwtTokenStorer) {
     this.serviceUrlBuilder = serviceUrlBuilder;
     this.registryProxy = registryProxy;
+    this.jwtTokenStorer = jwtTokenStorer;
   }
 
   /**
@@ -41,8 +50,11 @@ public class WebAppWebApiBankService implements WebAppBankService {
     dto.setCurrency(amount.getCurrency());
     dto.setAmount(amount.getValue());
     dto.setAccount(account.getIdentifier());
+    HttpHeaders headers = new HttpHeaders();
+    headers.setBearerAuth(jwtTokenStorer.getToken());
+    HttpEntity<DepositDto> entity = new HttpEntity<>(dto, headers);
     RestTemplate restTemplate = new RestTemplate();
-    restTemplate.postForEntity(URI.create(url), dto, DepositDto.class);
+    restTemplate.postForEntity(URI.create(url), entity, DepositDto.class);
   }
 
   /**
@@ -57,8 +69,11 @@ public class WebAppWebApiBankService implements WebAppBankService {
     dto.setAccount(account.getIdentifier());
     RestTemplate restTemplate = new RestTemplate();
     try {
+      HttpHeaders headers = new HttpHeaders();
+      headers.setBearerAuth(jwtTokenStorer.getToken());
+      HttpEntity<WithdrawDto> entity = new HttpEntity<>(dto, headers);
       WithdrawDto result =
-          restTemplate.postForEntity(URI.create(url), dto, WithdrawDto.class).getBody();
+          restTemplate.postForEntity(URI.create(url), entity, WithdrawDto.class).getBody();
     } catch (Exception ex) {
       ex.printStackTrace();
       //TODO
@@ -79,9 +94,11 @@ public class WebAppWebApiBankService implements WebAppBankService {
     dto.setFromAccount(from.getIdentifier());
     RestTemplate restTemplate = new RestTemplate();
     try {
-      System.out.println(dto);
+      HttpHeaders headers = new HttpHeaders();
+      headers.setBearerAuth(jwtTokenStorer.getToken());
+      HttpEntity<TransferDto> entity = new HttpEntity<>(dto, headers);
       TransferDto result =
-          restTemplate.postForEntity(URI.create(url), dto, TransferDto.class).getBody();
+          restTemplate.postForEntity(URI.create(url), entity, TransferDto.class).getBody();
     } catch (Exception ex) {
       ex.printStackTrace();
       throw new InsufficientFundsException("");

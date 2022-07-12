@@ -5,12 +5,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
 import ru.shanalotte.bankbarrel.core.dto.BankClientDto;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankClientDao;
+import ru.shanalotte.bankbarrel.webapp.service.jwt.JwtTokenStorer;
 import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.ServiceUrlBuilder;
 import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.WebApiServiceRegistryProxy;
 
@@ -24,11 +30,15 @@ public class RealClientDao implements BankClientDao {
 
   private ServiceUrlBuilder serviceUrlBuilder;
   private WebApiServiceRegistryProxy serviceRegistryProxy;
+  private JwtTokenStorer jwtTokenStorer;
 
+  @Autowired
   public RealClientDao(ServiceUrlBuilder serviceUrlBuilder,
-                       WebApiServiceRegistryProxy serviceRegistryProxy) {
+                       WebApiServiceRegistryProxy serviceRegistryProxy,
+                       JwtTokenStorer jwtTokenStorer) {
     this.serviceUrlBuilder = serviceUrlBuilder;
     this.serviceRegistryProxy = serviceRegistryProxy;
+    this.jwtTokenStorer = jwtTokenStorer;
   }
 
   @Override
@@ -36,8 +46,12 @@ public class RealClientDao implements BankClientDao {
     RestTemplate restTemplate = new RestTemplate();
     String url =
         serviceUrlBuilder.buildServiceUrl(serviceRegistryProxy.getWebApiInfo()) + "/clients";
-    BankClientDto[] list = restTemplate.getForEntity(
-        URI.create(url), BankClientDto[].class).getBody();
+    HttpHeaders headers = new HttpHeaders();
+    headers.setBearerAuth(jwtTokenStorer.getToken());
+    HttpEntity<Void> entity = new HttpEntity<>(headers);
+    ResponseEntity<BankClientDto[]> responseEntity = restTemplate.exchange(
+        url, HttpMethod.GET, entity, BankClientDto[].class);
+    BankClientDto[] list = responseEntity.getBody();
     return list.length;
   }
 
@@ -46,7 +60,10 @@ public class RealClientDao implements BankClientDao {
     RestTemplate restTemplate = new RestTemplate();
     String url =
         serviceUrlBuilder.buildServiceUrl(serviceRegistryProxy.getWebApiInfo()) + "/clients";
-    restTemplate.postForEntity(URI.create(url), newBankClient, BankClientDto.class);
+    HttpHeaders headers = new HttpHeaders();
+    headers.setBearerAuth(jwtTokenStorer.getToken());
+    HttpEntity<BankClientDto> entity = new HttpEntity<>(newBankClient, headers);
+    restTemplate.postForEntity(URI.create(url), entity, BankClientDto.class);
   }
 
   @Override
@@ -54,8 +71,12 @@ public class RealClientDao implements BankClientDao {
     RestTemplate restTemplate = new RestTemplate();
     String url =
         serviceUrlBuilder.buildServiceUrl(serviceRegistryProxy.getWebApiInfo()) + "/clients";
-    BankClientDto[] list = restTemplate.getForEntity(
-        URI.create(url), BankClientDto[].class).getBody();
+    HttpHeaders headers = new HttpHeaders();
+    headers.setBearerAuth(jwtTokenStorer.getToken());
+    HttpEntity<Void> entity = new HttpEntity<>(headers);
+    ResponseEntity<BankClientDto[]> responseEntity = restTemplate.exchange(
+        url, HttpMethod.GET, entity, BankClientDto[].class);
+    BankClientDto[] list = responseEntity.getBody();
     return Arrays.stream(list).filter(e -> e.getGivenName().equals(givenName)).findFirst().get();
   }
 
@@ -64,14 +85,18 @@ public class RealClientDao implements BankClientDao {
     RestTemplate restTemplate = new RestTemplate();
     String url =
         serviceUrlBuilder.buildServiceUrl(serviceRegistryProxy.getWebApiInfo()) + "/clients";
-    BankClientDto[] list = restTemplate.getForEntity(
-        URI.create(url), BankClientDto[].class).getBody();
-    System.out.println(clientDto);
+    HttpHeaders headers = new HttpHeaders();
+    headers.setBearerAuth(jwtTokenStorer.getToken());
+    HttpEntity<Void> entity = new HttpEntity<>(headers);
+    ResponseEntity<BankClientDto[]> responseEntity = restTemplate.exchange(
+        url, HttpMethod.GET, entity, BankClientDto[].class);
+    BankClientDto[] list = responseEntity.getBody();
     BankClientDto dto = Arrays.stream(list).filter(e -> e.getId().equals(clientDto.getId())).findFirst().get();
     url = serviceUrlBuilder.buildServiceUrl(
         serviceRegistryProxy.getWebApiInfo()) + "/clients/" + dto.getId() + "/accounts";
-    BankAccountDto[] accountsList = restTemplate.getForEntity(
-        URI.create(url), BankAccountDto[].class).getBody();
+    ResponseEntity<BankAccountDto[]> accountsEntity = restTemplate.exchange(
+        url, HttpMethod.GET, entity, BankAccountDto[].class);
+    BankAccountDto[] accountsList = accountsEntity.getBody();
     return Arrays.stream(accountsList).collect(Collectors.toList());
   }
 
@@ -83,8 +108,12 @@ public class RealClientDao implements BankClientDao {
     RestTemplate restTemplate = new RestTemplate();
     String url =
         serviceUrlBuilder.buildServiceUrl(serviceRegistryProxy.getWebApiInfo()) + "/clients";
-    BankClientDto[] list = restTemplate.getForEntity(
-        URI.create(url), BankClientDto[].class).getBody();
+    HttpHeaders headers = new HttpHeaders();
+    headers.setBearerAuth(jwtTokenStorer.getToken());
+    HttpEntity<Void> entity = new HttpEntity<>(headers);
+    ResponseEntity<BankClientDto[]> responseEntity = restTemplate.exchange(
+        url, HttpMethod.GET, entity, BankClientDto[].class);
+    BankClientDto[] list = responseEntity.getBody();
     Optional<BankClientDto> result = Arrays.stream(list).filter(e -> e.equals(dto)).findFirst();
     return result.map(BankClientDto::getId).orElse(null);
   }

@@ -58,7 +58,6 @@ public class AccountTypesController {
     String url = serviceUrlBuilder.buildServiceUrl(registeredServiceInfo);
     logger.info(url);
     HttpHeaders headers = new HttpHeaders();
-    System.out.println("Token = " + jwtTokenStorer.getToken());
     headers.set("Authorization", jwtTokenStorer.getToken());
     HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
     ResponseEntity<List> response = restTemplate.exchange(
@@ -79,7 +78,6 @@ public class AccountTypesController {
     RestTemplate restTemplate = new RestTemplate();
     RegisteredServiceInfo registeredServiceInfo = serviceRegistryProxy.getRestInfoModuleInfo();
     String url = serviceUrlBuilder.buildServiceUrl(registeredServiceInfo);
-    System.out.println("Token = " + jwtTokenStorer.getToken());
     HttpHeaders headers = new HttpHeaders();
     headers.set("Authorization", jwtTokenStorer.getToken());
     HttpEntity<Void> requestEntity = new HttpEntity<>(headers);

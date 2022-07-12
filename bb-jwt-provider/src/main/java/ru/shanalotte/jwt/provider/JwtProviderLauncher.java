@@ -8,12 +8,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.shanalotte.jwt.provider.entity.User;
 import ru.shanalotte.jwt.provider.repository.UserRepository;
 
 @SpringBootApplication
+@ComponentScan("ru.shanalotte.jwt.provider")
 @PropertySource("jwt-credentials-store.properties")
 public class JwtProviderLauncher implements CommandLineRunner {
 

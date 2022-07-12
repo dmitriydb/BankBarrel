@@ -1,4 +1,4 @@
-package ru.shanalotte.bankbarrel.rest.infomodule.service;
+package ru.shanalotte.bankbarrel.appserver.security.service;
 
 import java.util.ArrayList;
 import java.util.Base64;
@@ -10,10 +10,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;

@@ -3,6 +3,8 @@ package ru.shanalotte.jwt.provider.listener;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.UnknownHostException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
@@ -18,6 +20,8 @@ import ru.shanalotte.bankbarrel.core.dto.serviceregistry.RegisteredServiceInfo;
 @Component
 @Profile("production")
 public class AppContextListener implements ApplicationListener<ContextRefreshedEvent> {
+
+  private static final Logger logger = LoggerFactory.getLogger(AppContextListener.class);
 
   @Value("${service.name}")
   private String serviceName;
@@ -37,7 +41,9 @@ public class AppContextListener implements ApplicationListener<ContextRefreshedE
       e.printStackTrace();
     }
     RestTemplate restTemplate = new RestTemplate();
+    logger.info(serviceInfo.toString());
     String result = null;
     result = restTemplate.postForObject(URI.create(serviceRegistryUrl), serviceInfo, String.class);
+    logger.info(result);
   }
 }

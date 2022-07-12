@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,8 @@ import ru.shanalotte.bankbarrel.core.dto.serviceregistry.RegisteredServiceInfo;
 @Profile({"production"})
 public class WebApiServiceRegistryProxy implements ServiceRegistryProxy {
 
+  private static final Logger logger = LoggerFactory.getLogger(WebApiServiceRegistryProxy.class);
+
   private Map<String, RegisteredServiceInfo> registeredServices = new HashMap<>();
 
   @Value("${services.dependencies}")
@@ -31,13 +35,16 @@ public class WebApiServiceRegistryProxy implements ServiceRegistryProxy {
   /**
    * Запускается при поднятии веб-приложения и получает информацию о всех остальных микросервисах.
    */
-  @Scheduled(initialDelay = 100, fixedDelay = Integer.MAX_VALUE)
+  @Scheduled(initialDelay = 1000, fixedDelay = Integer.MAX_VALUE)
   public void loadServicesInfo() {
     RestTemplate restTemplate = new RestTemplate();
     for (String serviceName : serviceDependencies) {
+
       String url = serviceRegistryUrl + "/" + serviceName;
       ResponseEntity<RegisteredServiceInfo> result =
           restTemplate.getForEntity(URI.create(url), RegisteredServiceInfo.class);
+      logger.info("Loaded {} info", serviceName);
+      logger.info("{} {} {}", result.getBody().getName(), result.getBody().getHost(), result.getBody().getPort());
       registeredServices.put(serviceName, result.getBody());
     }
   }

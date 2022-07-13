@@ -27,6 +27,9 @@ public class JwtProviderLauncher implements CommandLineRunner {
   @Value("${bb-webapp}")
   private String webappPassword;
 
+  @Value("${bb-rest-infomodule}")
+  private String restInfomodulePassword;
+
   public static void main(String[] args) {
     SpringApplication.run(JwtProviderLauncher.class, args);
   }
@@ -38,7 +41,8 @@ public class JwtProviderLauncher implements CommandLineRunner {
   public void run(String... args) throws Exception {
     logger.info("loading services jwt credentials into memory...");
     userRepository.saveAll(Arrays.asList(
-        new User(1L, "bb-webapp", passwordEncoder.encode(webappPassword))
+        new User(1L, "bb-webapp", passwordEncoder.encode(webappPassword)),
+        new User(2L, "bb-rest-infomodule", passwordEncoder.encode(restInfomodulePassword))
     ));
     logger.info("Done!");
   }

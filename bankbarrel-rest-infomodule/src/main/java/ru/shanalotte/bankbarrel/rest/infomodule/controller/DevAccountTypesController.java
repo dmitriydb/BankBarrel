@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -23,12 +24,13 @@ import ru.shanalotte.bankbarrel.core.service.EnumToListingDtoItemConverter;
  * Контроллер, который возвращает json с возможными типами банковских счетов 1 и 2 уровня.
  */
 @RestController
-public class AccountTypesController {
+@Profile({"dev", "test"})
+public class DevAccountTypesController {
 
-  private static final Logger logger = LoggerFactory.getLogger(AccountTypesController.class);
+  private static final Logger logger = LoggerFactory.getLogger(DevAccountTypesController.class);
   private EnumToListingDtoItemConverter enumToListingDtoItemConverter;
 
-  public AccountTypesController(EnumToListingDtoItemConverter enumToListingDtoItemConverter) {
+  public DevAccountTypesController(EnumToListingDtoItemConverter enumToListingDtoItemConverter) {
     this.enumToListingDtoItemConverter = enumToListingDtoItemConverter;
   }
 

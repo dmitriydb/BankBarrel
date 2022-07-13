@@ -4,6 +4,11 @@ networks:
     bb-network:
         external: true
 services:
+  bb-rest-infomodule-redis:
+    container_name: bb-rest-infomodule-redis
+    image: redis
+    networks: 
+    - bb-network
   bb-serviceregistry-db:
     container_name: bb-serviceregistry-db
     environment:
@@ -75,6 +80,7 @@ services:
     - bb-serviceregistry
     - bb-appserver
     - bb-appserver-db
+    - bb-rest-infomodule-redis
     networks:
     - bb-network
   bb-webapp-db:

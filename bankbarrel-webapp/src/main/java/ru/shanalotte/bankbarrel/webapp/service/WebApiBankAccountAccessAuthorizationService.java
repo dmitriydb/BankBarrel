@@ -69,7 +69,6 @@ public class WebApiBankAccountAccessAuthorizationService
     RestTemplate restTemplate = new RestTemplate();
     ResponseEntity<BankAccountDto[]> responseEntity = restTemplate.exchange(
         url, HttpMethod.GET, entity, BankAccountDto[].class);
-
     List<BankAccountDto> accountDtos = Arrays.stream(
             responseEntity.getBody())
         .collect(Collectors.toList());

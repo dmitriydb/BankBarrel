@@ -9,20 +9,17 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import ru.shanalotte.bankbarrel.core.misc.PropertiesLoader;
+import ru.shanalotte.bankbarrel.core.misc.NonManagedBySpringBootPropertiesLoader;
 
-/**
- * Class represents a single bank account.
- */
 @Entity
 @Table(name = "bank_accounts")
 public class BankAccount {
 
+  @Id
+  protected String identifier;
   @ManyToOne
   @JoinColumn(name = "owner")
   protected BankClient owner;
-  @Id
-  protected String identifier;
   protected String number = "";
   @Column(name = "type")
   protected String bankAccountType;
@@ -33,12 +30,12 @@ public class BankAccount {
   protected BigDecimal value = BigDecimal.valueOf(0L);
   protected String currency;
 
+  public BankAccount() {
+  }
+
   private BankAccount(BankClient owner) {
     this.owner = owner;
     identifier = UUID.randomUUID().toString();
-  }
-
-  public BankAccount() {
   }
 
   public String getIdentifier() {
@@ -48,7 +45,6 @@ public class BankAccount {
   public BankClient getOwner() {
     return owner;
   }
-
 
   public String getDescription() {
     return description;
@@ -102,6 +98,14 @@ public class BankAccount {
     this.currency = currency;
   }
 
+  public BigDecimal getValue() {
+    return value;
+  }
+
+  public String getCurrency() {
+    return currency;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -133,21 +137,10 @@ public class BankAccount {
     return sb.toString();
   }
 
-  public BigDecimal getValue() {
-    return value;
-  }
-
-  public String getCurrency() {
-    return currency;
-  }
-
   public MonetaryAmount toMonetaryAmount() {
     return new MonetaryAmount(value, currency);
   }
 
-  /**
-   * Builder for the BankAccount class.
-   */
   public static class Builder {
     private BankClient owner;
     private BankAccountAdditionalType additionalType;
@@ -194,15 +187,6 @@ public class BankAccount {
       return this;
     }
 
-    /**
-     * Validates all build parameters, such as: bank account type, additional type etc.
-     * Throws exception if some mandatory parameters are not present or in case if
-     * the additional type mismatches the main bank account type.
-     * For example, you can't create the instances of the BankAccount class with
-     * checking type and saving-only additional types.
-     *
-     * @return the instance of the BankAccount class.
-     */
     public BankAccount build() {
       validateBuildParameters();
       BankAccount account = new BankAccount(owner);
@@ -210,7 +194,7 @@ public class BankAccount {
       account.additionalType = additionalType.name();
       account.description = bankAccountType + " " + additionalType;
       if (currency == null) {
-        account.currency = PropertiesLoader.get("bank.account.defaultCurrency");
+        account.currency = NonManagedBySpringBootPropertiesLoader.get("bank.account.defaultCurrency");
       } else {
         account.currency = currency;
       }

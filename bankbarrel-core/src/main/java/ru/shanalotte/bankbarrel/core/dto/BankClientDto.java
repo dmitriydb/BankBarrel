@@ -2,9 +2,6 @@ package ru.shanalotte.bankbarrel.core.dto;
 
 import java.util.Objects;
 
-/**
- * DTO клиента банка.
- */
 public class BankClientDto {
   private Long id;
   private String givenName;

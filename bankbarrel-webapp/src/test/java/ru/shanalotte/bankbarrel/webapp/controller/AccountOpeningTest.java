@@ -11,8 +11,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import ru.shanalotte.bankbarrel.core.dto.ListingDtoItem;
-import ru.shanalotte.bankbarrel.core.dto.ListingDto;
+import ru.shanalotte.bankbarrel.core.dto.CodeAndValuePair;
+import ru.shanalotte.bankbarrel.core.dto.CodeAndValuesPairsListWrapper;
 import ru.shanalotte.bankbarrel.webapp.service.listing.ListingService;
 
 @SpringBootTest
@@ -43,9 +43,9 @@ public class AccountOpeningTest {
   public void whenOpeningAccountUserShouldSeeAllPossibleAccountTypesAndCurrencies() throws Exception {
     enrollingHelper.enrollTestUser();
 
-    ListingDto accountTypesDto = accountTypeListingService.getListingDto();
-    ListingDto accountAdditionalTypesDto = accountAdditionalTypesListingService.getListingDto();
-    ListingDto accountOpeningCurrencies = accountOpeningCurrenciesListingService.getListingDto();
+    CodeAndValuesPairsListWrapper accountTypesDto = accountTypeListingService.getListingDto();
+    CodeAndValuesPairsListWrapper accountAdditionalTypesDto = accountAdditionalTypesListingService.getListingDto();
+    CodeAndValuesPairsListWrapper accountOpeningCurrencies = accountOpeningCurrenciesListingService.getListingDto();
     mockMvc.perform(MockMvcRequestBuilders.get("/user/testuser"))
         .andExpect(model().attribute("accountTypesDto", Matchers.equalTo(accountTypesDto)))
         .andExpect(model().attribute("accountAdditionalTypesDto", Matchers.equalTo(accountAdditionalTypesDto)))
@@ -54,8 +54,8 @@ public class AccountOpeningTest {
         .andReturn();
     String content = mvcResult.getResponse().getContentAsString();
     System.out.println(content);
-    for (ListingDto dto : Arrays.asList(accountTypesDto, accountAdditionalTypesDto, accountOpeningCurrencies)) {
-      for (ListingDtoItem dtoItem : dto.getItems()) {
+    for (CodeAndValuesPairsListWrapper dto : Arrays.asList(accountTypesDto, accountAdditionalTypesDto, accountOpeningCurrencies)) {
+      for (CodeAndValuePair dtoItem : dto.getCodeAndValuePairs()) {
         assertThat(content).contains(dtoItem.getCode());
         assertThat(content).contains(dtoItem.getValue());
       }

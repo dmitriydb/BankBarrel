@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ru.shanalotte.bankbarrel.core.domain.MonetaryAmount;
@@ -14,7 +13,7 @@ import ru.shanalotte.bankbarrel.core.dto.DepositDto;
 import ru.shanalotte.bankbarrel.core.dto.TransferDto;
 import ru.shanalotte.bankbarrel.core.dto.WithdrawDto;
 import ru.shanalotte.bankbarrel.core.exception.InsufficientFundsException;
-import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRate;
+import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRateForRequestedCurrency;
 import ru.shanalotte.bankbarrel.webapp.service.jwt.JwtTokenStorer;
 import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.ServiceRegistryProxy;
 import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.ServiceUrlBuilder;
@@ -61,7 +60,7 @@ public class WebAppWebApiBankService implements WebAppBankService {
    * Обрабатывает снятие средств.
    */
   public void withdraw(BankAccountDto account, MonetaryAmount amount)
-      throws InsufficientFundsException, UnknownCurrencyRate {
+      throws InsufficientFundsException, UnknownCurrencyRateForRequestedCurrency {
     String url = serviceUrlBuilder.buildServiceUrl(registryProxy.getWebApiInfo()) + "/withdraw";
     WithdrawDto dto = new WithdrawDto();
     dto.setCurrency(amount.getCurrency());
@@ -85,7 +84,7 @@ public class WebAppWebApiBankService implements WebAppBankService {
    * Обрабатывает перевод денежный средств.
    */
   public void transfer(BankAccountDto from, BankAccountDto to, MonetaryAmount amount)
-      throws InsufficientFundsException, UnknownCurrencyRate {
+      throws InsufficientFundsException, UnknownCurrencyRateForRequestedCurrency {
     String url = serviceUrlBuilder.buildServiceUrl(registryProxy.getWebApiInfo()) + "/transfer";
     TransferDto dto = new TransferDto();
     dto.setCurrency(amount.getCurrency());

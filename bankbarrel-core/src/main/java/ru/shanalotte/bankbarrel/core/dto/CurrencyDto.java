@@ -1,13 +1,8 @@
 package ru.shanalotte.bankbarrel.core.dto;
 
-import java.util.Currency;
 import java.util.Objects;
 
-/**
- * DTO валюты.
- */
 public class CurrencyDto {
-
   private Long id;
   private String code;
 

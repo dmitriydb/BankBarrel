@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import ru.shanalotte.bankbarrel.core.dto.serviceregistry.RegisteredServiceInfo;
+import ru.shanalotte.bankbarrel.core.dto.serviceregistry.DeployedMicroserviceWhereAboutInformation;
 
 /**
  * Класс, реализующий интерфейс прокси реестра микросервисов.
@@ -24,7 +24,7 @@ public class WebApiServiceRegistryProxy implements ServiceRegistryProxy {
 
   private static final Logger logger = LoggerFactory.getLogger(WebApiServiceRegistryProxy.class);
 
-  private Map<String, RegisteredServiceInfo> registeredServices = new HashMap<>();
+  private Map<String, DeployedMicroserviceWhereAboutInformation> registeredServices = new HashMap<>();
 
   @Value("${services.dependencies}")
   private List<String> serviceDependencies;
@@ -41,24 +41,24 @@ public class WebApiServiceRegistryProxy implements ServiceRegistryProxy {
     for (String serviceName : serviceDependencies) {
 
       String url = serviceRegistryUrl + "/" + serviceName;
-      ResponseEntity<RegisteredServiceInfo> result =
-          restTemplate.getForEntity(URI.create(url), RegisteredServiceInfo.class);
+      ResponseEntity<DeployedMicroserviceWhereAboutInformation> result =
+          restTemplate.getForEntity(URI.create(url), DeployedMicroserviceWhereAboutInformation.class);
       logger.info("Loaded {} info", serviceName);
       logger.info("{} {} {}", result.getBody().getName(), result.getBody().getHost(), result.getBody().getPort());
       registeredServices.put(serviceName, result.getBody());
     }
   }
 
-  public RegisteredServiceInfo getRestInfoModuleInfo() {
+  public DeployedMicroserviceWhereAboutInformation getRestInfoModuleInfo() {
     return registeredServices.get("bb-rest-infomodule");
   }
 
-  public RegisteredServiceInfo getWebApiInfo() {
+  public DeployedMicroserviceWhereAboutInformation getWebApiInfo() {
     return registeredServices.get("bb-gateway-webapi");
   }
 
   @Override
-  public RegisteredServiceInfo getJwtProviderInfo() {
+  public DeployedMicroserviceWhereAboutInformation getJwtProviderInfo() {
     return registeredServices.get("bb-jwt-provider");
   }
 }

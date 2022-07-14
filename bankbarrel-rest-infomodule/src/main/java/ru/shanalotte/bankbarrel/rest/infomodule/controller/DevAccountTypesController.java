@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import ru.shanalotte.bankbarrel.core.domain.BankAccountAdditionalType;
 import ru.shanalotte.bankbarrel.core.domain.BankAccountType;
-import ru.shanalotte.bankbarrel.core.dto.ListingDtoItem;
-import ru.shanalotte.bankbarrel.core.service.EnumToListingDtoItemConverter;
+import ru.shanalotte.bankbarrel.core.dto.CodeAndValuePair;
+import ru.shanalotte.bankbarrel.core.service.EnumToCodeAndValuePairConverter;
 
 /**
  * Контроллер, который возвращает json с возможными типами банковских счетов 1 и 2 уровня.
@@ -28,10 +28,10 @@ import ru.shanalotte.bankbarrel.core.service.EnumToListingDtoItemConverter;
 public class DevAccountTypesController {
 
   private static final Logger logger = LoggerFactory.getLogger(DevAccountTypesController.class);
-  private EnumToListingDtoItemConverter enumToListingDtoItemConverter;
+  private EnumToCodeAndValuePairConverter enumToCodeAndValuePairConverter;
 
-  public DevAccountTypesController(EnumToListingDtoItemConverter enumToListingDtoItemConverter) {
-    this.enumToListingDtoItemConverter = enumToListingDtoItemConverter;
+  public DevAccountTypesController(EnumToCodeAndValuePairConverter enumToCodeAndValuePairConverter) {
+    this.enumToCodeAndValuePairConverter = enumToCodeAndValuePairConverter;
   }
 
   /**
@@ -40,17 +40,17 @@ public class DevAccountTypesController {
   @CrossOrigin(origins = "http://localhost:8888")
   @GetMapping("/accounttypes")
   @Operation(description = "Получить типы банковских счетов 1 уровня", summary = "Получить типы счетов 1 уровня")
-  public List<ListingDtoItem> accountTypes() {
+  public List<CodeAndValuePair> accountTypes() {
     logger.info("GET /accounttypes");
-    List<ListingDtoItem> listingDtoItems = new ArrayList<>();
+    List<CodeAndValuePair> codeAndValuePairs = new ArrayList<>();
     try {
       for (BankAccountType bankAccountType : BankAccountType.values()) {
-        listingDtoItems.add(enumToListingDtoItemConverter.convert(bankAccountType.name()));
+        codeAndValuePairs.add(enumToCodeAndValuePairConverter.convert(bankAccountType.name()));
       }
     } catch (Exception ex) {
       ex.printStackTrace();
     }
-    return listingDtoItems;
+    return codeAndValuePairs;
   }
 
   /**
@@ -63,7 +63,7 @@ public class DevAccountTypesController {
   @Operation(description = "Получить типы банковских счетов 2 уровня", summary = "Получить типы счетов 2 уровня")
   @ApiResponse(responseCode = "404", description = "Возвращает в случае, "
       + "если тип банковского счета 1 уровня с таким кодом не существует")
-  public ResponseEntity<List<ListingDtoItem>> additionalTypes(
+  public ResponseEntity<List<CodeAndValuePair>> additionalTypes(
       @Parameter(description = "Тип счета 1 уровня", examples = {
           @ExampleObject(
               name = "CHECKING",
@@ -80,16 +80,16 @@ public class DevAccountTypesController {
       })
       @PathVariable("code") String code) {
     logger.info("GET /accounttype/{}/additionaltypes", code);
-    List<ListingDtoItem> listingDtoItems = new ArrayList<>();
+    List<CodeAndValuePair> codeAndValuePairs = new ArrayList<>();
     try {
       BankAccountType type = BankAccountType.valueOf(code);
       for (BankAccountAdditionalType bankAccountAdditionalType : type.getAdditionalTypes()) {
-        listingDtoItems.add(
-            enumToListingDtoItemConverter.convert(bankAccountAdditionalType.name()));
+        codeAndValuePairs.add(
+            enumToCodeAndValuePairConverter.convert(bankAccountAdditionalType.name()));
       }
     } catch (IllegalArgumentException ex) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    return new ResponseEntity<>(listingDtoItems, HttpStatus.OK);
+    return new ResponseEntity<>(codeAndValuePairs, HttpStatus.OK);
   }
 }

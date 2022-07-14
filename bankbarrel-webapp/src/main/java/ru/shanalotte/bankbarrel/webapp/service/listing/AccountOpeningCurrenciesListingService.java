@@ -3,8 +3,8 @@ package ru.shanalotte.bankbarrel.webapp.service.listing;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.shanalotte.bankbarrel.core.dto.ListingDto;
-import ru.shanalotte.bankbarrel.core.dto.ListingDtoItem;
+import ru.shanalotte.bankbarrel.core.dto.CodeAndValuesPairsListWrapper;
+import ru.shanalotte.bankbarrel.core.dto.CodeAndValuePair;
 import ru.shanalotte.bankbarrel.webapp.service.converter.CurrencyPresentationConverter;
 
 /**
@@ -23,14 +23,14 @@ public class AccountOpeningCurrenciesListingService implements ListingService {
   }
 
   @Override
-  public ListingDto getListingDto() {
-    ListingDto dto = new ListingDto();
+  public CodeAndValuesPairsListWrapper getListingDto() {
+    CodeAndValuesPairsListWrapper dto = new CodeAndValuesPairsListWrapper();
     for (String currency : bankOpeningCurrencies) {
       String code = currency;
       String currencySign = currencyPresentationConverter.currencyToSign(currency);
       String currencyName = currencyPresentationConverter.currencyToName(currency);
       String value = currencyName + " (" + currencySign + ")";
-      dto.addItem(new ListingDtoItem(code, value));
+      dto.addItem(new CodeAndValuePair(code, value));
     }
     return dto;
   }

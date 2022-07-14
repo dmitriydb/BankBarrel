@@ -2,7 +2,7 @@ package ru.shanalotte.bankbarrel.webapp.service.converter;
 
 import org.springframework.stereotype.Service;
 import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
-import ru.shanalotte.bankbarrel.core.service.EnumToListingDtoItemConverter;
+import ru.shanalotte.bankbarrel.core.service.EnumToCodeAndValuePairConverter;
 import ru.shanalotte.bankbarrel.webapp.dto.account.BankAccountWebAppDto;
 
 
@@ -13,22 +13,22 @@ import ru.shanalotte.bankbarrel.webapp.dto.account.BankAccountWebAppDto;
 @Service
 public class BankAccountDtoConverter {
 
-  private EnumToListingDtoItemConverter enumToListingDtoItemConverter;
+  private EnumToCodeAndValuePairConverter enumToCodeAndValuePairConverter;
 
   /**
    * Конструктор со всеми зависимостями.
    */
-  public BankAccountDtoConverter(EnumToListingDtoItemConverter enumToListingDtoItemConverter) {
-    this.enumToListingDtoItemConverter = enumToListingDtoItemConverter;
+  public BankAccountDtoConverter(EnumToCodeAndValuePairConverter enumToCodeAndValuePairConverter) {
+    this.enumToCodeAndValuePairConverter = enumToCodeAndValuePairConverter;
   }
 
   /**
    * Метод конвертации.
    */
   public BankAccountWebAppDto convert(BankAccountDto account) {
-    String type = enumToListingDtoItemConverter
+    String type = enumToCodeAndValuePairConverter
         .convert(account.getType()).getValue();
-    String additionalType = enumToListingDtoItemConverter
+    String additionalType = enumToCodeAndValuePairConverter
         .convert(account.getAdditionalType()).getValue();
     String currency = account.getCurrency();
     String number = account.getNumber();

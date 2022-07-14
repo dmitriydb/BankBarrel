@@ -1,6 +1,5 @@
 package ru.shanalotte.bankbarrel.webapp.controller.rest;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,8 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import ru.shanalotte.bankbarrel.core.dto.ListingDtoItem;
-import ru.shanalotte.bankbarrel.core.dto.serviceregistry.RegisteredServiceInfo;
+import ru.shanalotte.bankbarrel.core.dto.CodeAndValuePair;
+import ru.shanalotte.bankbarrel.core.dto.serviceregistry.DeployedMicroserviceWhereAboutInformation;
 import ru.shanalotte.bankbarrel.webapp.service.jwt.JwtTokenStorer;
 import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.ServiceRegistryProxy;
 import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.ServiceUrlBuilder;
@@ -49,13 +48,13 @@ public class AccountTypesController {
    */
   @CrossOrigin(origins = "http://localhost:8890")
   @GetMapping("/accounttypes")
-  public List<ListingDtoItem> accountTypes() {
+  public List<CodeAndValuePair> accountTypes() {
     logger.info("GET /accounttypes");
-    List<ListingDtoItem> listingDtoItems = new ArrayList<>();
+    List<CodeAndValuePair> codeAndValuePairs = new ArrayList<>();
     RestTemplate restTemplate = new RestTemplate();
-    RegisteredServiceInfo registeredServiceInfo = serviceRegistryProxy.getRestInfoModuleInfo();
-    logger.info(registeredServiceInfo.toString());
-    String url = serviceUrlBuilder.buildServiceUrl(registeredServiceInfo);
+    DeployedMicroserviceWhereAboutInformation deployedMicroserviceWhereAboutInformation = serviceRegistryProxy.getRestInfoModuleInfo();
+    logger.info(deployedMicroserviceWhereAboutInformation.toString());
+    String url = serviceUrlBuilder.buildServiceUrl(deployedMicroserviceWhereAboutInformation);
     logger.info(url);
     HttpHeaders headers = new HttpHeaders();
     headers.set("Authorization", jwtTokenStorer.getToken());
@@ -72,17 +71,17 @@ public class AccountTypesController {
    */
   @CrossOrigin(origins = "http://localhost:8890")
   @GetMapping("/accounttype/{code}/additionaltypes")
-  public ResponseEntity<List<ListingDtoItem>> additionalTypes(@PathVariable("code") String code) {
+  public ResponseEntity<List<CodeAndValuePair>> additionalTypes(@PathVariable("code") String code) {
     logger.info("GET /accounttype/{}/additionaltypes", code);
-    List<ListingDtoItem> listingDtoItems = new ArrayList<>();
+    List<CodeAndValuePair> codeAndValuePairs = new ArrayList<>();
     RestTemplate restTemplate = new RestTemplate();
-    RegisteredServiceInfo registeredServiceInfo = serviceRegistryProxy.getRestInfoModuleInfo();
-    String url = serviceUrlBuilder.buildServiceUrl(registeredServiceInfo);
+    DeployedMicroserviceWhereAboutInformation deployedMicroserviceWhereAboutInformation = serviceRegistryProxy.getRestInfoModuleInfo();
+    String url = serviceUrlBuilder.buildServiceUrl(deployedMicroserviceWhereAboutInformation);
     HttpHeaders headers = new HttpHeaders();
     headers.set("Authorization", jwtTokenStorer.getToken());
     HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
-    ResponseEntity<ListingDtoItem[]> response = restTemplate.exchange(
-        url + "/accounttype/" + code + "/additionaltypes", HttpMethod.GET, requestEntity, ListingDtoItem[].class);
+    ResponseEntity<CodeAndValuePair[]> response = restTemplate.exchange(
+        url + "/accounttype/" + code + "/additionaltypes", HttpMethod.GET, requestEntity, CodeAndValuePair[].class);
     return new ResponseEntity<>(
         Arrays.stream(response.getBody()).collect(Collectors.toList()), HttpStatus.OK
     );

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
 import ru.shanalotte.bankbarrel.core.dto.BankClientDto;
-import ru.shanalotte.bankbarrel.core.dto.serviceregistry.RegisteredServiceInfo;
+import ru.shanalotte.bankbarrel.core.dto.serviceregistry.DeployedMicroserviceWhereAboutInformation;
 import ru.shanalotte.bankbarrel.webapp.config.FakeAccountNumberGenerator;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankAccountDao;
 import ru.shanalotte.bankbarrel.webapp.dto.account.AccountOpeningDto;
@@ -49,7 +49,7 @@ public class RealBankAccountDao implements BankAccountDao {
 
   @Override
   public void save(BankAccountDto account) {
-    RegisteredServiceInfo webApiInfo = serviceRegistryProxy.getWebApiInfo();
+    DeployedMicroserviceWhereAboutInformation webApiInfo = serviceRegistryProxy.getWebApiInfo();
     String url = serviceUrlBuilder.buildServiceUrl(webApiInfo) + "/accounts";
     RestTemplate restTemplate = new RestTemplate();
 

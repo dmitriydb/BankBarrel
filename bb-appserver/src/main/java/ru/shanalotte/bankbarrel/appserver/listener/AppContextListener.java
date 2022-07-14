@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import ru.shanalotte.bankbarrel.core.dto.serviceregistry.RegisteredServiceInfo;
+import ru.shanalotte.bankbarrel.core.dto.serviceregistry.DeployedMicroserviceWhereAboutInformation;
 
 /**
  * Листенер, который срабатывает в момент поднятия приложения.
@@ -28,7 +28,7 @@ public class AppContextListener implements ApplicationListener<ContextRefreshedE
 
   @Override
   public void onApplicationEvent(ContextRefreshedEvent event) {
-    RegisteredServiceInfo serviceInfo = new RegisteredServiceInfo();
+    DeployedMicroserviceWhereAboutInformation serviceInfo = new DeployedMicroserviceWhereAboutInformation();
     serviceInfo.setName(serviceName);
     serviceInfo.setPort(port);
     try {

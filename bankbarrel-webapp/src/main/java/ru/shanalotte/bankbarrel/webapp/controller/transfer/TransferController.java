@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.shanalotte.bankbarrel.core.domain.MonetaryAmount;
 import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
 import ru.shanalotte.bankbarrel.core.exception.InsufficientFundsException;
-import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRate;
+import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRateForRequestedCurrency;
 import ru.shanalotte.bankbarrel.webapp.dao.interfaces.BankAccountDao;
 import ru.shanalotte.bankbarrel.webapp.dto.transfer.TransferDto;
 import ru.shanalotte.bankbarrel.webapp.exception.BankAccountNotExists;
@@ -77,7 +77,7 @@ public class TransferController {
     } catch (BankAccountNotFound e) {
       logger.warn("Счет с номером {} или {} не найдены", accountFromNumber, dto.getAccountNumber());
       redirectAttributes.addFlashAttribute("message", "webapp.transfer.toaccountnotexists");
-    } catch (UnknownCurrencyRate unknownCurrencyRate) {
+    } catch (UnknownCurrencyRateForRequestedCurrency unknownCurrencyRate) {
       logger.warn("Валюта {} не существует", dto.getCurrency());
       redirectAttributes.addFlashAttribute("message", "webapp.error.unknowncurrency");
     } catch (InsufficientFundsException e) {

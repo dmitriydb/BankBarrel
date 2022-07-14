@@ -2,28 +2,28 @@ package ru.shanalotte.bankbarrel.webapp.service.listing;
 
 import org.springframework.stereotype.Service;
 import ru.shanalotte.bankbarrel.core.domain.BankAccountAdditionalType;
-import ru.shanalotte.bankbarrel.core.dto.ListingDto;
-import ru.shanalotte.bankbarrel.core.dto.ListingDtoItem;
-import ru.shanalotte.bankbarrel.core.service.EnumToListingDtoItemConverter;
+import ru.shanalotte.bankbarrel.core.dto.CodeAndValuesPairsListWrapper;
+import ru.shanalotte.bankbarrel.core.dto.CodeAndValuePair;
+import ru.shanalotte.bankbarrel.core.service.EnumToCodeAndValuePairConverter;
 
 /**
- * Сервис возвращает ListingDto со списком всех дополнительных типов банковских счетов 2 уровня.
+ * Сервис возвращает CodeAndValuesPairsListWrapper со списком всех дополнительных типов банковских счетов 2 уровня.
  */
 @Service
 public class AccountAdditionalTypesListingService implements ListingService {
 
-  private EnumToListingDtoItemConverter enumToListingDtoItemConverter;
+  private EnumToCodeAndValuePairConverter enumToCodeAndValuePairConverter;
 
-  public AccountAdditionalTypesListingService(EnumToListingDtoItemConverter
-                                                  enumToListingDtoItemConverter) {
-    this.enumToListingDtoItemConverter = enumToListingDtoItemConverter;
+  public AccountAdditionalTypesListingService(EnumToCodeAndValuePairConverter
+                                                  enumToCodeAndValuePairConverter) {
+    this.enumToCodeAndValuePairConverter = enumToCodeAndValuePairConverter;
   }
 
   @Override
-  public ListingDto getListingDto() {
-    ListingDto dto = new ListingDto();
+  public CodeAndValuesPairsListWrapper getListingDto() {
+    CodeAndValuesPairsListWrapper dto = new CodeAndValuesPairsListWrapper();
     for (BankAccountAdditionalType accountType : BankAccountAdditionalType.values()) {
-      ListingDtoItem item = enumToListingDtoItemConverter.convert(accountType.name());
+      CodeAndValuePair item = enumToCodeAndValuePairConverter.convert(accountType.name());
       dto.addItem(item);
     }
     return dto;

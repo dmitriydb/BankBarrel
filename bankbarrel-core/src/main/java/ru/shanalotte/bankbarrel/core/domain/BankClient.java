@@ -14,9 +14,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import org.apache.commons.lang3.StringUtils;
 
-/**
- * Class that represents a single bank customer.
- */
 @Entity
 @Table(name = "bank_clients")
 public class BankClient {
@@ -36,6 +33,21 @@ public class BankClient {
   public BankClient() {
   }
 
+  private BankClient(String givenName, String familyName) {
+    if (stringIsBlank(givenName)) {
+      throw new IllegalArgumentException("Customer givenName is blank");
+    }
+    if (stringIsBlank(familyName)) {
+      throw new IllegalArgumentException("Customer familyName is blank");
+    }
+    this.givenName = givenName;
+    this.familyName = familyName;
+  }
+
+  private boolean stringIsBlank(String value) {
+    return StringUtils.isBlank(value);
+  }
+
   public Long getId() {
     return id;
   }
@@ -43,18 +55,6 @@ public class BankClient {
   public void setId(Long id) {
     this.id = id;
   }
-
-  private BankClient(String givenName, String familyName) {
-    if (StringUtils.isBlank(givenName)) {
-      throw new IllegalArgumentException("Customer givenName is blank");
-    }
-    if (StringUtils.isBlank(familyName)) {
-      throw new IllegalArgumentException("Customer familyName is blank");
-    }
-    this.givenName = givenName;
-    this.familyName = familyName;
-  }
-
 
   public String getGivenName() {
     return givenName;
@@ -76,10 +76,6 @@ public class BankClient {
     return accounts;
   }
 
-  public void addAccount(BankAccount bankAccount) {
-    accounts.add(bankAccount);
-  }
-
   public void setGivenName(String givenName) {
     this.givenName = givenName;
   }
@@ -96,11 +92,6 @@ public class BankClient {
     this.email = email;
   }
 
-  /**
-   * Builder for the class Customer.
-   * Checks the reqiurements for the Customer instance initial data
-   * For example, throws exception if both email and telephone are not present
-   */
   public static class Builder {
     private final BankClient bankClient;
 
@@ -118,14 +109,15 @@ public class BankClient {
       return this;
     }
 
-    /**
-     * Build the Customer instance.
-     */
     public BankClient build() {
-      if (StringUtils.isBlank(bankClient.email) && StringUtils.isBlank(bankClient.telephone)) {
+      if (emailAndTelephoneAreMissing()) {
         throw new IllegalStateException("Customer creation error: should fill email or telephone.");
       }
       return bankClient;
+    }
+
+    private boolean emailAndTelephoneAreMissing() {
+      return StringUtils.isBlank(bankClient.email) && StringUtils.isBlank(bankClient.telephone);
     }
   }
 

@@ -2,7 +2,7 @@ package ru.shanalotte.bankbarrel.webapp.service.serviceregistry;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
-import ru.shanalotte.bankbarrel.core.dto.serviceregistry.RegisteredServiceInfo;
+import ru.shanalotte.bankbarrel.core.dto.serviceregistry.DeployedMicroserviceWhereAboutInformation;
 
 /**
  * Сервис, который конструирует URL для обращения к API микросервиса.
@@ -12,7 +12,7 @@ import ru.shanalotte.bankbarrel.core.dto.serviceregistry.RegisteredServiceInfo;
 @Profile({"dev", "test"})
 public class FakeServiceUrlBuilder implements ServiceUrlBuilder {
 
-  public String buildServiceUrl(RegisteredServiceInfo info) {
+  public String buildServiceUrl(DeployedMicroserviceWhereAboutInformation info) {
     String url = "http://localhost:" + info.getPort();
     return url;
   }

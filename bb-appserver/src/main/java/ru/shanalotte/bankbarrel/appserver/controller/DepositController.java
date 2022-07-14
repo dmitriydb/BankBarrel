@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.tags.Tags;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -25,7 +24,7 @@ import ru.shanalotte.bankbarrel.appserver.repository.OperationSourceDao;
 import ru.shanalotte.bankbarrel.core.domain.BankAccount;
 import ru.shanalotte.bankbarrel.core.domain.MonetaryAmount;
 import ru.shanalotte.bankbarrel.core.dto.DepositDto;
-import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRate;
+import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRateForRequestedCurrency;
 import ru.shanalotte.bankbarrel.core.service.SimpleBankService;
 
 /**
@@ -112,7 +111,7 @@ public class DepositController {
       depositDao.save(moneyDeposit);
       dto.setId(moneyDeposit.getId());
       return new ResponseEntity<>(dto, HttpStatus.OK);
-    } catch (UnknownCurrencyRate e) {
+    } catch (UnknownCurrencyRateForRequestedCurrency e) {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
   }

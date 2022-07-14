@@ -1,6 +1,6 @@
 package ru.shanalotte.bankbarrel.rest.infomodule.service.serviceregistry;
 
-import ru.shanalotte.bankbarrel.core.dto.serviceregistry.RegisteredServiceInfo;
+import ru.shanalotte.bankbarrel.core.dto.serviceregistry.DeployedMicroserviceWhereAboutInformation;
 
 /**
  * Интерфейс сервиса, который загружает информацию о существующих микросервисах из
@@ -9,7 +9,7 @@ import ru.shanalotte.bankbarrel.core.dto.serviceregistry.RegisteredServiceInfo;
 public interface ServiceRegistryProxy {
   void loadServicesInfo();
 
-  RegisteredServiceInfo getWebApiInfo();
+  DeployedMicroserviceWhereAboutInformation getWebApiInfo();
 
-  RegisteredServiceInfo getJwtProviderInfo();
+  DeployedMicroserviceWhereAboutInformation getJwtProviderInfo();
 }

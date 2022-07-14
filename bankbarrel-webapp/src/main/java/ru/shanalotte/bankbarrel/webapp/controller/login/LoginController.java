@@ -30,6 +30,7 @@ public class LoginController {
 
   private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
+  @SuppressWarnings("checkstyle:MissingJavadocMethod")
   public LoginController(WebAppUserDao webAppUserDao,
                          WebAppOperationDao webAppOperationDao,
                          WebAppOperationHistoryDao webAppOperationHistoryDao,

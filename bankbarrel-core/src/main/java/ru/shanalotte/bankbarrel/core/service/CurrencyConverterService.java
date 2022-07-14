@@ -6,11 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.shanalotte.bankbarrel.core.domain.CurrencyRateRule;
-import ru.shanalotte.bankbarrel.core.exception.CurrencyNotFoundException;
+import ru.shanalotte.bankbarrel.core.exception.CurrencyNotRegisteredInSystemException;
 
-/**
- * Class that performs basic currencies converting operations.
- */
 @Service
 public class CurrencyConverterService {
 
@@ -25,27 +22,25 @@ public class CurrencyConverterService {
    * Converts a monetary amount to the monetary amount of default currency.
    *
    * @param currencyRateService service that stores all available currency rates
-   * @param currency            monetary amount
-   * @param value               value
+   * @param currency            currency
+   * @param value               monetary amount
    * @return converted value
-   * @throws CurrencyNotFoundException when the desired currency rate is not known
+   * @throws CurrencyNotRegisteredInSystemException when the desired currency rate is not known
    */
   public BigDecimal convertToDefaultCurrency(CurrencyRateService currencyRateService,
                                              String currency, BigDecimal value)
-      throws CurrencyNotFoundException {
-    Optional<CurrencyRateRule> currencyRateRule = currencyRateService.getCurrencyRateRules()
-        .stream().filter(e -> e.getCurrency().equals(currency))
-        .findFirst();
-    if (currencyRateRule.isPresent()) {
-      BigDecimal rate = currencyRateRule.get().getRate();
-      boolean isMore = currencyRateRule.get().isMore();
+      throws CurrencyNotRegisteredInSystemException {
+    Optional<CurrencyRateRule> tradingRuleForCurrency = currencyRateService.findTradingRateForCurrency(currency);
+    if (tradingRuleForCurrency.isPresent()) {
+      BigDecimal currencyRate = tradingRuleForCurrency.get().getRate();
+      boolean isMore = tradingRuleForCurrency.get().isMore();
       if (isMore) {
-        return value.multiply(rate);
+        return value.multiply(currencyRate);
       } else {
-        return value.divide(rate, bigDecimalRoundingScale, RoundingMode.HALF_UP);
+        return value.divide(currencyRate, bigDecimalRoundingScale, RoundingMode.HALF_UP);
       }
     } else {
-      throw new CurrencyNotFoundException("Currency rate rule for " + currency + " is not found!");
+      throw new CurrencyNotRegisteredInSystemException("Currency rate rule for " + currency + " is not registered in the system!");
     }
   }
 
@@ -56,25 +51,22 @@ public class CurrencyConverterService {
    * @param toCurrency          desired monetary amount currency
    * @param value               value of money
    * @return converted value
-   * @throws CurrencyNotFoundException when the desired currency rate is not known
+   * @throws CurrencyNotRegisteredInSystemException when the desired currency rate is not known
    */
   public BigDecimal convertFromDefaultCurrency(CurrencyRateService currencyRateService,
                                                String toCurrency,
-                                               BigDecimal value) throws CurrencyNotFoundException {
-    Optional<CurrencyRateRule> currencyRateRule = currencyRateService.getCurrencyRateRules()
-        .stream().filter(e -> e.getCurrency().equals(toCurrency))
-        .findFirst();
-
-    if (currencyRateRule.isPresent()) {
-      BigDecimal rate = currencyRateRule.get().getRate();
-      boolean isMore = currencyRateRule.get().isMore();
+                                               BigDecimal value) throws CurrencyNotRegisteredInSystemException {
+    Optional<CurrencyRateRule> tradingRuleForCurrency = currencyRateService.findTradingRateForCurrency(toCurrency);
+    if (tradingRuleForCurrency.isPresent()) {
+      BigDecimal currencyRate = tradingRuleForCurrency.get().getRate();
+      boolean isMore = tradingRuleForCurrency.get().isMore();
       if (!isMore) {
-        return value.multiply(rate);
+        return value.multiply(currencyRate);
       } else {
-        return value.divide(rate, bigDecimalRoundingScale, RoundingMode.DOWN);
+        return value.divide(currencyRate, bigDecimalRoundingScale, RoundingMode.DOWN);
       }
     } else {
-      throw new CurrencyNotFoundException(
+      throw new CurrencyNotRegisteredInSystemException(
           "Currency rate rule for " + toCurrency + " is not found!");
     }
   }

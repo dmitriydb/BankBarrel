@@ -1,9 +1,6 @@
 package ru.shanalotte.bankbarrel.core.dto.serviceregistry;
 
-/**
- * Класс (DTO), который хранит информацию о расположении микросервиса.
- */
-public class RegisteredServiceInfo {
+public class DeployedMicroserviceWhereAboutInformation {
   private String name;
   private String host;
   private String port;

@@ -2,9 +2,9 @@ package ru.shanalotte.bankbarrel.webapp.service.listing;
 
 import org.springframework.stereotype.Service;
 import ru.shanalotte.bankbarrel.core.domain.BankAccountType;
-import ru.shanalotte.bankbarrel.core.dto.ListingDto;
-import ru.shanalotte.bankbarrel.core.dto.ListingDtoItem;
-import ru.shanalotte.bankbarrel.core.service.EnumToListingDtoItemConverter;
+import ru.shanalotte.bankbarrel.core.dto.CodeAndValuesPairsListWrapper;
+import ru.shanalotte.bankbarrel.core.dto.CodeAndValuePair;
+import ru.shanalotte.bankbarrel.core.service.EnumToCodeAndValuePairConverter;
 
 /**
  * Сервис, который возвращает DTO со всеми возможными типами банковского счета 1 уровня.
@@ -13,17 +13,17 @@ import ru.shanalotte.bankbarrel.core.service.EnumToListingDtoItemConverter;
 @Service
 public class AccountTypeListingService implements ListingService {
 
-  private EnumToListingDtoItemConverter enumToListingDtoItemConverter;
+  private EnumToCodeAndValuePairConverter enumToCodeAndValuePairConverter;
 
-  public AccountTypeListingService(EnumToListingDtoItemConverter enumToListingDtoItemConverter) {
-    this.enumToListingDtoItemConverter = enumToListingDtoItemConverter;
+  public AccountTypeListingService(EnumToCodeAndValuePairConverter enumToCodeAndValuePairConverter) {
+    this.enumToCodeAndValuePairConverter = enumToCodeAndValuePairConverter;
   }
 
   @Override
-  public ListingDto getListingDto() {
-    ListingDto dto = new ListingDto();
+  public CodeAndValuesPairsListWrapper getListingDto() {
+    CodeAndValuesPairsListWrapper dto = new CodeAndValuesPairsListWrapper();
     for (BankAccountType accountType : BankAccountType.values()) {
-      ListingDtoItem item = enumToListingDtoItemConverter.convert(accountType.name());
+      CodeAndValuePair item = enumToCodeAndValuePairConverter.convert(accountType.name());
       dto.addItem(item);
     }
     return dto;

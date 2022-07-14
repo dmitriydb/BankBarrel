@@ -17,6 +17,7 @@ import ru.shanalotte.jwt.provider.entity.User;
 import ru.shanalotte.jwt.provider.repository.UserRepository;
 import ru.shanalotte.jwt.provider.service.JwtTokenProvider;
 
+@SuppressWarnings("checkstyle:MissingJavadocType")
 @RestController
 public class JwtController {
   private final AuthenticationManager authenticationManager;

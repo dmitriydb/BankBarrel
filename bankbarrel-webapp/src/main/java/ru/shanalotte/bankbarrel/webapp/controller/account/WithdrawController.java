@@ -10,7 +10,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.shanalotte.bankbarrel.core.domain.MonetaryAmount;
 import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
 import ru.shanalotte.bankbarrel.core.exception.InsufficientFundsException;
-import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRate;
+import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRateForRequestedCurrency;
 import ru.shanalotte.bankbarrel.webapp.exception.BankAccountNotExists;
 import ru.shanalotte.bankbarrel.webapp.exception.UnathorizedAccessToBankAccount;
 import ru.shanalotte.bankbarrel.webapp.exception.WebAppUserNotFound;
@@ -61,7 +61,7 @@ public class WithdrawController {
       logger.warn("Недостаточно средств для операции: пользователь {}, счет {}, снятие {} {}",
           username, accountNumber, amount, currency);
       redirectAttributes.addFlashAttribute("message", "webapp.error.withdraw.notsufficientfunds");
-    } catch (UnknownCurrencyRate e) {
+    } catch (UnknownCurrencyRateForRequestedCurrency e) {
       logger.warn("Неизвестная валюта {}", currency);
       redirectAttributes.addFlashAttribute("message", "webapp.error.unknowncurrency");
     }

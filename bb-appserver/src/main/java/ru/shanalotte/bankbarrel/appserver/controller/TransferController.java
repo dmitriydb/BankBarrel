@@ -25,7 +25,7 @@ import ru.shanalotte.bankbarrel.core.domain.BankAccount;
 import ru.shanalotte.bankbarrel.core.domain.MonetaryAmount;
 import ru.shanalotte.bankbarrel.core.dto.TransferDto;
 import ru.shanalotte.bankbarrel.core.exception.InsufficientFundsException;
-import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRate;
+import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRateForRequestedCurrency;
 import ru.shanalotte.bankbarrel.core.service.SimpleBankService;
 
 /**
@@ -121,7 +121,7 @@ public class TransferController {
       transferDao.save(moneyTransfer);
       dto.setId(moneyTransfer.getId());
       return new ResponseEntity<>(dto, HttpStatus.OK);
-    } catch (UnknownCurrencyRate unknownCurrencyRate) {
+    } catch (UnknownCurrencyRateForRequestedCurrency unknownCurrencyRate) {
       System.out.println("Unknown currency");
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     } catch (InsufficientFundsException e) {

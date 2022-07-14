@@ -1,15 +1,10 @@
 package ru.shanalotte.bankbarrel.webapp.service.serviceregistry;
 
-import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import ru.shanalotte.bankbarrel.core.dto.serviceregistry.RegisteredServiceInfo;
+import ru.shanalotte.bankbarrel.core.dto.serviceregistry.DeployedMicroserviceWhereAboutInformation;
 
 /**
  * Заглушка для прокси Service Registry на этапе тестирования.
@@ -38,16 +33,16 @@ public class TestServiceRegistryProxy implements ServiceRegistryProxy {
   private String serviceRegistryUrl;
 
   private class RegisteredServiceInfoDecorator {
-    private RegisteredServiceInfo value;
+    private DeployedMicroserviceWhereAboutInformation value;
 
     RegisteredServiceInfoDecorator(String name, String host, String port) {
-      value = new RegisteredServiceInfo();
+      value = new DeployedMicroserviceWhereAboutInformation();
       value.setHost(host);
       value.setPort(port);
       value.setName(name);
     }
 
-    public RegisteredServiceInfo getValue() {
+    public DeployedMicroserviceWhereAboutInformation getValue() {
       return value;
     }
   }
@@ -60,16 +55,16 @@ public class TestServiceRegistryProxy implements ServiceRegistryProxy {
 
 
   @Override
-  public RegisteredServiceInfo getRestInfoModuleInfo() {
+  public DeployedMicroserviceWhereAboutInformation getRestInfoModuleInfo() {
     return new RegisteredServiceInfoDecorator("bb-rest-infomodule", restInfomoduleHost, restInfomodulePort).getValue();
   }
 
   @Override
-  public RegisteredServiceInfo getJwtProviderInfo() {
+  public DeployedMicroserviceWhereAboutInformation getJwtProviderInfo() {
     return new RegisteredServiceInfoDecorator("bb-jwt-provider", jwtProviderHost, jwtProviderPort).getValue();
   }
 
-  public RegisteredServiceInfo getWebApiInfo() {
+  public DeployedMicroserviceWhereAboutInformation getWebApiInfo() {
     return null;
   }
 

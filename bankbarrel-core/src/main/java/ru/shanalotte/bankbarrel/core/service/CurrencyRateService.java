@@ -1,6 +1,7 @@
 package ru.shanalotte.bankbarrel.core.service;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,14 +20,13 @@ public class CurrencyRateService {
   private String defaultRateCurrency;
   private Set<CurrencyRateRule> currencyRateRules = new HashSet<>();
 
-  /**
-   * Конструктор со всеми зависимостями.
-   *
-   * @param defaultRateCurrency валюта, через которую всё конвертируется по умолчанию.
-   */
   public CurrencyRateService(@Value("${bank.currency.defaultRateCurrency}")
                                  String defaultRateCurrency) {
     this.defaultRateCurrency = defaultRateCurrency;
+    addRuleForDefaultRateCurrency(defaultRateCurrency);
+  }
+
+  private void addRuleForDefaultRateCurrency(String defaultRateCurrency) {
     CurrencyRateRule defaultRule = new CurrencyRateRule.Builder()
         .currency(defaultRateCurrency)
         .is(1)
@@ -37,6 +37,12 @@ public class CurrencyRateService {
   public void addRule(CurrencyRateRule rule) {
     logger.info("Adding currency rate rule {}", rule);
     currencyRateRules.add(rule);
+  }
+
+  public Optional<CurrencyRateRule> findTradingRateForCurrency(String currency) {
+    return currencyRateRules
+        .stream().filter(e -> e.getCurrency().equals(currency))
+        .findFirst();
   }
 
   public Set<CurrencyRateRule> getCurrencyRateRules() {

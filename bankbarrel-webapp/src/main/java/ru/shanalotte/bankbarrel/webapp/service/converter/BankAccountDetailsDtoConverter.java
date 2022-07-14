@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import org.springframework.stereotype.Service;
 import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
-import ru.shanalotte.bankbarrel.core.service.EnumToListingDtoItemConverter;
+import ru.shanalotte.bankbarrel.core.service.EnumToCodeAndValuePairConverter;
 import ru.shanalotte.bankbarrel.webapp.dto.account.BankAccountDetailsDto;
 import ru.shanalotte.bankbarrel.webapp.dto.account.BankAccountWebAppDto;
 
@@ -16,26 +16,26 @@ import ru.shanalotte.bankbarrel.webapp.dto.account.BankAccountWebAppDto;
 @Service
 public class BankAccountDetailsDtoConverter {
 
-  private EnumToListingDtoItemConverter enumToListingDtoItemConverter;
+  private EnumToCodeAndValuePairConverter enumToCodeAndValuePairConverter;
   private CurrencyPresentationConverter currencyPresentationConverter;
 
-  public BankAccountDetailsDtoConverter(EnumToListingDtoItemConverter
-                                            enumToListingDtoItemConverter,
+  public BankAccountDetailsDtoConverter(EnumToCodeAndValuePairConverter
+                                            enumToCodeAndValuePairConverter,
                                         CurrencyPresentationConverter
                                             currencyPresentationConverter) {
-    this.enumToListingDtoItemConverter = enumToListingDtoItemConverter;
+    this.enumToCodeAndValuePairConverter = enumToCodeAndValuePairConverter;
     this.currencyPresentationConverter = currencyPresentationConverter;
   }
 
   /**
    * Метод преобразует бизнес-объект класса BankAccount в соответствующее DTO.
    * В данном методе названия констант перечислений банковских счетов напрямую передаются
-   * в сервис enumToListingDtoItemConverter, что в дальнейшем может создать ненужный coupling.
+   * в сервис enumToCodeAndValuePairConverter, что в дальнейшем может создать ненужный coupling.
    */
   public BankAccountDetailsDto convert(BankAccountDto account) {
-    final String type = enumToListingDtoItemConverter
+    final String type = enumToCodeAndValuePairConverter
         .convert(account.getType()).getValue();
-    String additionalType = enumToListingDtoItemConverter
+    String additionalType = enumToCodeAndValuePairConverter
         .convert(account.getAdditionalType()).getValue();
     String currency = account.getCurrency();
     final String currencySign = currencyPresentationConverter.currencyToSign(currency);

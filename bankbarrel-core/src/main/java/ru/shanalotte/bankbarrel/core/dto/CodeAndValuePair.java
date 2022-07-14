@@ -2,18 +2,11 @@ package ru.shanalotte.bankbarrel.core.dto;
 
 import java.util.Objects;
 
-/**
- * Значение ListingDto для вывода списка строк пользователю.
- * Содержит код значения и самое значение в виде строки.
- */
-public class ListingDtoItem {
-  private String code;
-  private String value;
+public class CodeAndValuePair {
+  private final String code;
+  private final String value;
 
-  public ListingDtoItem() {
-  }
-
-  public ListingDtoItem(String code, String value) {
+  public CodeAndValuePair(String code, String value) {
     this.code = code;
     this.value = value;
   }
@@ -34,7 +27,7 @@ public class ListingDtoItem {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ListingDtoItem dtoItem = (ListingDtoItem) o;
+    CodeAndValuePair dtoItem = (CodeAndValuePair) o;
     return Objects.equals(code, dtoItem.code) && Objects.equals(value, dtoItem.value);
   }
 

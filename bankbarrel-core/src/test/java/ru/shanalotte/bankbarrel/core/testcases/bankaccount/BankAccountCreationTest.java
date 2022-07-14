@@ -1,10 +1,11 @@
-package ru.shanalotte.bankbarrel.core;
+package ru.shanalotte.bankbarrel.core.testcases.bankaccount;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.TestPropertySource;
-import static ru.shanalotte.bankbarrel.core.CustomerCreationData.validName;
-import static ru.shanalotte.bankbarrel.core.CustomerCreationData.validSurname;
+import static ru.shanalotte.bankbarrel.core.service.DummyTestingEntitiesConstants.VALID_BANK_CLIENT_NAME;
+import static ru.shanalotte.bankbarrel.core.service.DummyTestingEntitiesConstants.VALID_BANK_CLIENT_SURNAME;
+import ru.shanalotte.bankbarrel.core.service.DummyTestingEntitiesProvider;
 import ru.shanalotte.bankbarrel.core.domain.BankAccount;
 import ru.shanalotte.bankbarrel.core.domain.BankAccountAdditionalType;
 import ru.shanalotte.bankbarrel.core.domain.BankAccountType;
@@ -15,9 +16,7 @@ public class BankAccountCreationTest {
 
   @Test
   public void should_AssignOwnerToBankAccount_WhenCreated(){
-    BankClient bankClient = new BankClient.Builder(validName, validSurname)
-        .withEmail("abc@xyz.ema")
-        .build();
+    BankClient bankClient = DummyTestingEntitiesProvider.createValidBankClientDummy();
     BankAccount bankAccount = new BankAccount.Builder()
         .withOwner(bankClient)
         .withType(BankAccountType.CHECKING)
@@ -27,8 +26,8 @@ public class BankAccountCreationTest {
   }
 
   @Test
-  public void should_CreateRandomGUID_WhenBankAccountIsCreated(){
-    BankClient bankClient = DummyService.createDummyCustomer();
+  public void should_GenerateBankAccountIdentifier_WhenBankAccountIsCreated(){
+    BankClient bankClient = DummyTestingEntitiesProvider.createValidBankClientDummy();
     BankAccount bankAccount = new BankAccount.Builder()
         .withOwner(bankClient)
         .withType(BankAccountType.CHECKING)
@@ -38,9 +37,9 @@ public class BankAccountCreationTest {
   }
 
   @Test
-  public void checkingBankAccount_ShouldHasTheCheckingBankAccountType(){
+  public void checkingBankAccount_ShouldHaveTheCheckingBankAccountType(){
     BankAccount bankAccount = new BankAccount.Builder()
-        .withOwner(DummyService.createDummyCustomer())
+        .withOwner(DummyTestingEntitiesProvider.createValidBankClientDummy())
         .withType(BankAccountType.CHECKING)
         .withAdditionalType(BankAccountAdditionalType.INTEREST_BEARING)
         .build();
@@ -48,9 +47,9 @@ public class BankAccountCreationTest {
   }
 
   @Test
-  public void savingBankAccount_ShouldHasTheSavingBankAccountType(){
+  public void savingBankAccount_ShouldHaveTheSavingBankAccountType(){
     BankAccount bankAccount = new BankAccount.Builder()
-        .withOwner(DummyService.createDummyCustomer())
+        .withOwner(DummyTestingEntitiesProvider.createValidBankClientDummy())
         .withType(BankAccountType.SAVING)
         .withAdditionalType(BankAccountAdditionalType.SAVINGS_ONLY)
         .build();
@@ -58,11 +57,11 @@ public class BankAccountCreationTest {
   }
 
   @Test
-  public void bankAccountBuilderTest(){
+  public void differentBankAccountTypesBuildingTest(){
     for (BankAccountType type : BankAccountType.values()) {
       for (BankAccountAdditionalType additionalType : type.getAdditionalTypes()) {
         BankAccount account = new BankAccount.Builder()
-            .withOwner(DummyService.createDummyCustomer())
+            .withOwner(DummyTestingEntitiesProvider.createValidBankClientDummy())
             .withType(type)
             .withAdditionalType(additionalType)
             .build();
@@ -74,20 +73,20 @@ public class BankAccountCreationTest {
 
   @Test
   public void bankAccount_shouldBeDollarCurrencyByDefault() {
-    BankAccount account = DummyService.createDummyCheckingBankAccount();
+    BankAccount account = DummyTestingEntitiesProvider.createCheckingBankAccountDummy();
     assertThat(account.getCurrency()).isEqualTo("USD");
   }
 
   @Test
   public void bankAccount_shouldHaveDescription() {
-      BankAccount bankAccount = DummyService.createDummyCheckingBankAccount();
+      BankAccount bankAccount = DummyTestingEntitiesProvider.createCheckingBankAccountDummy();
       assertThat(bankAccount.getDescription()).isNotBlank();
   }
 
   @Test
-  public void customer_CanOpenRublesAccount() {
+  public void customer_shouldAllowOpeningBankAccountInCurrencyOtherThanUSD() {
     BankAccount account = new BankAccount.Builder()
-        .withOwner(DummyService.createDummyCustomer())
+        .withOwner(DummyTestingEntitiesProvider.createValidBankClientDummy())
         .withType(BankAccountType.CHECKING)
         .withAdditionalType(BankAccountAdditionalType.PREMIUM)
         .withCurrency("RUB")

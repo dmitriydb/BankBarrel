@@ -2,11 +2,8 @@ package ru.shanalotte.bankbarrel.core.domain;
 
 import java.math.BigDecimal;
 import java.util.Objects;
-import ru.shanalotte.bankbarrel.core.misc.PropertiesLoader;
+import ru.shanalotte.bankbarrel.core.misc.NonManagedBySpringBootPropertiesLoader;
 
-/**
- * Class that represents a quantity of money of some defined currency.
- */
 public class MonetaryAmount {
   private final BigDecimal value;
   private final String currency;
@@ -28,17 +25,17 @@ public class MonetaryAmount {
 
   public MonetaryAmount(long value) {
     this.value = new BigDecimal(value);
-    this.currency = PropertiesLoader.get("bank.monetaryAmount.defaultCurrency");
+    this.currency = NonManagedBySpringBootPropertiesLoader.get("bank.monetaryAmount.defaultCurrency");
   }
 
   public MonetaryAmount(double value) {
     this.value = new BigDecimal(String.valueOf(value));
-    this.currency = PropertiesLoader.get("bank.monetaryAmount.defaultCurrency");
+    this.currency = NonManagedBySpringBootPropertiesLoader.get("bank.monetaryAmount.defaultCurrency");
   }
 
   public MonetaryAmount(int value) {
     this.value = new BigDecimal(value);
-    this.currency = PropertiesLoader.get("bank.monetaryAmount.defaultCurrency");
+    this.currency = NonManagedBySpringBootPropertiesLoader.get("bank.monetaryAmount.defaultCurrency");
   }
 
   public MonetaryAmount(BigDecimal value, String currency) {

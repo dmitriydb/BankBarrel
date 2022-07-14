@@ -2,11 +2,7 @@ package ru.shanalotte.bankbarrel.core.dto;
 
 import java.math.BigDecimal;
 
-/**
- * DTO для курса валюты.
- */
 public class CurrencyRateDto {
-
   private String currency;
   private BigDecimal rate;
   private boolean more;

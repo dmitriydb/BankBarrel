@@ -2,7 +2,7 @@ package ru.shanalotte.bankbarrel.rest.infomodule.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.shanalotte.bankbarrel.core.service.EnumToListingDtoItemConverter;
+import ru.shanalotte.bankbarrel.core.service.EnumToCodeAndValuePairConverter;
 
 /**
  * Java-конфигурация контейнера спринга для данного микросервиса.
@@ -12,7 +12,7 @@ import ru.shanalotte.bankbarrel.core.service.EnumToListingDtoItemConverter;
 public class BeanConfig {
 
   @Bean
-  public EnumToListingDtoItemConverter enumToListingDtoItemConverter() {
-    return new EnumToListingDtoItemConverter();
+  public EnumToCodeAndValuePairConverter enumToListingDtoItemConverter() {
+    return new EnumToCodeAndValuePairConverter();
   }
 }

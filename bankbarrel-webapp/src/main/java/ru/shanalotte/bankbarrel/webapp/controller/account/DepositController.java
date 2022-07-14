@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.shanalotte.bankbarrel.core.domain.MonetaryAmount;
 import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
-import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRate;
+import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRateForRequestedCurrency;
 import ru.shanalotte.bankbarrel.webapp.exception.BankAccountNotExists;
 import ru.shanalotte.bankbarrel.webapp.exception.UnathorizedAccessToBankAccount;
 import ru.shanalotte.bankbarrel.webapp.exception.WebAppUserNotFound;
@@ -46,7 +46,7 @@ public class DepositController {
                                @RequestParam("amount") Double amount,
                                @RequestParam("currency") String currency
   ) throws WebAppUserNotFound,
-      UnathorizedAccessToBankAccount, BankAccountNotExists, UnknownCurrencyRate {
+      UnathorizedAccessToBankAccount, BankAccountNotExists, UnknownCurrencyRateForRequestedCurrency {
     logger.info("Пользователь {} вносит {} {} на счет {}",
         username, amount, currency, accountNumber);
     BankAccountDto account = bankAccountAccessAuthorizationService

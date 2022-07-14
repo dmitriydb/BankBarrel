@@ -3,7 +3,6 @@ package ru.shanalotte.bankbarrel.webapp.service.jwt;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
@@ -11,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import ru.shanalotte.bankbarrel.core.dto.serviceregistry.RegisteredServiceInfo;
+import ru.shanalotte.bankbarrel.core.dto.serviceregistry.DeployedMicroserviceWhereAboutInformation;
 import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.ServiceRegistryProxy;
 import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.ServiceUrlBuilder;
 
@@ -38,8 +37,8 @@ public class JwtTokenObtainer {
 
   @Scheduled(initialDelay = 10000, fixedDelay = 100000)
   public void createToken() {
-    RegisteredServiceInfo registeredServiceInfo = serviceRegistryProxy.getJwtProviderInfo();
-    String url = serviceUrlBuilder.buildServiceUrl(registeredServiceInfo) + "/auth";
+    DeployedMicroserviceWhereAboutInformation deployedMicroserviceWhereAboutInformation = serviceRegistryProxy.getJwtProviderInfo();
+    String url = serviceUrlBuilder.buildServiceUrl(deployedMicroserviceWhereAboutInformation) + "/auth";
 
     class AuthDto {
       String username;

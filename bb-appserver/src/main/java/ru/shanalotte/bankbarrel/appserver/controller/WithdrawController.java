@@ -25,7 +25,7 @@ import ru.shanalotte.bankbarrel.core.domain.BankAccount;
 import ru.shanalotte.bankbarrel.core.domain.MonetaryAmount;
 import ru.shanalotte.bankbarrel.core.dto.WithdrawDto;
 import ru.shanalotte.bankbarrel.core.exception.InsufficientFundsException;
-import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRate;
+import ru.shanalotte.bankbarrel.core.exception.UnknownCurrencyRateForRequestedCurrency;
 import ru.shanalotte.bankbarrel.core.service.SimpleBankService;
 
 /**
@@ -112,7 +112,7 @@ public class WithdrawController {
       withdrawDao.save(moneyWithdraw);
       dto.setId(moneyWithdraw.getId());
       return new ResponseEntity<>(dto, HttpStatus.OK);
-    } catch (UnknownCurrencyRate unknownCurrencyRate) {
+    } catch (UnknownCurrencyRateForRequestedCurrency unknownCurrencyRate) {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     } catch (InsufficientFundsException e) {
       moneyWithdraw.setResult("REJECTED: NOT ENOUGH FUNDS");

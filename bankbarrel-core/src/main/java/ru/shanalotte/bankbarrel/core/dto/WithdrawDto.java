@@ -2,9 +2,6 @@ package ru.shanalotte.bankbarrel.core.dto;
 
 import java.math.BigDecimal;
 
-/**
- * DTO для снятия средств.
- */
 public class WithdrawDto {
   private Long id;
   private String account;

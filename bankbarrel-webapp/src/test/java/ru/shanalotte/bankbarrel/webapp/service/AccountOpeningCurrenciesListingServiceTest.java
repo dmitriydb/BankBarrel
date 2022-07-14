@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-import ru.shanalotte.bankbarrel.core.dto.ListingDto;
+import ru.shanalotte.bankbarrel.core.dto.CodeAndValuesPairsListWrapper;
 import ru.shanalotte.bankbarrel.webapp.service.listing.AccountOpeningCurrenciesListingService;
 
 @SpringBootTest
@@ -20,9 +20,9 @@ public class AccountOpeningCurrenciesListingServiceTest {
 
   @Test
   public void shouldLoadSupportedCurrenciesFromProperties() {
-     ListingDto dto = accountOpeningCurrenciesListingService.getListingDto();
-     assertThat(dto.getItems().size()).isEqualTo(1);
-     assertThat(dto.getItems().get(0).getCode()).isEqualTo("KZT");
+     CodeAndValuesPairsListWrapper dto = accountOpeningCurrenciesListingService.getListingDto();
+     assertThat(dto.getCodeAndValuePairs().size()).isEqualTo(1);
+     assertThat(dto.getCodeAndValuePairs().get(0).getCode()).isEqualTo("KZT");
   }
 
 }

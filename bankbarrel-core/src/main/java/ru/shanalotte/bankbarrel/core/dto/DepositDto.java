@@ -1,11 +1,7 @@
 package ru.shanalotte.bankbarrel.core.dto;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 
-/**
- * DTO денежного вклада.
- */
 public class DepositDto {
   private Long id;
   private String account;

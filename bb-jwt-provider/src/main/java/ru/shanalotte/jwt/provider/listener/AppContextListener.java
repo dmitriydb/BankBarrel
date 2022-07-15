@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.UnknownHostException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
@@ -30,6 +31,13 @@ public class AppContextListener implements ApplicationListener<ContextRefreshedE
   @Value("${service.registry.url}")
   private String serviceRegistryUrl;
 
+  private RestTemplate restTemplate;
+
+  @Autowired
+  public AppContextListener(RestTemplate restTemplate) {
+    this.restTemplate = restTemplate;
+  }
+
   @Override
   public void onApplicationEvent(ContextRefreshedEvent event) {
     DeployedMicroserviceWhereAboutInformation serviceInfo = new DeployedMicroserviceWhereAboutInformation();
@@ -40,10 +48,6 @@ public class AppContextListener implements ApplicationListener<ContextRefreshedE
     } catch (UnknownHostException e) {
       e.printStackTrace();
     }
-    RestTemplate restTemplate = new RestTemplate();
-    logger.info(serviceInfo.toString());
-    String result = null;
-    result = restTemplate.postForObject(URI.create(serviceRegistryUrl), serviceInfo, String.class);
-    logger.info(result);
+    restTemplate.postForObject(URI.create(serviceRegistryUrl), serviceInfo, String.class);
   }
 }

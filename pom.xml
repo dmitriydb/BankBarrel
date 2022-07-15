@@ -12,7 +12,7 @@
         <module>bankbarrel-core</module>
         <module>bankbarrel-webapp</module>
         <module>bankbarrel-rest-infomodule</module>
-        <module>bankbarrel-serviceregistry</module>
+        <module>bankbarrel-ru.shanalotte.jwt.provider.serviceregistry</module>
         <module>bb-appserver</module>
         <module>bb-monitoring-webapp</module>
         <module>bb-jwt-provider</module>

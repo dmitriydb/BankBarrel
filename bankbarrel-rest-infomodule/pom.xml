@@ -54,7 +54,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>bankbarrel-serviceregistry</artifactId>
+            <artifactId>bankbarrel-ru.shanalotte.jwt.provider.serviceregistry</artifactId>
             <version>2.6.7</version>
             <scope>runtime</scope>
         </dependency>

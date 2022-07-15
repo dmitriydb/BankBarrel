@@ -20,5 +20,12 @@ public class AuthDto {
     this.password = password;
   }
 
-
+  @Override
+  public String toString() {
+    final StringBuilder sb = new StringBuilder("AuthDto{");
+    sb.append("username='").append(username).append('\'');
+    sb.append(", password='").append(password).append('\'');
+    sb.append('}');
+    return sb.toString();
+  }
 }

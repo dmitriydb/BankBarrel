@@ -1,6 +1,7 @@
 package ru.shanalotte.jwt.provider;
 
 import java.util.Arrays;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import ru.shanalotte.jwt.provider.repository.UserRepository;
 
 @SpringBootApplication
 @ComponentScan("ru.shanalotte.jwt.provider")
-@PropertySource("jwt-credentials-store.properties")
+@PropertySource("classpath:jwt-credentials-store.properties")
 public class JwtProviderLauncher implements CommandLineRunner {
 
   private static final Logger logger = LoggerFactory.getLogger(JwtProviderLauncher.class);
@@ -24,11 +25,8 @@ public class JwtProviderLauncher implements CommandLineRunner {
   @Autowired
   private UserRepository userRepository;
 
-  @Value("${bb-webapp}")
-  private String webappPassword;
-
-  @Value("${bb-rest-infomodule}")
-  private String restInfomodulePassword;
+  @Value("#{${valid-credentials}}")
+  private Map<String, String> validCredentials;
 
   public static void main(String[] args) {
     SpringApplication.run(JwtProviderLauncher.class, args);
@@ -40,10 +38,11 @@ public class JwtProviderLauncher implements CommandLineRunner {
   @Override
   public void run(String... args) throws Exception {
     logger.info("loading services jwt credentials into memory...");
-    userRepository.saveAll(Arrays.asList(
-        new User(1L, "bb-webapp", passwordEncoder.encode(webappPassword)),
-        new User(2L, "bb-rest-infomodule", passwordEncoder.encode(restInfomodulePassword))
-    ));
+    long nextId = 1;
+    for (String serviceName : validCredentials.keySet()) {
+      logger.info("Loading {}", serviceName);
+      userRepository.save(new User(nextId++, serviceName, passwordEncoder.encode(validCredentials.get(serviceName))));
+    }
     logger.info("Done!");
   }
 }

@@ -71,6 +71,7 @@ public class ServiceRegistryController {
     return new ResponseEntity<>(info, HttpStatus.OK);
   }
 
+
   /**
    * Создание информации о микросервисе.
    */

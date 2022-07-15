@@ -7,7 +7,6 @@ import ru.shanalotte.bankbarrel.core.dto.serviceregistry.DeployedMicroserviceWhe
  * Service Registry и выдает информацию о конкретном микросервисе клиентам.
  */
 public interface ServiceRegistryProxy {
-  void loadServicesInfo();
 
   DeployedMicroserviceWhereAboutInformation getWebApiInfo();
 

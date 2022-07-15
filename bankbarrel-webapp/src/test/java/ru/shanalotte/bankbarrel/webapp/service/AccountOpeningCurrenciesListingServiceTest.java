@@ -21,8 +21,8 @@ public class AccountOpeningCurrenciesListingServiceTest {
   @Test
   public void shouldLoadSupportedCurrenciesFromProperties() {
      CodeAndValuesPairsListWrapper dto = accountOpeningCurrenciesListingService.getListingDto();
-     assertThat(dto.getCodeAndValuePairs().size()).isEqualTo(1);
-     assertThat(dto.getCodeAndValuePairs().get(0).getCode()).isEqualTo("KZT");
+     assertThat(dto.getItems().size()).isEqualTo(1);
+     assertThat(dto.getItems().get(0).getCode()).isEqualTo("KZT");
   }
 
 }

@@ -1,4 +1,4 @@
-package ru.shanalotte.bankbarrel.rest.infomodule.service;
+package ru.shanalotte.bankbarrel.rest.infomodule.jwt;
 
 import java.util.ArrayList;
 import java.util.Base64;
@@ -10,12 +10,11 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,6 +25,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @PropertySource("classpath:jwt-secret.properties")
+@Profile({"dev", "production"})
 public class JwtTokenValidator {
 
   private static final Logger logger = LoggerFactory.getLogger(JwtTokenValidator.class);

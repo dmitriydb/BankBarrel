@@ -82,7 +82,7 @@ public class AccountDetailsController {
       BankAccountDto bankAccount = bankAccountDao.findByNumber(accountNumber);
       model.addAttribute("account", bankAccountDetailsDtoConverter.convert(bankAccount));
       model.addAttribute("currencies",
-          accountOpeningCurrenciesListingService.getListingDto().getCodeAndValuePairs());
+          accountOpeningCurrenciesListingService.getListingDto().getItems());
       model.addAttribute("transferDto", new TransferDto());
       return "account";
     } else {

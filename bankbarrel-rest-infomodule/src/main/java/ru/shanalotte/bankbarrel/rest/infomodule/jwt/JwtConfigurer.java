@@ -1,4 +1,4 @@
-package ru.shanalotte.bankbarrel.rest.infomodule.service;
+package ru.shanalotte.bankbarrel.rest.infomodule.jwt;
 
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

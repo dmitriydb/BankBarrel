@@ -1,6 +1,8 @@
 package ru.shanalotte.bankbarrel.core.dto;
 
-public class AccountAdditionalTypeDto {
+import ru.shanalotte.bankbarrel.core.dto.serviceregistry.AbstractAccountTypeDto;
+
+public class AccountAdditionalTypeDto implements AbstractAccountTypeDto {
   private Long id;
   private String type;
   private String description;

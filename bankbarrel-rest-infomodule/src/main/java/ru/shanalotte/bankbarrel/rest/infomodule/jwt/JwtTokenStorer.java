@@ -1,4 +1,4 @@
-package ru.shanalotte.bankbarrel.rest.infomodule.service;
+package ru.shanalotte.bankbarrel.rest.infomodule.jwt;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;

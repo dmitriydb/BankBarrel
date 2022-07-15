@@ -80,10 +80,9 @@ public class AccountTypesController {
     HttpHeaders headers = new HttpHeaders();
     headers.set("Authorization", jwtTokenStorer.getToken());
     HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
-    ResponseEntity<CodeAndValuePair[]> response = restTemplate.exchange(
-        url + "/accounttype/" + code + "/additionaltypes", HttpMethod.GET, requestEntity, CodeAndValuePair[].class);
-    return new ResponseEntity<>(
-        Arrays.stream(response.getBody()).collect(Collectors.toList()), HttpStatus.OK
-    );
-  }
+    ResponseEntity<List> response = restTemplate.exchange(
+        url + "/accounttype/" + code + "/additionaltypes", HttpMethod.GET, requestEntity, List.class);
+    return new ResponseEntity<List<CodeAndValuePair>>(
+        response.getBody(), HttpStatus.OK);
+    }
 }

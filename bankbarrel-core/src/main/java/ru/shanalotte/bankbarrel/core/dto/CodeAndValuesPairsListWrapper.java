@@ -5,14 +5,14 @@ import java.util.List;
 import java.util.Objects;
 
 public class CodeAndValuesPairsListWrapper {
-  protected final List<CodeAndValuePair> codeAndValuePairs = new ArrayList<>();
+  protected final List<CodeAndValuePair> items = new ArrayList<>();
 
   public void addItem(CodeAndValuePair item) {
-    codeAndValuePairs.add(item);
+    items.add(item);
   }
 
-  public List<CodeAndValuePair> getCodeAndValuePairs() {
-    return codeAndValuePairs;
+  public List<CodeAndValuePair> getItems() {
+    return items;
   }
 
   @Override
@@ -24,18 +24,18 @@ public class CodeAndValuesPairsListWrapper {
       return false;
     }
     CodeAndValuesPairsListWrapper dto = (CodeAndValuesPairsListWrapper) o;
-    return Objects.equals(codeAndValuePairs, dto.codeAndValuePairs);
+    return Objects.equals(items, dto.items);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(codeAndValuePairs);
+    return Objects.hash(items);
   }
 
   @Override
   public String toString() {
     final StringBuilder sb = new StringBuilder("CodeAndValuesPairsListWrapper{");
-    sb.append("items=").append(codeAndValuePairs);
+    sb.append("items=").append(items);
     sb.append('}');
     return sb.toString();
   }

@@ -55,7 +55,7 @@ public class AccountOpeningTest {
     String content = mvcResult.getResponse().getContentAsString();
     System.out.println(content);
     for (CodeAndValuesPairsListWrapper dto : Arrays.asList(accountTypesDto, accountAdditionalTypesDto, accountOpeningCurrencies)) {
-      for (CodeAndValuePair dtoItem : dto.getCodeAndValuePairs()) {
+      for (CodeAndValuePair dtoItem : dto.getItems()) {
         assertThat(content).contains(dtoItem.getCode());
         assertThat(content).contains(dtoItem.getValue());
       }

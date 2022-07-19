@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -64,6 +65,7 @@ import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
    */
   @Operation(summary = "Получить информацию о банковском счете по номеру")
   @GetMapping("/accounts/{number}")
+  @Transactional
   public ResponseEntity<BankAccountDto> getAccountInfo(
       @Parameter(description = "Номер счета", example = "40700000500000000001", required = true
       )
@@ -115,6 +117,7 @@ import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
   @ApiResponse(responseCode = "404", description = "Счет с таким ID не существует")
   @ApiResponse(responseCode = "200", description = "Счет успешно удален")
   @DeleteMapping("/accounts/{id}")
+  @Transactional
   public ResponseEntity<?> deleteAccount(@Parameter(description = "ID удаляемого счетa") @PathVariable("id") String id) {
     logger.info("DELETE /accounts/{}", id);
     Optional<BankAccount> account = bankAccountDao.findById(id);
@@ -124,7 +127,6 @@ import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
     BankClient client = bankClientDao.getById(account.get().getOwner().getId());
     client.getAccounts().remove(account.get());
     bankClientDao.save(client);
-    bankAccountDao.delete(account.get());
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
@@ -134,6 +136,7 @@ import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
   @Operation(summary = "Получить список счетов клиента по его ID")
   @ApiResponse(responseCode = "404", description = "Клиент с указанным ID не найден")
   @GetMapping("/clients/{id}/accounts")
+  @Transactional
   public ResponseEntity<List<BankAccountDto>> getClientAccounts(@PathVariable("id") @Parameter(description = "ID клиента") Long id) {
     logger.info("GET /clients/{}/accounts", id);
     if (!bankClientDao.findById(id).isPresent()) {
@@ -161,13 +164,14 @@ import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
    */
   @Operation(summary = "Открыть новый счет")
   @PostMapping("/accounts")
+  @Transactional
   @ApiResponse(responseCode = "400", description = "В случае, если данные не прошли валидацию. Возможные причины: "
       + "1) неверный ID клиента 2) неверный тип счета 3) неверный код валюты")
   @ApiResponse(responseCode = "401", description = "Счет с таким номером уже существует")
   public ResponseEntity<BankAccountDto> createAccount(@RequestBody BankAccountDto dto)
       throws JsonProcessingException {
     logger.info("POST /accounts {}", new ObjectMapper().writeValueAsString(dto));
-    if (!bankClientDao.findById(dto.getOwner()).isPresent()) {
+    if (dto.getOwner() == null || !bankClientDao.findById(dto.getOwner()).isPresent()) {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
     if (bankAccountDao.findByNumber(dto.getNumber()) != null) {
@@ -186,6 +190,7 @@ import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
     account.setBankAccountType(dto.getType());
     account.setAdditionalType(dto.getAdditionalType());
     account.setIdentifier(UUID.randomUUID().toString());
+    dto.setIdentifier(account.getIdentifier());
     account.setNumber(dto.getNumber());
     account.setDescription(dto.getDescription());
     account.setCurrency(dto.getCurrency());
@@ -194,7 +199,7 @@ import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
     BankClient client = bankClientDao.getById(dto.getOwner());
     client.getAccounts().add(account);
     bankClientDao.save(client);
-    dto.setIdentifier(account.getIdentifier());
+    System.out.println("B = " + dto.getIdentifier());
     return new ResponseEntity<>(dto, HttpStatus.CREATED);
   }
 }

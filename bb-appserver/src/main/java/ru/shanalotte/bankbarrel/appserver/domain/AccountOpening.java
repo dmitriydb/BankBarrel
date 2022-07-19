@@ -21,32 +21,32 @@ import ru.shanalotte.bankbarrel.core.domain.BankClient;
 @Table(name = "account_openings")
 public class AccountOpening {
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne
-  @JoinColumn(name = "client")
+  @OneToOne(optional = false)
+  @JoinColumn(name = "client", nullable = false)
   private BankClient client;
 
-  @Column(name = "opening_date_time")
+  @Column(name = "opening_date_time", nullable = false)
   private Timestamp timestamp;
 
-  @ManyToOne
-  @JoinColumn(name = "currency")
+  @OneToOne(optional = false)
+  @JoinColumn(name = "currency", nullable = false)
   private Currency currency;
 
   private String result;
 
-  @ManyToOne
-  @JoinColumn(name = "type")
+  @OneToOne(optional = false)
+  @JoinColumn(name = "type", nullable = false)
   private BankAccountTypeEntity type;
 
-  @ManyToOne
-  @JoinColumn(name = "additional_type")
+  @OneToOne(optional = false)
+  @JoinColumn(name = "additional_type", nullable = false)
   private BankAccountAdditionalTypeEntity additionalType;
 
-  @ManyToOne
-  @JoinColumn(name = "source")
+  @OneToOne(optional = false)
+  @JoinColumn(name = "source", nullable = false)
   private OperationSource operationSource;
 
   @OneToOne

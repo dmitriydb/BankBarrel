@@ -9,7 +9,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import ru.shanalotte.bankbarrel.core.domain.BankAccount;
 
 /**
@@ -22,23 +24,24 @@ public class MoneyDeposit {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne
+  @OneToOne(optional = false)
   @JoinColumn(name = "account")
   private BankAccount account;
 
+  @Min(0)
   @Column(name = "amount")
   private BigDecimal amount;
 
-  @Column(name = "deposit_date_time")
+  @Column(name = "deposit_date_time", nullable = false)
   private Timestamp timestamp;
 
-  @ManyToOne
+  @OneToOne(optional = false)
   @JoinColumn(name = "currency")
   private Currency currency;
 
   private String result;
 
-  @ManyToOne
+  @OneToOne(optional = false)
   @JoinColumn(name = "source")
   private OperationSource operationSource;
 

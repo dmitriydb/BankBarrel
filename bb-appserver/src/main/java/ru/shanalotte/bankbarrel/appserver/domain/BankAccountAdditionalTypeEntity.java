@@ -2,6 +2,7 @@ package ru.shanalotte.bankbarrel.appserver.domain;
 
 
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,10 +21,12 @@ public class BankAccountAdditionalTypeEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+  @Column(nullable = false)
   private String code;
+  @Column(nullable = false)
   private String description;
-  @ManyToOne
-  @JoinColumn(name = "owner_type")
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "owner_type", nullable = false)
   private BankAccountTypeEntity ownerType;
 
   public Long getId() {

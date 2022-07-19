@@ -1,0 +1,1 @@
+ALTER TABLE account_openings ALTER COLUMN resulting_account TYPE VARCHAR;

@@ -15,7 +15,8 @@ import javax.persistence.Table;
 @Table(name = "money_transfer_status")
 public class MoneyTransferStatus {
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "code")
   private Long id;
 
   @Column(length = 255, nullable = false)

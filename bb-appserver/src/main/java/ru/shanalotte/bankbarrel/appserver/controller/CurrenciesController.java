@@ -3,6 +3,7 @@ package ru.shanalotte.bankbarrel.appserver.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -136,14 +137,15 @@ public class CurrenciesController {
    */
   @Operation(summary = "Добавление новой валюты")
   @PostMapping(value = "/currencies", consumes = "application/json", produces = "application/json")
-  public ResponseEntity<Currency> createNewCurrency(@RequestBody CurrencyDto dto)
+  public ResponseEntity<CurrencyDto> createNewCurrency(@RequestBody CurrencyDto dto)
       throws JsonProcessingException {
     logger.info("POST /currencies {}", new ObjectMapper().writeValueAsString(dto));
     String code = dto.getCode();
     Currency currency = new Currency();
     currency.setCode(code);
     currency = currencyDao.save(currency);
-    return new ResponseEntity<>(currency, HttpStatus.CREATED);
+    dto.setId(currency.getId());
+    return new ResponseEntity<>(dto, HttpStatus.CREATED);
   }
 
   /**
@@ -153,11 +155,14 @@ public class CurrenciesController {
   @DeleteMapping("/currencies/{id}")
   public ResponseEntity<?> deleteCurrency(@Parameter(description = "ID валюты") @PathVariable("id") Long id) {
     logger.info("DELETE /currencies/{}", id);
-    Currency currency = currencyDao.getById(id);
-    if (currency == null) {
+    if (id == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    currencyDao.delete(currency);
+    Optional<Currency> currency = currencyDao.findById(id);
+    if (!currency.isPresent()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    currencyDao.delete(currency.get());
     return new ResponseEntity<>(HttpStatus.OK);
   }
 

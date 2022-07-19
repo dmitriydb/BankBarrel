@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import ru.shanalotte.bankbarrel.appserver.domain.Currency;
 import ru.shanalotte.bankbarrel.appserver.domain.MoneyDeposit;
 import ru.shanalotte.bankbarrel.appserver.repository.BankAccountDao;
 import ru.shanalotte.bankbarrel.appserver.repository.CurrencyDao;
@@ -89,7 +90,9 @@ public class DepositController {
     if (!bankAccountDao.findById(dto.getAccount()).isPresent()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    if (currencyDao.findByCode(dto.getCurrency()) == null) {
+    Currency currency = currencyDao.findByCode(dto.getCurrency());
+    System.out.println(currency);
+    if (currency == null) {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
     if (dto.getTimestamp() == null) {
@@ -110,6 +113,7 @@ public class DepositController {
       dto.setResult("SUCCESS");
       depositDao.save(moneyDeposit);
       dto.setId(moneyDeposit.getId());
+      System.out.println("NEW ID = " + dto.getId());
       return new ResponseEntity<>(dto, HttpStatus.OK);
     } catch (UnknownCurrencyRateForRequestedCurrency e) {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

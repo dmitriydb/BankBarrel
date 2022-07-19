@@ -1,14 +1,11 @@
 package ru.shanalotte.bankbarrel.rest.infomodule.caching;
 
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import ru.shanalotte.bankbarrel.core.service.EnumToCodeAndValuePairConverter;
 import ru.shanalotte.bankbarrel.rest.infomodule.controller.AccountTypesController;
 import ru.shanalotte.bankbarrel.rest.infomodule.service.AccountTypesReader;

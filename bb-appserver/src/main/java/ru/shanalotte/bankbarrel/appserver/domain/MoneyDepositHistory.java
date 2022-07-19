@@ -19,18 +19,18 @@ import javax.persistence.Table;
 public class MoneyDepositHistory {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @OneToOne
+  @OneToOne(optional = false)
   @JoinColumn(name = "money_deposit")
   private MoneyDeposit moneyDeposit;
 
-  @OneToOne
+  @OneToOne(optional = false)
   @JoinColumn(name = "status")
   private MoneyDepositStatus status;
 
-  @Column(name = "ts")
+  @Column(name = "ts", nullable = false)
   private Timestamp timestamp;
 
   public Long getId() {

@@ -14,6 +14,8 @@ import ru.shanalotte.bankbarrel.core.service.CurrencyRateService;
 @Service
 public class CurrencyLoader {
 
+  private boolean areLoaded = false;
+
   private CurrencyDao currencyDao;
   private CurrencyRateDao currencyRateDao;
   private CurrencyRateService currencyRateService;
@@ -33,8 +35,12 @@ public class CurrencyLoader {
    */
   @Scheduled(initialDelay = 1000, fixedDelay = Integer.MAX_VALUE)
   public void loadCurrenciesInService() {
+    if (areLoaded) {
+      return;
+    }
     for (CurrencyRateRule rule : currencyRateDao.findAll()) {
       currencyRateService.addRule(rule);
     }
+    areLoaded = true;
   }
 }

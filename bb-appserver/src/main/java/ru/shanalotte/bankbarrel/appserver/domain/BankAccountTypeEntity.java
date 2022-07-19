@@ -4,6 +4,7 @@ package ru.shanalotte.bankbarrel.appserver.domain;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -24,7 +25,7 @@ public class BankAccountTypeEntity {
   private Long id;
   private String code;
   private String description;
-  @OneToMany(mappedBy = "ownerType", fetch = FetchType.EAGER, orphanRemoval = true)
+  @OneToMany(mappedBy = "ownerType", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
   private Set<BankAccountAdditionalTypeEntity> subTypes = new HashSet<>();
 
   public Long getId() {
@@ -55,8 +56,9 @@ public class BankAccountTypeEntity {
     return subTypes;
   }
 
-  public void setSubTypes(Set<BankAccountAdditionalTypeEntity> subTypes) {
-    this.subTypes = subTypes;
+  public void addSubType(BankAccountAdditionalTypeEntity subType) {
+    this.subTypes.add(subType);
+    subType.setOwnerType(this);
   }
 
   @Override

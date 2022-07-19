@@ -15,7 +15,8 @@ import javax.persistence.Table;
 @Table(name = "account_opening_status")
 public class AccountOpeningStatus {
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "code")
   private Long id;
 
   @Column(length = 255, nullable = false)

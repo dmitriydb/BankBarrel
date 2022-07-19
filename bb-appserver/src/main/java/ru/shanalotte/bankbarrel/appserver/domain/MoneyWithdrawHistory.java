@@ -15,21 +15,21 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "money_withdraw_history")
-public class MoneyWithdrawHistory {
+  public class MoneyWithdrawHistory {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @OneToOne
+  @OneToOne(optional = false)
   @JoinColumn(name = "money_withdraw")
   private MoneyWithdraw moneyWithdraw;
 
-  @OneToOne
+  @OneToOne(optional = false)
   @JoinColumn(name = "status")
   private MoneyWithdrawStatus status;
 
-  @Column(name = "ts")
+  @Column(name = "ts", nullable = false)
   private Timestamp timestamp;
 
   public Long getId() {

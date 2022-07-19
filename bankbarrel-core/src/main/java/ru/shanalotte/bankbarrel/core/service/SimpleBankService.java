@@ -79,7 +79,7 @@ public class SimpleBankService implements BankService {
       logger.debug("Account balance after deposit = {} {}", account.getValue()
           .setScale(2, RoundingMode.HALF_UP), account.getCurrency());
     } catch (CurrencyNotRegisteredInSystemException exception) {
-      logger.error("Currency {} not found", amount.getCurrency());
+      logger.error("Currency {} not found", amount.getCurrency(), exception);
       throw new UnknownCurrencyRateForRequestedCurrency(amount.getCurrency());
     }
   }

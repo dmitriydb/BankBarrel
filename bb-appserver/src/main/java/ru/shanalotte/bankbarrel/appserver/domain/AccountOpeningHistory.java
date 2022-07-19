@@ -14,22 +14,22 @@ import javax.persistence.Table;
  * Класс, который инкапсулирует информацию о событии процесса открытия счета.
  */
 @Entity
-@Table(name = "account_opening_history")
+@Table(name = "account_openings_history")
 public class AccountOpeningHistory {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @OneToOne
-  @JoinColumn(name = "account_opening")
+  @OneToOne(optional = false)
+  @JoinColumn(name = "account_opening", nullable = false)
   private AccountOpening accountOpening;
 
-  @OneToOne
-  @JoinColumn(name = "status")
+  @OneToOne(optional = false)
+  @JoinColumn(name = "status", nullable = false)
   private AccountOpeningStatus status;
 
-  @Column(name = "ts")
+  @Column(name = "ts", nullable = false)
   private Timestamp timestamp;
 
   public Long getId() {

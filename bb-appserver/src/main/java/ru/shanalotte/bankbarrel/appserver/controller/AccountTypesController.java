@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -89,6 +90,7 @@ public class AccountTypesController {
    */
   @Operation(summary = "Получить информацию о подтипах банковского счета 1 уровня")
   @GetMapping("/accounttypes/{code}/additionaltypes")
+  @Transactional
   public ResponseEntity<List<AccountAdditionalTypeDto>> getAdditionalTypes(
      @Parameter(description = "Код типа счета 1 уровня", example = "CHECKING") @PathVariable("code") String code) {
     logger.info("GET /accounttypes/{}/additionaltypes", code);
@@ -133,6 +135,7 @@ public class AccountTypesController {
   /**
    * Добавление подтипа типу банковского счета 1 уровня.
    */
+  @Transactional
   @Operation(summary = "Добавление подтипа типу счета 1 уровня")
   @PostMapping(value = "/accounttypes/{code}/additionaltypes",
       consumes = "application/json", produces = "application/json")
@@ -170,6 +173,7 @@ public class AccountTypesController {
   @Operation(summary = "Удаление подтипа из типа счета 1 уровня")
   @DeleteMapping(value = "/accounttypes/{code}/additionaltypes",
       consumes = "application/json", produces = "application/json")
+  @Transactional
   public ResponseEntity<?> deleteAdditionalType(@Parameter(description = "Код типа счета 1 уровня") @PathVariable("code") String code,
                                                 @RequestBody AccountAdditionalTypeDto dto)
       throws JsonProcessingException {
@@ -186,7 +190,6 @@ public class AccountTypesController {
     }
     entity.getSubTypes().remove(existingEntity);
     bankAccountTypeDao.save(entity);
-    bankAccountAdditionalTypeDao.delete(existingEntity);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
@@ -194,6 +197,7 @@ public class AccountTypesController {
    * Создание банковского счета 1 уровня.
    */
   @Operation(summary = "Создание типа счета 1 уровня")
+  @Transactional
   @PostMapping(value = "/accounttypes",
       consumes = "application/json", produces = "application/json")
   public ResponseEntity<AccountTypeDto> createNewAccountType(@RequestBody AccountTypeDto dto)
@@ -219,6 +223,7 @@ public class AccountTypesController {
    * Удаление банковского счета 1 уровня.
    */
   @Operation(summary = "Удаление типа счета 1 уровня")
+  @Transactional
   @DeleteMapping(value = "/accounttypes",
       consumes = "application/json", produces = "application/json")
   public ResponseEntity<?> deleteAccountType(@RequestBody AccountTypeDto dto)

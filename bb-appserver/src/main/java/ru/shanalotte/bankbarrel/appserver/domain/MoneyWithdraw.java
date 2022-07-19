@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import ru.shanalotte.bankbarrel.core.domain.BankAccount;
 
 /**
@@ -22,23 +23,24 @@ public class MoneyWithdraw {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne
+  @ManyToOne(optional = false)
   @JoinColumn(name = "account")
   private BankAccount account;
 
+  @Min(0)
   @Column(name = "amount")
   private BigDecimal amount;
 
-  @Column(name = "withdraw_date_time")
+  @Column(name = "withdraw_date_time", nullable = false)
   private Timestamp timestamp;
 
-  @ManyToOne
+  @ManyToOne(optional = false)
   @JoinColumn(name = "currency")
   private Currency currency;
 
   private String result;
 
-  @ManyToOne
+  @ManyToOne(optional = false)
   @JoinColumn(name = "source")
   private OperationSource operationSource;
 

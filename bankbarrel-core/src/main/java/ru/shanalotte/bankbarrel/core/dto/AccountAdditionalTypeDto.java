@@ -2,6 +2,7 @@ package ru.shanalotte.bankbarrel.core.dto;
 
 import ru.shanalotte.bankbarrel.core.dto.serviceregistry.AbstractAccountTypeDto;
 
+@SuppressWarnings({"checkstyle:MissingJavadocType", "CheckStyle"})
 public class AccountAdditionalTypeDto implements AbstractAccountTypeDto {
   private Long id;
   private String type;

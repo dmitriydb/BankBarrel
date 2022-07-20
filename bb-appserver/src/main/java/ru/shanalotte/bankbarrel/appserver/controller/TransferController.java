@@ -2,11 +2,11 @@ package ru.shanalotte.bankbarrel.appserver.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -35,12 +35,12 @@ import ru.shanalotte.bankbarrel.core.service.SimpleBankService;
 @Tag(name = "Transfers", description = "Переводы")
 public class TransferController {
 
+  private static final Logger logger = LoggerFactory.getLogger(TransferController.class);
   private BankAccountDao bankAccountDao;
   private CurrencyDao currencyDao;
   private SimpleBankService bankService;
   private OperationSourceDao operationSourceDao;
   private TransferDao transferDao;
-  private static final Logger logger = LoggerFactory.getLogger(TransferController.class);
 
   /**
    * Конструктор со всеми зависимостями.
@@ -61,7 +61,9 @@ public class TransferController {
    */
   @Operation(summary = "Получить информацию о переводе")
   @GetMapping("/transfer/{id}")
-  public ResponseEntity<TransferDto> transferInfo(@Parameter(description = "ID перевода") @PathVariable("id") Long id) {
+  public ResponseEntity<TransferDto> transferInfo(
+      @Parameter(description = "ID перевода")
+      @PathVariable("id") Long id) {
     logger.info("GET /transfer/{}", id);
     if (!transferDao.findById(id).isPresent()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);

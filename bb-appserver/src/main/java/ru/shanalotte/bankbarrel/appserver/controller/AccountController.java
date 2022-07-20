@@ -1,16 +1,16 @@
 package ru.shanalotte.bankbarrel.appserver.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -36,7 +36,7 @@ import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
  */
 @RestController
 @Tag(name = "BankAccounts", description = "Банковские счета")
- public class AccountController {
+public class AccountController {
 
   private static final Logger logger = LoggerFactory.getLogger(AccountController.class);
   private BankAccountTypeDao bankAccountTypeDao;
@@ -118,7 +118,8 @@ import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
   @ApiResponse(responseCode = "200", description = "Счет успешно удален")
   @DeleteMapping("/accounts/{id}")
   @Transactional
-  public ResponseEntity<?> deleteAccount(@Parameter(description = "ID удаляемого счетa") @PathVariable("id") String id) {
+  public ResponseEntity<?> deleteAccount(
+      @Parameter(description = "ID удаляемого счетa") @PathVariable("id") String id) {
     logger.info("DELETE /accounts/{}", id);
     Optional<BankAccount> account = bankAccountDao.findById(id);
     if (!account.isPresent()) {
@@ -127,6 +128,7 @@ import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
     BankClient client = bankClientDao.getById(account.get().getOwner().getId());
     client.getAccounts().remove(account.get());
     bankClientDao.save(client);
+    bankAccountDao.delete(account.get());
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
@@ -137,7 +139,8 @@ import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
   @ApiResponse(responseCode = "404", description = "Клиент с указанным ID не найден")
   @GetMapping("/clients/{id}/accounts")
   @Transactional
-  public ResponseEntity<List<BankAccountDto>> getClientAccounts(@PathVariable("id") @Parameter(description = "ID клиента") Long id) {
+  public ResponseEntity<List<BankAccountDto>> getClientAccounts(
+      @PathVariable("id") @Parameter(description = "ID клиента") Long id) {
     logger.info("GET /clients/{}/accounts", id);
     if (!bankClientDao.findById(id).isPresent()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -165,11 +168,12 @@ import ru.shanalotte.bankbarrel.core.dto.BankAccountDto;
   @Operation(summary = "Открыть новый счет")
   @PostMapping("/accounts")
   @Transactional
-  @ApiResponse(responseCode = "400", description = "В случае, если данные не прошли валидацию. Возможные причины: "
+  @ApiResponse(responseCode = "400",
+      description = "В случае, если данные не прошли валидацию. Возможные причины: "
       + "1) неверный ID клиента 2) неверный тип счета 3) неверный код валюты")
   @ApiResponse(responseCode = "401", description = "Счет с таким номером уже существует")
-  public ResponseEntity<BankAccountDto> createAccount(@RequestBody BankAccountDto dto)
-      throws JsonProcessingException {
+  public ResponseEntity<BankAccountDto> createAccount(
+      @RequestBody BankAccountDto dto) throws JsonProcessingException {
     logger.info("POST /accounts {}", new ObjectMapper().writeValueAsString(dto));
     if (dto.getOwner() == null || !bankClientDao.findById(dto.getOwner()).isPresent()) {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

@@ -3,6 +3,8 @@ package ru.shanalotte.bankbarrel.appserver.listener;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.UnknownHostException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
@@ -19,6 +21,8 @@ import ru.shanalotte.bankbarrel.core.dto.serviceregistry.DeployedMicroserviceWhe
 @Profile("production")
 public class AppContextListener implements ApplicationListener<ContextRefreshedEvent> {
 
+  private static final Logger logger = LoggerFactory.getLogger(AppContextListener.class);
+
   @Value("${service.name}")
   private String serviceName;
   @Value("${server.port}")
@@ -28,13 +32,14 @@ public class AppContextListener implements ApplicationListener<ContextRefreshedE
 
   @Override
   public void onApplicationEvent(ContextRefreshedEvent event) {
-    DeployedMicroserviceWhereAboutInformation serviceInfo = new DeployedMicroserviceWhereAboutInformation();
+    DeployedMicroserviceWhereAboutInformation serviceInfo =
+        new DeployedMicroserviceWhereAboutInformation();
     serviceInfo.setName(serviceName);
     serviceInfo.setPort(port);
     try {
       serviceInfo.setHost(InetAddress.getLocalHost().getHostName());
     } catch (UnknownHostException e) {
-      e.printStackTrace();
+      logger.error("", e);
     }
     RestTemplate restTemplate = new RestTemplate();
     String result = null;

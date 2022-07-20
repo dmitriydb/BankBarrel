@@ -1,10 +1,8 @@
 package ru.shanalotte.bankbarrel.appserver.rest;
 
 import java.math.BigDecimal;
-import javax.xml.ws.Response;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import static org.assertj.core.api.Assertions.assertThat;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

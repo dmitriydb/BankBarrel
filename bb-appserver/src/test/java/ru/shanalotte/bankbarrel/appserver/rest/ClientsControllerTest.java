@@ -1,10 +1,8 @@
 package ru.shanalotte.bankbarrel.appserver.rest;
 
 import java.util.List;
-import javax.xml.ws.Response;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

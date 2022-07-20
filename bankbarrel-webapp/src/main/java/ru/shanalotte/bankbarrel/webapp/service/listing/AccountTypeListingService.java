@@ -2,8 +2,8 @@ package ru.shanalotte.bankbarrel.webapp.service.listing;
 
 import org.springframework.stereotype.Service;
 import ru.shanalotte.bankbarrel.core.domain.BankAccountType;
-import ru.shanalotte.bankbarrel.core.dto.CodeAndValuesPairsListWrapper;
 import ru.shanalotte.bankbarrel.core.dto.CodeAndValuePair;
+import ru.shanalotte.bankbarrel.core.dto.CodeAndValuesPairsListWrapper;
 import ru.shanalotte.bankbarrel.core.service.EnumToCodeAndValuePairConverter;
 
 /**
@@ -15,7 +15,8 @@ public class AccountTypeListingService implements ListingService {
 
   private EnumToCodeAndValuePairConverter enumToCodeAndValuePairConverter;
 
-  public AccountTypeListingService(EnumToCodeAndValuePairConverter enumToCodeAndValuePairConverter) {
+  public AccountTypeListingService(
+      EnumToCodeAndValuePairConverter enumToCodeAndValuePairConverter) {
     this.enumToCodeAndValuePairConverter = enumToCodeAndValuePairConverter;
   }
 

@@ -15,7 +15,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "money_withdraw_history")
-  public class MoneyWithdrawHistory {
+public class MoneyWithdrawHistory {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -8,7 +8,8 @@ import org.springframework.stereotype.Service;
 
 @Profile({"dev", "test"})
 @Service
-public class UserActivityMonitoringServiceThatDoingNothing implements UserActivityMonitoringService {
+public class UserActivityMonitoringServiceThatDoingNothing
+    implements UserActivityMonitoringService {
 
   @Override
   public void auditEnroll(String enrollDto) {

@@ -19,7 +19,7 @@ import ru.shanalotte.bankbarrel.rest.infomodule.service.serviceregistry.ServiceU
 
 @Service
 @Profile("production")
-public class ProductionAccountTypesReader implements AccountTypesReader{
+public class ProductionAccountTypesReader implements AccountTypesReader {
 
   private JwtTokenStorer jwtTokenStorer;
   private ServiceRegistryProxy serviceRegistryProxy;
@@ -27,7 +27,10 @@ public class ProductionAccountTypesReader implements AccountTypesReader{
   private RestTemplate restTemplate;
 
   @Autowired
-  public ProductionAccountTypesReader(JwtTokenStorer jwtTokenStorer, ServiceRegistryProxy serviceRegistryProxy, ServiceUrlBuilder serviceUrlBuilder, RestTemplate restTemplate) {
+  public ProductionAccountTypesReader(JwtTokenStorer jwtTokenStorer,
+                                      ServiceRegistryProxy serviceRegistryProxy,
+                                      ServiceUrlBuilder serviceUrlBuilder,
+                                      RestTemplate restTemplate) {
     this.jwtTokenStorer = jwtTokenStorer;
     this.serviceRegistryProxy = serviceRegistryProxy;
     this.serviceUrlBuilder = serviceUrlBuilder;
@@ -36,13 +39,18 @@ public class ProductionAccountTypesReader implements AccountTypesReader{
 
   @Override
   public List<CodeAndValuePair> getAccountTypes() {
-    String url = serviceUrlBuilder.buildServiceUrl(serviceRegistryProxy.getWebApiInfo()) + "/accounttypes";
+    String url = serviceUrlBuilder.buildServiceUrl(
+        serviceRegistryProxy.getWebApiInfo()) + "/accounttypes";
     return processRequest(url);
   }
 
   @Override
   public List<CodeAndValuePair> getAdditionalAccountTypes(String accountTypeCode) {
-    String url = serviceUrlBuilder.buildServiceUrl(serviceRegistryProxy.getWebApiInfo()) + "/accounttypes/" + accountTypeCode + "/additionaltypes";
+    String url = serviceUrlBuilder.buildServiceUrl(
+        serviceRegistryProxy.getWebApiInfo())
+        + "/accounttypes/"
+        + accountTypeCode
+        + "/additionaltypes";
     return processRequest(url);
   }
 

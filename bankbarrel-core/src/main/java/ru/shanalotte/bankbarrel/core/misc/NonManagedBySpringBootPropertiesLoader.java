@@ -4,7 +4,9 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class NonManagedBySpringBootPropertiesLoader {
+
   private static Properties properties;
+
   static {
     try (InputStream inputStream = NonManagedBySpringBootPropertiesLoader.class
         .getClassLoader()

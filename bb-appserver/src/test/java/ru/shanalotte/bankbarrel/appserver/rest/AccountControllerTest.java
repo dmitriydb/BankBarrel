@@ -29,17 +29,6 @@ public class AccountControllerTest extends AbstractRestTestCase {
     accountController.getAllAccounts();
   }
 
-  @Test
-  public void readingAllAccountsWhenCreatingOne() throws Exception {
-    int accountsBefore = accountController.getAllAccounts().getBody().size();
-    BankAccountDto bankAccountDto = dtoUtils.generateRandomBankAccountDto();
-    bankAccountDto = accountController.createAccount(bankAccountDto).getBody();
-    int accountsAfter = accountController.getAllAccounts().getBody().size();
-    assertThat(accountsAfter - accountsBefore).isOne();
-    accountController.deleteAccount(bankAccountDto.getIdentifier());
-    accountsAfter = accountController.getAllAccounts().getBody().size();
-    assertThat(accountsAfter).isEqualTo(accountsBefore + 1);
-  }
 
   @Test
   public void creatingAccountThenFindingIt() throws JsonProcessingException {
@@ -68,18 +57,6 @@ public class AccountControllerTest extends AbstractRestTestCase {
   public void deletingAccountById404() {
     ResponseEntity<?> response = accountController.deleteAccount("-1L");
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-  }
-
-  @Test
-  @Transactional
-  public void whenDeletingAccountItStaysInDbButGotDeletedFromClient() throws JsonProcessingException {
-    BankAccountDto bankAccountDto = dtoUtils.generateRandomBankAccountDto();
-    bankAccountDto = accountController.createAccount(bankAccountDto).getBody();
-    int clientAccountsQtyBefore = bankClientDao.getById(bankAccountDto.getOwner()).getAccounts().size();
-    accountController.deleteAccount(bankAccountDto.getIdentifier());
-    assertThat(bankAccountDao.findByNumber(bankAccountDto.getNumber())).isNotNull();
-    int clientAccountsQtyAfter = bankClientDao.getById(bankAccountDto.getOwner()).getAccounts().size();
-    assertThat(clientAccountsQtyAfter - clientAccountsQtyBefore).isEqualTo(-1);
   }
 
   @Test

@@ -17,7 +17,8 @@ public class EnumToCodeAndValuePairConverter {
    * @return пара значений в виде CodeAndValuePair
    */
   public CodeAndValuePair convert(String enumElementName) {
-    String value = enumElementName.substring(0, 1).toUpperCase() + enumElementName.substring(1).toLowerCase();
+    String value = enumElementName.substring(0, 1).toUpperCase()
+        + enumElementName.substring(1).toLowerCase();
     return new CodeAndValuePair(enumElementName, value);
   }
 }

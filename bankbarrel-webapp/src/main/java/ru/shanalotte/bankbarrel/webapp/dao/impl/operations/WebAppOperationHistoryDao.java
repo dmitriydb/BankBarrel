@@ -14,13 +14,6 @@ import ru.shanalotte.bankbarrel.webapp.entities.rowmappers.WebAppOperationRowMap
 @Repository
 public class WebAppOperationHistoryDao {
 
-  /**
-   * operation_id integer references webapp_operation(operation_id),
-   * startTs timestamp,
-   * finishedTs timestamp,
-   * status varchar(255) references webapp_operation_status(status)
-   */
-
   private JdbcTemplate jdbcTemplate;
 
   public WebAppOperationHistoryDao(JdbcTemplate jdbcTemplate) {
@@ -37,13 +30,15 @@ public class WebAppOperationHistoryDao {
   public void createAndCloseEntry(WebAppOperationHistory entry) {
     jdbcTemplate.update("INSERT INTO webapp_operation_history "
             + "(operation_id, startTs, status, finishedTs) VALUES (?, ?, ?, ?)",
-        entry.getOperationId(), entry.getStartTs(), entry.getStatus(), Timestamp.valueOf(LocalDateTime.now())
+        entry.getOperationId(), entry.getStartTs(), entry.getStatus(),
+        Timestamp.valueOf(LocalDateTime.now())
     );
   }
 
   public Long getId(WebAppOperationHistory entry) {
     try {
-      WebAppOperationHistory foundEntry = jdbcTemplate.queryForObject("SELECT * FROM webapp_operation_history where operation_id = ? "
+      WebAppOperationHistory foundEntry = jdbcTemplate.queryForObject(
+          "SELECT * FROM webapp_operation_history where operation_id = ? "
               + "AND startTs = ? AND status = ?", new WebAppOperationHistoryRowMapper(),
           entry.getOperationId(), entry.getStartTs(), entry.getStatus());
       return foundEntry.getId();

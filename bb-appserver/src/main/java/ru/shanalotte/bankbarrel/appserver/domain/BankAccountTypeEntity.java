@@ -25,7 +25,9 @@ public class BankAccountTypeEntity {
   private Long id;
   private String code;
   private String description;
-  @OneToMany(mappedBy = "ownerType", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
+  @OneToMany(
+      mappedBy = "ownerType", fetch = FetchType.EAGER,
+      orphanRemoval = true, cascade = CascadeType.ALL)
   private Set<BankAccountAdditionalTypeEntity> subTypes = new HashSet<>();
 
   public Long getId() {

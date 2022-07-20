@@ -28,13 +28,13 @@ import ru.shanalotte.bankbarrel.webapp.service.serviceregistry.ServiceUrlBuilder
 @RestController
 public class AccountTypesController {
 
+  private static final Logger logger = LoggerFactory.getLogger(AccountTypesController.class);
   private ServiceRegistryProxy serviceRegistryProxy;
   private ServiceUrlBuilder serviceUrlBuilder;
   private JwtTokenStorer jwtTokenStorer;
 
-  private static final Logger logger = LoggerFactory.getLogger(AccountTypesController.class);
 
-
+  @SuppressWarnings("checkstyle:MissingJavadocMethod")
   public AccountTypesController(ServiceRegistryProxy serviceRegistryProxy,
                                 ServiceUrlBuilder serviceUrlBuilder,
                                 JwtTokenStorer jwtTokenStorer) {
@@ -51,8 +51,9 @@ public class AccountTypesController {
   public List<CodeAndValuePair> accountTypes() {
     logger.info("GET /accounttypes");
     List<CodeAndValuePair> codeAndValuePairs = new ArrayList<>();
-    RestTemplate restTemplate = new RestTemplate();
-    DeployedMicroserviceWhereAboutInformation deployedMicroserviceWhereAboutInformation = serviceRegistryProxy.getRestInfoModuleInfo();
+    final RestTemplate restTemplate = new RestTemplate();
+    DeployedMicroserviceWhereAboutInformation deployedMicroserviceWhereAboutInformation
+        = serviceRegistryProxy.getRestInfoModuleInfo();
     logger.info(deployedMicroserviceWhereAboutInformation.toString());
     String url = serviceUrlBuilder.buildServiceUrl(deployedMicroserviceWhereAboutInformation);
     logger.info(url);
@@ -75,14 +76,16 @@ public class AccountTypesController {
     logger.info("GET /accounttype/{}/additionaltypes", code);
     List<CodeAndValuePair> codeAndValuePairs = new ArrayList<>();
     RestTemplate restTemplate = new RestTemplate();
-    DeployedMicroserviceWhereAboutInformation deployedMicroserviceWhereAboutInformation = serviceRegistryProxy.getRestInfoModuleInfo();
+    DeployedMicroserviceWhereAboutInformation deployedMicroserviceWhereAboutInformation
+        = serviceRegistryProxy.getRestInfoModuleInfo();
     String url = serviceUrlBuilder.buildServiceUrl(deployedMicroserviceWhereAboutInformation);
     HttpHeaders headers = new HttpHeaders();
     headers.set("Authorization", jwtTokenStorer.getToken());
     HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
     ResponseEntity<List> response = restTemplate.exchange(
-        url + "/accounttype/" + code + "/additionaltypes", HttpMethod.GET, requestEntity, List.class);
+        url + "/accounttype/" + code + "/additionaltypes",
+        HttpMethod.GET, requestEntity, List.class);
     return new ResponseEntity<List<CodeAndValuePair>>(
         response.getBody(), HttpStatus.OK);
-    }
+  }
 }

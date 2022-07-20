@@ -1,15 +1,15 @@
 package ru.shanalotte.bankbarrel.appserver.security.service;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,8 +36,8 @@ public class JwtTokenValidator {
 
   @Bean
   public BCryptPasswordEncoder passwordEncoder() {
-    BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-    return bCryptPasswordEncoder;
+    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    return passwordEncoder;
   }
 
   @PostConstruct
@@ -53,7 +53,11 @@ public class JwtTokenValidator {
   }
 
   public String getServiceName(String token) {
-    String serviceName = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
+    String serviceName = Jwts.parser()
+        .setSigningKey(secret)
+        .parseClaimsJws(token)
+        .getBody()
+        .getSubject();
     logger.info("Parsed {} service name from token", serviceName);
     return serviceName;
   }

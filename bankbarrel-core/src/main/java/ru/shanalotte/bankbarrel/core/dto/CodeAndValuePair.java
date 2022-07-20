@@ -2,6 +2,7 @@ package ru.shanalotte.bankbarrel.core.dto;
 
 import java.util.Objects;
 
+@SuppressWarnings("checkstyle:MissingJavadocType")
 public class CodeAndValuePair {
   private final String code;
   private final String value;

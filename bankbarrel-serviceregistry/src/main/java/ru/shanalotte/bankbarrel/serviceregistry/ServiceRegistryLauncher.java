@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
  * Launcher.
  */
 @SpringBootApplication
-@ComponentScan("ru.shanalotte.bankbarrel.ru.shanalotte.jwt.provider.serviceregistry")
+@ComponentScan("ru.shanalotte.bankbarrel.serviceregistry")
 @OpenAPIDefinition(
     servers = @Server(
         description = "Локальный реестр сервисов",

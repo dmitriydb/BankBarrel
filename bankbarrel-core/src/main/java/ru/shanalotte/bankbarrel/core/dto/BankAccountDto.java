@@ -1,5 +1,6 @@
 package ru.shanalotte.bankbarrel.core.dto;
 
+@SuppressWarnings("checkstyle:MissingJavadocType")
 public class BankAccountDto {
   private Long owner;
   private String identifier;

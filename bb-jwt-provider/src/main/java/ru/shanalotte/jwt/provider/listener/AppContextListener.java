@@ -40,7 +40,8 @@ public class AppContextListener implements ApplicationListener<ContextRefreshedE
 
   @Override
   public void onApplicationEvent(ContextRefreshedEvent event) {
-    DeployedMicroserviceWhereAboutInformation serviceInfo = new DeployedMicroserviceWhereAboutInformation();
+    DeployedMicroserviceWhereAboutInformation serviceInfo =
+        new DeployedMicroserviceWhereAboutInformation();
     serviceInfo.setName(serviceName);
     serviceInfo.setPort(port);
     try {

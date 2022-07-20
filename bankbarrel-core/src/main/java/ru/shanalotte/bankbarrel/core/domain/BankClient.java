@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import org.apache.commons.lang3.StringUtils;
 
+@SuppressWarnings("checkstyle:MissingJavadocType")
 @Entity
 @Table(name = "bank_clients")
 public class BankClient {

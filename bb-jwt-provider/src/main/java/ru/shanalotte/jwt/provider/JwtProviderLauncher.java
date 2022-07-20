@@ -27,13 +27,12 @@ public class JwtProviderLauncher implements CommandLineRunner {
 
   @Value("#{${valid-credentials}}")
   private Map<String, String> validCredentials;
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
   public static void main(String[] args) {
     SpringApplication.run(JwtProviderLauncher.class, args);
   }
-
-  @Autowired
-  private PasswordEncoder passwordEncoder;
 
   @Override
   public void run(String... args) throws Exception {
@@ -41,7 +40,9 @@ public class JwtProviderLauncher implements CommandLineRunner {
     long nextId = 1;
     for (String serviceName : validCredentials.keySet()) {
       logger.info("Loading {}", serviceName);
-      userRepository.save(new User(nextId++, serviceName, passwordEncoder.encode(validCredentials.get(serviceName))));
+      userRepository.save(
+          new User(nextId++, serviceName,
+              passwordEncoder.encode(validCredentials.get(serviceName))));
     }
     logger.info("Done!");
   }

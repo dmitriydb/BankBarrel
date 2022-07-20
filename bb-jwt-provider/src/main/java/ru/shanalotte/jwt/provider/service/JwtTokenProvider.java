@@ -1,11 +1,11 @@
 package ru.shanalotte.jwt.provider.service;
 
-import java.util.Base64;
-import java.util.Date;
-import javax.annotation.PostConstruct;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import java.util.Base64;
+import java.util.Date;
+import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
@@ -25,8 +25,8 @@ public class JwtTokenProvider {
 
   @Bean
   public BCryptPasswordEncoder passwordEncoder() {
-    BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-    return bCryptPasswordEncoder;
+    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    return passwordEncoder;
   }
 
   @PostConstruct

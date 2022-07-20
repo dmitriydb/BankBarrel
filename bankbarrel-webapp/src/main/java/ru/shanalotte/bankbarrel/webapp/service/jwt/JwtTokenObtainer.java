@@ -3,6 +3,7 @@ package ru.shanalotte.bankbarrel.webapp.service.jwt;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
@@ -25,20 +26,25 @@ public class JwtTokenObtainer {
   private JwtTokenStorer jwtTokenStorer;
   private ServiceRegistryProxy serviceRegistryProxy;
   private ServiceUrlBuilder serviceUrlBuilder;
+  private RestTemplate restTemplate;
 
-  public JwtTokenObtainer(JwtTokenStorer jwtTokenStorer, ServiceRegistryProxy serviceRegistryProxy, ServiceUrlBuilder serviceUrlBuilder) {
+  @Autowired
+  public JwtTokenObtainer(JwtTokenStorer jwtTokenStorer,
+                          ServiceRegistryProxy serviceRegistryProxy,
+                          ServiceUrlBuilder serviceUrlBuilder,
+                          RestTemplate restTemplate) {
     this.jwtTokenStorer = jwtTokenStorer;
     this.serviceRegistryProxy = serviceRegistryProxy;
     this.serviceUrlBuilder = serviceUrlBuilder;
+    this.restTemplate = restTemplate;
   }
-
-
-
 
   @Scheduled(initialDelay = 10000, fixedDelay = 100000)
   public void createToken() {
-    DeployedMicroserviceWhereAboutInformation deployedMicroserviceWhereAboutInformation = serviceRegistryProxy.getJwtProviderInfo();
-    String url = serviceUrlBuilder.buildServiceUrl(deployedMicroserviceWhereAboutInformation) + "/auth";
+    DeployedMicroserviceWhereAboutInformation deployedMicroserviceWhereAboutInformation =
+        serviceRegistryProxy.getJwtProviderInfo();
+    String url =
+        serviceUrlBuilder.buildServiceUrl(deployedMicroserviceWhereAboutInformation) + "/auth";
 
     class AuthDto {
       String username;
@@ -63,7 +69,7 @@ public class JwtTokenObtainer {
 
     try {
       System.out.println(url);
-      ResponseEntity<Map> token = new RestTemplate().postForEntity(new URI(url), authDto, Map.class);
+      ResponseEntity<Map> token = restTemplate.postForEntity(new URI(url), authDto, Map.class);
       System.out.println("Obtained token" + token.getBody().get("token"));
       jwtTokenStorer.setToken((String) token.getBody().get("token"));
     } catch (URISyntaxException e) {

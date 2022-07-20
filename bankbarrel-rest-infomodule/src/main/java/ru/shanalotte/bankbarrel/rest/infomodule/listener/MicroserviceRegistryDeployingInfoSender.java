@@ -16,9 +16,11 @@ import ru.shanalotte.bankbarrel.core.dto.serviceregistry.DeployedMicroserviceWhe
 
 @Component
 @Profile("production")
-public class MicroserviceRegistryDeployingInfoSender implements ApplicationListener<ContextRefreshedEvent> {
+public class MicroserviceRegistryDeployingInfoSender
+    implements ApplicationListener<ContextRefreshedEvent> {
 
-  private static final Logger logger = LoggerFactory.getLogger(MicroserviceRegistryDeployingInfoSender.class);
+  private static final Logger logger =
+      LoggerFactory.getLogger(MicroserviceRegistryDeployingInfoSender.class);
 
   @Value("${service.name}")
   private String serviceName;
@@ -36,14 +38,15 @@ public class MicroserviceRegistryDeployingInfoSender implements ApplicationListe
 
   @Override
   public void onApplicationEvent(ContextRefreshedEvent event) {
-    DeployedMicroserviceWhereAboutInformation serviceInfo = new DeployedMicroserviceWhereAboutInformation();
+    DeployedMicroserviceWhereAboutInformation serviceInfo
+        = new DeployedMicroserviceWhereAboutInformation();
     serviceInfo.setName(serviceName);
     serviceInfo.setPort(port);
     try {
       serviceInfo.setHost(InetAddress.getLocalHost().getHostName());
       restTemplate.postForObject(URI.create(serviceRegistryUrl), serviceInfo, String.class);
     } catch (Throwable anyThrowable) {
-        logger.error("Couldn't send deploying information to the service registry!", anyThrowable);
+      logger.error("Couldn't send deploying information to the service registry!", anyThrowable);
     }
   }
 }

@@ -53,15 +53,17 @@ public class TestServiceRegistryProxy implements ServiceRegistryProxy {
 
   }
 
-
   @Override
   public DeployedMicroserviceWhereAboutInformation getRestInfoModuleInfo() {
-    return new RegisteredServiceInfoDecorator("bb-rest-infomodule", restInfomoduleHost, restInfomodulePort).getValue();
+    return new RegisteredServiceInfoDecorator(
+        "bb-rest-infomodule", restInfomoduleHost, restInfomodulePort)
+        .getValue();
   }
 
   @Override
   public DeployedMicroserviceWhereAboutInformation getJwtProviderInfo() {
-    return new RegisteredServiceInfoDecorator("bb-jwt-provider", jwtProviderHost, jwtProviderPort).getValue();
+    return new RegisteredServiceInfoDecorator("bb-jwt-provider", jwtProviderHost, jwtProviderPort)
+        .getValue();
   }
 
   public DeployedMicroserviceWhereAboutInformation getWebApiInfo() {

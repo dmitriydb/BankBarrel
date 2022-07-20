@@ -85,9 +85,11 @@ public class CurrencyRateRule {
   public String toString() {
     if (more) {
       return "One " + currency + " is "
-          + rate + " " + NonManagedBySpringBootPropertiesLoader.get("bank.currency.defaultRateCurrency");
+          + rate + " "
+          + NonManagedBySpringBootPropertiesLoader.get("bank.currency.defaultRateCurrency");
     } else {
-      return "One " +  NonManagedBySpringBootPropertiesLoader.get("bank.currency.defaultRateCurrency")
+      return "One "
+          + NonManagedBySpringBootPropertiesLoader.get("bank.currency.defaultRateCurrency")
            + " is " + rate + " " + currency;
     }
   }

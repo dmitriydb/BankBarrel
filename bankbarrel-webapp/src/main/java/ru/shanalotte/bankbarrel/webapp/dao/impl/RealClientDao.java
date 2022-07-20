@@ -91,7 +91,10 @@ public class RealClientDao implements BankClientDao {
     ResponseEntity<BankClientDto[]> responseEntity = restTemplate.exchange(
         url, HttpMethod.GET, entity, BankClientDto[].class);
     BankClientDto[] list = responseEntity.getBody();
-    BankClientDto dto = Arrays.stream(list).filter(e -> e.getId().equals(clientDto.getId())).findFirst().get();
+    BankClientDto dto = Arrays.stream(list)
+        .filter(e -> e.getId().equals(clientDto.getId()))
+        .findFirst()
+        .get();
     url = serviceUrlBuilder.buildServiceUrl(
         serviceRegistryProxy.getWebApiInfo()) + "/clients/" + dto.getId() + "/accounts";
     ResponseEntity<BankAccountDto[]> accountsEntity = restTemplate.exchange(

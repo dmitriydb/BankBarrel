@@ -17,13 +17,13 @@ import ru.shanalotte.bankbarrel.core.dto.serviceregistry.DeployedMicroserviceWhe
 import ru.shanalotte.bankbarrel.rest.infomodule.service.serviceregistry.ServiceRegistryProxy;
 import ru.shanalotte.bankbarrel.rest.infomodule.service.serviceregistry.ServiceUrlBuilder;
 
+/**
+ * Этот класс должен авторизовывать данный микросервис в JWT Provider
+ * для использования токена при запросах в appserver в продакшне.
+ */
 @Component
 @Profile({"production"})
 @PropertySource("classpath:jwt-credentials.properties")
-/**
- * Этот класс должен авторизовывать данный микросервис в JWT Provider
- * для использования токена при запросах в appserver в продакшне
- */
 public class JwtTokenObtainer {
 
   private static final Logger logger = LoggerFactory.getLogger(JwtTokenObtainer.class);
@@ -40,7 +40,10 @@ public class JwtTokenObtainer {
   private RestTemplate restTemplate;
 
   @Autowired
-  public JwtTokenObtainer(JwtTokenStorer jwtTokenStorer, ServiceUrlBuilder serviceUrlBuilder, ServiceRegistryProxy serviceRegistryProxy, RestTemplate restTemplate) {
+  public JwtTokenObtainer(JwtTokenStorer jwtTokenStorer,
+                          ServiceUrlBuilder serviceUrlBuilder,
+                          ServiceRegistryProxy serviceRegistryProxy,
+                          RestTemplate restTemplate) {
     this.jwtTokenStorer = jwtTokenStorer;
     this.serviceUrlBuilder = serviceUrlBuilder;
     this.serviceRegistryProxy = serviceRegistryProxy;
@@ -49,8 +52,10 @@ public class JwtTokenObtainer {
 
   @Scheduled(initialDelay = 10000, fixedDelay = 100000)
   public void obtainTokenOnStartup() {
-    DeployedMicroserviceWhereAboutInformation jwtProviderWhereAbouts = serviceRegistryProxy.getJwtProviderInfo();
-    String urlForObtainingJwtToken = serviceUrlBuilder.buildServiceUrl(jwtProviderWhereAbouts) + "/auth";
+    DeployedMicroserviceWhereAboutInformation jwtProviderWhereAbouts =
+        serviceRegistryProxy.getJwtProviderInfo();
+    String urlForObtainingJwtToken =
+        serviceUrlBuilder.buildServiceUrl(jwtProviderWhereAbouts) + "/auth";
     JwtCredentials credentials = new JwtCredentials(serviceName, password);
     try {
       String jwtToken = obtainToken(urlForObtainingJwtToken, credentials);
@@ -69,13 +74,16 @@ public class JwtTokenObtainer {
   static class JwtCredentials {
     final String username;
     final String password;
+
     public JwtCredentials(String username, String password) {
       this.username = username;
       this.password = password;
     }
+
     public String getUsername() {
       return username;
     }
+
     public String getPassword() {
       return password;
     }

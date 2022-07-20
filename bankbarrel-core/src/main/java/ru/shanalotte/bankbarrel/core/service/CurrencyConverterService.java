@@ -30,7 +30,8 @@ public class CurrencyConverterService {
   public BigDecimal convertToDefaultCurrency(CurrencyRateService currencyRateService,
                                              String currency, BigDecimal value)
       throws CurrencyNotRegisteredInSystemException {
-    Optional<CurrencyRateRule> tradingRuleForCurrency = currencyRateService.findTradingRateForCurrency(currency);
+    Optional<CurrencyRateRule> tradingRuleForCurrency =
+        currencyRateService.findTradingRateForCurrency(currency);
     if (tradingRuleForCurrency.isPresent()) {
       BigDecimal currencyRate = tradingRuleForCurrency.get().getRate();
       boolean isMore = tradingRuleForCurrency.get().isMore();
@@ -40,7 +41,8 @@ public class CurrencyConverterService {
         return value.divide(currencyRate, bigDecimalRoundingScale, RoundingMode.HALF_UP);
       }
     } else {
-      throw new CurrencyNotRegisteredInSystemException("Currency rate rule for " + currency + " is not registered in the system!");
+      throw new CurrencyNotRegisteredInSystemException(
+          "Currency rate rule for " + currency + " is not registered in the system!");
     }
   }
 
@@ -55,8 +57,10 @@ public class CurrencyConverterService {
    */
   public BigDecimal convertFromDefaultCurrency(CurrencyRateService currencyRateService,
                                                String toCurrency,
-                                               BigDecimal value) throws CurrencyNotRegisteredInSystemException {
-    Optional<CurrencyRateRule> tradingRuleForCurrency = currencyRateService.findTradingRateForCurrency(toCurrency);
+                                               BigDecimal value)
+      throws CurrencyNotRegisteredInSystemException {
+    Optional<CurrencyRateRule> tradingRuleForCurrency =
+        currencyRateService.findTradingRateForCurrency(toCurrency);
     if (tradingRuleForCurrency.isPresent()) {
       BigDecimal currencyRate = tradingRuleForCurrency.get().getRate();
       boolean isMore = tradingRuleForCurrency.get().isMore();

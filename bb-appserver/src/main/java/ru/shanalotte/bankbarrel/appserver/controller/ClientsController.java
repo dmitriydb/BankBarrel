@@ -2,12 +2,11 @@ package ru.shanalotte.bankbarrel.appserver.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.beans.Transient;
-import java.util.List;
-import java.util.stream.Collectors;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -80,7 +79,9 @@ public class ClientsController {
    */
   @Operation(summary = "Получить информацию о клиенте")
   @GetMapping("/clients/{id}")
-  public ResponseEntity<BankClientDto> getClientInfo(@Parameter(description = "ID клиента") @PathVariable("id") Long id) {
+  public ResponseEntity<BankClientDto> getClientInfo(
+      @Parameter(description = "ID клиента")
+      @PathVariable("id") Long id) {
     logger.info("GET /clients/{}", id);
     if (id == null || !bankClientDao.findById(id).isPresent()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -101,8 +102,10 @@ public class ClientsController {
   @Operation(summary = "Обновить информацию о клиенте")
   @PutMapping("/clients/{id}")
   @Transactional
-  public ResponseEntity<BankClientDto> updateClientInfo(@Parameter(description = "ID клиента") @PathVariable("id") Long id,
-                                                     @RequestBody BankClientDto dto) {
+  public ResponseEntity<BankClientDto> updateClientInfo(
+      @Parameter(description = "ID клиента")
+      @PathVariable("id") Long id,
+      @RequestBody BankClientDto dto) {
     logger.info("PUT /clients/{}", id);
     if (!bankClientDao.findById(id).isPresent()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);

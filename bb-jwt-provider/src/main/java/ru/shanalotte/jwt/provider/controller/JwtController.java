@@ -31,7 +31,9 @@ public class JwtController {
   private final UserRepository userRepository;
 
   @Autowired
-  public JwtController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserRepository userRepository) {
+  public JwtController(AuthenticationManager authenticationManager,
+                       JwtTokenProvider jwtTokenProvider,
+                       UserRepository userRepository) {
     this.authenticationManager = authenticationManager;
     this.jwtTokenProvider = jwtTokenProvider;
     this.userRepository = userRepository;
@@ -42,7 +44,8 @@ public class JwtController {
     logger.info("Service name {} trying to get token", requestDto.getUsername());
     try {
       String username = requestDto.getUsername();
-      authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
+      authenticationManager.authenticate(
+          new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
       User user = userRepository.findByUsername(username);
       if (user == null) {
         logger.error("Service name {} is not registered in JWT provider", requestDto.getUsername());

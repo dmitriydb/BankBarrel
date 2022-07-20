@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import ru.shanalotte.bankbarrel.core.misc.NonManagedBySpringBootPropertiesLoader;
 
+@SuppressWarnings("checkstyle:MissingJavadocType")
 @Entity
 @Table(name = "bank_accounts")
 public class BankAccount {
@@ -141,6 +142,7 @@ public class BankAccount {
     return new MonetaryAmount(value, currency);
   }
 
+  @SuppressWarnings("checkstyle:MissingJavadocType")
   public static class Builder {
     private BankClient owner;
     private BankAccountAdditionalType additionalType;
@@ -187,6 +189,7 @@ public class BankAccount {
       return this;
     }
 
+    @SuppressWarnings("checkstyle:MissingJavadocMethod")
     public BankAccount build() {
       validateBuildParameters();
       BankAccount account = new BankAccount(owner);
@@ -194,7 +197,8 @@ public class BankAccount {
       account.additionalType = additionalType.name();
       account.description = bankAccountType + " " + additionalType;
       if (currency == null) {
-        account.currency = NonManagedBySpringBootPropertiesLoader.get("bank.account.defaultCurrency");
+        account.currency = NonManagedBySpringBootPropertiesLoader.get(
+            "bank.account.defaultCurrency");
       } else {
         account.currency = currency;
       }

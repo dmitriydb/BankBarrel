@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@SuppressWarnings("checkstyle:MissingJavadocType")
 public class CodeAndValuesPairsListWrapper {
   protected final List<CodeAndValuePair> items = new ArrayList<>();
 

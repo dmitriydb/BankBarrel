@@ -1,6 +1,7 @@
 package ru.shanalotte.bankbarrel.webapp.dao.impl.operations;
 
 import java.time.LocalDateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -15,14 +16,7 @@ import ru.shanalotte.bankbarrel.webapp.user.WebAppUser;
 @Profile({"production"})
 public class RealWebAppUserDao implements WebAppUserDao {
 
-  /**
-   * id serial primary key,
-   * username varchar(255) unique not null,
-   * registration_ts timestamp not null,
-   * last_login_ts timestamp,
-   * client_id integer
-   */
-
+  @Autowired
   private JdbcTemplate jdbcTemplate;
 
   public RealWebAppUserDao(JdbcTemplate jdbcTemplate) {
@@ -32,7 +26,11 @@ public class RealWebAppUserDao implements WebAppUserDao {
   @Override
   public WebAppUser findByUsername(String username) {
     try {
-      WebAppUser user = jdbcTemplate.queryForObject("SELECT * FROM webapp_user WHERE username = ?", new WebAppUserRowMapper(), username);
+      WebAppUser user = jdbcTemplate.queryForObject(
+          "SELECT * FROM webapp_user WHERE username = ?",
+          new WebAppUserRowMapper(),
+          username
+      );
       return user;
     } catch (EmptyResultDataAccessException ex) {
       return null;
@@ -41,18 +39,26 @@ public class RealWebAppUserDao implements WebAppUserDao {
 
   @Override
   public void addUser(WebAppUser webAppUser) {
+    if (findByUsername(webAppUser.getUsername()) != null) {
+      throw new IllegalStateException("Web app user already exists");
+    }
+    Long id = webAppUser.getBankClient() == null ? null : webAppUser.getBankClient().getId();
     webAppUser.setRegistrationTs(LocalDateTime.now());
     jdbcTemplate.update("INSERT INTO webapp_user (username, registration_ts, "
             + "last_login_ts, client_id) VALUES (?, ?, ?, ?)",
         webAppUser.getUsername(), webAppUser.getRegistrationTs(),
-        webAppUser.getLastLoginTs(), webAppUser.getBankClient().getId()
+        webAppUser.getLastLoginTs(), id
     );
   }
 
   @Override
   public boolean isUserExists(String username) {
     try {
-      WebAppUser user = jdbcTemplate.queryForObject("SELECT * FROM webapp_user WHERE username = ?", new WebAppUserRowMapper(), username);
+      WebAppUser user = jdbcTemplate.queryForObject(
+          "SELECT * FROM webapp_user WHERE username = ?",
+          new WebAppUserRowMapper(),
+          username
+      );
       return true;
     } catch (EmptyResultDataAccessException ex) {
       return false;

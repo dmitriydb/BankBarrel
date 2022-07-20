@@ -25,17 +25,20 @@ public class MonetaryAmount {
 
   public MonetaryAmount(long value) {
     this.value = new BigDecimal(value);
-    this.currency = NonManagedBySpringBootPropertiesLoader.get("bank.monetaryAmount.defaultCurrency");
+    this.currency = NonManagedBySpringBootPropertiesLoader.get(
+        "bank.monetaryAmount.defaultCurrency");
   }
 
   public MonetaryAmount(double value) {
     this.value = new BigDecimal(String.valueOf(value));
-    this.currency = NonManagedBySpringBootPropertiesLoader.get("bank.monetaryAmount.defaultCurrency");
+    this.currency = NonManagedBySpringBootPropertiesLoader.get(
+        "bank.monetaryAmount.defaultCurrency");
   }
 
   public MonetaryAmount(int value) {
     this.value = new BigDecimal(value);
-    this.currency = NonManagedBySpringBootPropertiesLoader.get("bank.monetaryAmount.defaultCurrency");
+    this.currency = NonManagedBySpringBootPropertiesLoader.get(
+        "bank.monetaryAmount.defaultCurrency");
   }
 
   public MonetaryAmount(BigDecimal value, String currency) {

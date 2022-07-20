@@ -10,20 +10,20 @@ services:
     networks: 
     - bb-network
   bb-serviceregistry-db:
-    container_name: bb-ru.shanalotte.jwt.provider.serviceregistry-db
+    container_name: bb-serviceregistry-db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DATABASE: ru.shanalotte.jwt.provider.serviceregistry
+      POSTGRES_DATABASE: serviceregistry
     image: postgres
     volumes:
     - ./dbs:/docker-entrypoint-initdb.d
     networks:
     - bb-network
   bb-serviceregistry:
-    container_name: bb-ru.shanalotte.jwt.provider.serviceregistry
+    container_name: bb-serviceregistry
     build: 
-      context: D:\ideaProjects\BankBarrel\bankbarrel-ru.shanalotte.jwt.provider.serviceregistry\.
+      context: D:\ideaProjects\BankBarrel\bankbarrel-serviceregistry\.
       dockerfile: Dockerfile
     ports:
     - 8181:8181

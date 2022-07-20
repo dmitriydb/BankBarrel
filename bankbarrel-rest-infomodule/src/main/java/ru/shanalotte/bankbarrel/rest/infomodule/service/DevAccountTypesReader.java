@@ -12,7 +12,7 @@ import ru.shanalotte.bankbarrel.core.service.EnumToCodeAndValuePairConverter;
 
 @Service
 @Profile({"dev", "test"})
-public class DevAccountTypesReader implements AccountTypesReader{
+public class DevAccountTypesReader implements AccountTypesReader {
 
   private EnumToCodeAndValuePairConverter enumToCodeAndValuePairConverter;
 
@@ -37,11 +37,11 @@ public class DevAccountTypesReader implements AccountTypesReader{
   @Override
   public List<CodeAndValuePair> getAdditionalAccountTypes(String accountTypeCode) {
     List<CodeAndValuePair> codeAndValuePairs = new ArrayList<>();
-      BankAccountType type = BankAccountType.valueOf(accountTypeCode);
-      for (BankAccountAdditionalType bankAccountAdditionalType : type.getAdditionalTypes()) {
-        codeAndValuePairs.add(
-            enumToCodeAndValuePairConverter.convert(bankAccountAdditionalType.name()));
-      }
+    BankAccountType type = BankAccountType.valueOf(accountTypeCode);
+    for (BankAccountAdditionalType bankAccountAdditionalType : type.getAdditionalTypes()) {
+      codeAndValuePairs.add(
+          enumToCodeAndValuePairConverter.convert(bankAccountAdditionalType.name()));
+    }
     return codeAndValuePairs;
   }
 }

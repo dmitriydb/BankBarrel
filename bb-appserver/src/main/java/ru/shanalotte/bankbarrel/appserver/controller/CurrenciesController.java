@@ -2,12 +2,12 @@ package ru.shanalotte.bankbarrel.appserver.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -51,7 +51,9 @@ public class CurrenciesController {
   @Operation(summary = "Добавление курса валюты")
   @PostMapping("/currencies/{currency}/rate")
   public ResponseEntity<CurrencyRateDto> createCurrencyRate(
-      @Parameter(description = "Код валюты") @PathVariable("currency") String currency, @RequestBody CurrencyRateDto dto)
+      @Parameter(description = "Код валюты")
+      @PathVariable("currency") String currency,
+      @RequestBody CurrencyRateDto dto)
       throws JsonProcessingException {
     logger.info("POST /currencies/{}/rate {}", currency,
         new ObjectMapper().writeValueAsString(dto));
@@ -153,7 +155,9 @@ public class CurrenciesController {
    */
   @Operation(summary = "Удаление валюты")
   @DeleteMapping("/currencies/{id}")
-  public ResponseEntity<?> deleteCurrency(@Parameter(description = "ID валюты") @PathVariable("id") Long id) {
+  public ResponseEntity<?> deleteCurrency(
+      @Parameter(description = "ID валюты")
+      @PathVariable("id") Long id) {
     logger.info("DELETE /currencies/{}", id);
     if (id == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);

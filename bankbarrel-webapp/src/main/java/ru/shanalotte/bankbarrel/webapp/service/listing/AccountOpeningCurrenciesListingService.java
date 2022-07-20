@@ -3,8 +3,8 @@ package ru.shanalotte.bankbarrel.webapp.service.listing;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.shanalotte.bankbarrel.core.dto.CodeAndValuesPairsListWrapper;
 import ru.shanalotte.bankbarrel.core.dto.CodeAndValuePair;
+import ru.shanalotte.bankbarrel.core.dto.CodeAndValuesPairsListWrapper;
 import ru.shanalotte.bankbarrel.webapp.service.converter.CurrencyPresentationConverter;
 
 /**

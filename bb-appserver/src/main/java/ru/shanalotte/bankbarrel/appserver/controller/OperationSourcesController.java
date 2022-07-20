@@ -1,16 +1,15 @@
 package ru.shanalotte.bankbarrel.appserver.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.shanalotte.bankbarrel.appserver.domain.OperationSource;
 import ru.shanalotte.bankbarrel.appserver.repository.OperationSourceDao;
 import ru.shanalotte.bankbarrel.core.dto.OperationSourceDto;
 

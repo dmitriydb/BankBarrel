@@ -19,15 +19,18 @@ public class WebAppOperationDao {
   }
 
   public void createOperation(WebAppOperation operation) {
-    jdbcTemplate.update("INSERT INTO webapp_operation (init_user, operation_type, operation_status, "
+    jdbcTemplate.update(
+        "INSERT INTO webapp_operation (init_user, operation_type, operation_status, "
             + "finished, startTs, finishedTs, requestJson) VALUES (?, ?, ?, ?, ?, ?, ?)",
-        operation.getInitUser(), operation.getType(), operation.getStatus(), operation.getFinishedTime(),
-        operation.getStartTime(), operation.getFinishedTime(), operation.getJson());
+        operation.getInitUser(), operation.getType(), operation.getStatus(),
+        operation.getFinishedTime(), operation.getStartTime(), operation.getFinishedTime(),
+        operation.getJson());
   }
 
   public Long getId(WebAppOperation webAppOperation) {
     try {
-      WebAppOperation operation = jdbcTemplate.queryForObject("SELECT * FROM webapp_operation where operation_type = ? "
+      WebAppOperation operation = jdbcTemplate.queryForObject(
+          "SELECT * FROM webapp_operation where operation_type = ? "
               + "AND operation_status = ? AND startTs = ? ", new WebAppOperationRowMapper(),
           webAppOperation.getType(), webAppOperation.getStatus(), webAppOperation.getStartTime());
       System.out.println("Found " + operation);

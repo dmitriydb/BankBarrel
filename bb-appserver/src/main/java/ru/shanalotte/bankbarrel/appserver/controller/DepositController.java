@@ -2,11 +2,11 @@ package ru.shanalotte.bankbarrel.appserver.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -62,7 +62,9 @@ public class DepositController {
    */
   @GetMapping("/deposit/{id}")
   @Operation(summary = "Получить информацию о вкладе")
-  public ResponseEntity<DepositDto> depositInfo(@Parameter(description = "ID вклада") @PathVariable("id") Long id) {
+  public ResponseEntity<DepositDto> depositInfo(
+      @Parameter(description = "ID вклада")
+      @PathVariable("id") Long id) {
     logger.info("GET /deposit/{}", id);
     if (!depositDao.findById(id).isPresent()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);

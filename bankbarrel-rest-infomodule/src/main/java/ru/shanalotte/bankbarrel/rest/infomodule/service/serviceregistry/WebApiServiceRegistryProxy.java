@@ -25,7 +25,8 @@ public class WebApiServiceRegistryProxy implements ServiceRegistryProxy {
 
   private static final Logger logger = LoggerFactory.getLogger(WebApiServiceRegistryProxy.class);
 
-  private Map<String, DeployedMicroserviceWhereAboutInformation> registeredServices = new HashMap<>();
+  private Map<String, DeployedMicroserviceWhereAboutInformation> registeredServices
+      = new HashMap<>();
 
   @Value("${services.dependencies}")
   private List<String> serviceDependencies;
@@ -48,7 +49,9 @@ public class WebApiServiceRegistryProxy implements ServiceRegistryProxy {
     for (String serviceName : serviceDependencies) {
       String url = serviceRegistryUrl + "/" + serviceName;
       ResponseEntity<DeployedMicroserviceWhereAboutInformation> result =
-          restTemplate.getForEntity(URI.create(url), DeployedMicroserviceWhereAboutInformation.class);
+          restTemplate.getForEntity(URI.create(url),
+              DeployedMicroserviceWhereAboutInformation.class
+          );
       logger.info("Loaded {} service deploying info", serviceName);
       registeredServices.put(serviceName, result.getBody());
     }

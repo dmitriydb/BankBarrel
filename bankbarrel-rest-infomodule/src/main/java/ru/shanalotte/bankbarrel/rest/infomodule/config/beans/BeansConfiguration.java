@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 import ru.shanalotte.bankbarrel.core.service.EnumToCodeAndValuePairConverter;
 
+@SuppressWarnings("checkstyle:MissingJavadocType")
 @Configuration
 public class BeansConfiguration {
 

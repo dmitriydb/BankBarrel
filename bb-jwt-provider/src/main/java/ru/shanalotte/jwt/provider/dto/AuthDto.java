@@ -1,5 +1,6 @@
 package ru.shanalotte.jwt.provider.dto;
 
+@SuppressWarnings("checkstyle:MissingJavadocType")
 public class AuthDto {
   private String username;
   private String password;

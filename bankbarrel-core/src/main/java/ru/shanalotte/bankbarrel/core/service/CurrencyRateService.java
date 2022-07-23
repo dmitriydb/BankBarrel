@@ -1,30 +1,48 @@
 package ru.shanalotte.bankbarrel.core.service;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
-import ru.shanalotte.bankbarrel.core.CurrencyRateRule;
-import ru.shanalotte.bankbarrel.core.config.DefaultCurrenciesConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import ru.shanalotte.bankbarrel.core.domain.CurrencyRateRule;
 
 /**
  * Class that stores all actual currency rate rules for the current bank service.
  */
+@Service
 public class CurrencyRateService {
 
-  /**
-   * Constructor that adds base rule: 1 unit of default currency = 1 unit of default currency.
-   */
-  public CurrencyRateService() {
+  private static final Logger logger = LoggerFactory.getLogger(CurrencyRateService.class);
+
+  private String defaultRateCurrency;
+  private Set<CurrencyRateRule> currencyRateRules = new HashSet<>();
+
+  public CurrencyRateService(@Value("${bank.currency.defaultRateCurrency}")
+                                 String defaultRateCurrency) {
+    this.defaultRateCurrency = defaultRateCurrency;
+    addRuleForDefaultRateCurrency(defaultRateCurrency);
+  }
+
+  private void addRuleForDefaultRateCurrency(String defaultRateCurrency) {
     CurrencyRateRule defaultRule = new CurrencyRateRule.Builder()
-        .currency(new DefaultCurrenciesConfig().defaultCurrencyRateCurrency())
+        .currency(defaultRateCurrency)
         .is(1)
         .perOneUnitOfDefaultCurrency();
     this.currencyRateRules.add(defaultRule);
   }
 
-  private Set<CurrencyRateRule> currencyRateRules = new HashSet<>();
-
   public void addRule(CurrencyRateRule rule) {
+    logger.info("Adding currency rate rule {}", rule);
     currencyRateRules.add(rule);
+  }
+
+  public Optional<CurrencyRateRule> findTradingRateForCurrency(String currency) {
+    return currencyRateRules
+        .stream().filter(e -> e.getCurrency().equals(currency))
+        .findFirst();
   }
 
   public Set<CurrencyRateRule> getCurrencyRateRules() {

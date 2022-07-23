@@ -1,0 +1,165 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script th:src="@{/userpage.js}"></script>
+    <title th:text="${username} + ' page'"></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<div class="container">
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor02">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" th:href="@{/}">Главная страница</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" th:href="@{/user/{usr} (usr = ${username})}">Личный кабинет</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/user/{usr}/profile (usr = ${username})}">Профиль</a>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/}">Главная страница</a></li>
+            <li class="breadcrumb-item active" aria-current="page" th:text="'Кабинет пользователя ' + ${username}">Кабинет пользователя Vasya</li>
+          </ol>
+        </nav>
+    </div>
+
+  <div class="accordion" id="accordionPanelsStayOpenExample">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="panelsStayOpen-headingZero">
+
+      </h2>
+      <div id="panelsStayOpen-collapseZero" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingZerp">
+        <div class="accordion-body">
+          <p><strong>Добро пожаловать в свой личный кабинет, <span th:text="${username}">Vasya</span>.</strong><p>
+          <p>Здесь вы можете открывать новые счета, совершать денежные переводы и следить за новостями нашего банка.</p>
+
+        </div>
+      </div>
+    </div>
+
+
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+        Открыть новый счёт
+      </button>
+    </h2>
+    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
+      <div class="accordion-body">
+
+  <form method="post" th:action="@{/account/create}" th:object="${accountOpeningDto}">
+<fieldset>
+    <legend>Открытие счета</legend>
+    <div class="mb-3">
+      <label for="accountType" class="form-label">Тип счёта</label>
+      <select name="accountType" id="accountType" class="form-select" th:field="*{accountType}">
+        <option th:each = "item: ${accountTypesDto.items}" th:value="${item.code}" th:text="${item.value}"></option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="accountAdditionalType" class="form-label">Вид счёта</label>
+      <select name="accountAdditionalType" id="accountAdditionalType"  class="form-select"  th:field="*{accountAdditionalType}">
+        <option th:each = "item: ${accountAdditionalTypesDto.items}" th:value="${item.code}" th:text="${item.value}"></option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="currency" class="form-label">Валюта</label>
+      <select id="currency" name="currency" class="form-select" th:field="*{currency}">
+      <option th:each = "item: ${accountOpeningCurrenciesDto.items}" th:value="${item.code}" th:text="${item.value}"></option>
+      </select>
+    </div>
+    <input type="hidden" name="username" th:value="${username}">
+    <div class="mb-3">
+          <p>In aliquam eros est, vitae porta ipsum tempus id. Nullam aliquet accumsan tellus a interdum. Duis vel ipsum ipsum. Proin pretium lectus ac tellus facilisis, nec tempus neque blandit. Maecenas eget arcu neque. Nulla lobortis turpis sagittis, auctor elit non, dignissim leo. Vestibulum vitae metus quis erat consequat porttitor. Curabitur tellus felis, tristique vel sollicitudin vel, sollicitudin ac urna. Nam blandit magna eu quam scelerisque, ac luctus dui volutpat. Quisque eu eros sed purus semper sollicitudin.
+</p>
+    </div>
+    <button type="submit" class="btn btn-primary">Открыть счет</button>
+  </fieldset>
+</form>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+        Список ваших счетов
+      </button>
+    </h2>
+    <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+      <div class="accordion-body">
+        <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Номер</th>
+      <th scope="col">Тип</th>
+      <th scope="col">Вид</th>
+      <th scope="col">Валюта</th>
+    </tr>
+  </thead>
+  <tbody>
+<!--/*-->
+    <tr>
+      <th scope="row"><a href="test">2424-423423-34-423-423-4234</a>&nbsp;<i style="color:red" class="fa fa-trash"></i></th>
+      <td>123</td>
+      <td>123</td>
+      <td>123</td>
+    </tr>
+<!--*/-->
+    <tr th:each = "account : ${accounts}">
+      <th scope="row"><a th:text="${account.number}" th:href="@{/user/{username}/account/{number} (username = ${username}, number = ${account.number})}"></a>
+        <form style="display: inline" method="post" th:action="@{/account/{number}/delete (number = ${account.number})}">
+          <input type="hidden" name="username" th:value="${username}">
+          <button style="display: inline" class="btn btn-link btn-xs" type="submit" name="action" value="delete">
+            <i style="color:red; cursor: pointer" class="fa fa-trash"></i>
+          </button>
+        </form>
+      </th>
+      <td th:text="${account.type}"></td>
+      <td th:text="${account.additionalType}"></td>
+      <td th:text="${account.currency}"></td>
+    </tr>
+  </tbody>
+</table>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+        История переводов
+      </button>
+    </h2>
+    <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+      <div class="accordion-body">
+        <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<input type="hidden" id="serverPort" th:value=${serverPort}>
+</body>
+</html>

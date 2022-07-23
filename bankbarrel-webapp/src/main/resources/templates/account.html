@@ -1,0 +1,167 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title text="Управление счетом"></title>
+</head>
+<body>
+<div class="container">
+
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor02">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" th:href="@{/}">Главная страница</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" th:href="@{/user/{usr} (usr = ${username})}">Личный кабинет</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/user/{usr}/profile (usr = ${username})}">Профиль</a>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/}">Главная страница</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/user/{usr} (usr = ${username})}" th:text="'Кабинет пользователя ' + ${username}"></a></li>
+            <li class="breadcrumb-item active" aria-current="page" th:text="'Счет ' + ${account.number}">Счет 234273-24-2342-4</li>
+          </ol>
+        </nav>
+    </div>
+    <div th:if="${message}" class="alert alert-danger" role="alert" th:text="#{${message}}">
+    </div>
+
+    <div th:if="${successMessage}" class="alert alert-success" role="alert" th:text="#{${successMessage}}">
+    </div>
+
+  <div class="accordion" id="accordionPanelsStayOpenExample">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="panelsStayOpen-headingZero">
+
+      </h2>
+      <div id="panelsStayOpen-collapseZero" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingZerp">
+        <div class="accordion-body">
+          <p>
+              <strong th:text="'Счет ' + ${account.number}"></strong>
+              <br>
+              <strong th:text="'Тип: ' + ${account.type}"></strong>
+              <br>
+              <strong th:text="'Вид: ' + ${account.additionalType}"></strong>
+              <br>
+              <strong th:text="'Описание: ' + ${account.description}"></strong>
+              <br>
+              <strong th:text="'Валюта: ' + ${account.currency} + ' (' + ${account.currencySign} + ')'"></strong>
+              <br>
+              <strong th:text="'Баланс: ' + ${account.balance} + ${account.currencySign}"></strong>
+              <br>
+          </p>
+        </div>
+      </div>
+    </div>
+
+
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+        Пополнить счет
+      </button>
+    </h2>
+    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
+      <div class="accordion-body">
+        <form method="post" th:action="@{/account/{number}/deposit (number = ${account.number})}">
+          <div class="mb-3">
+            <label for="amount" class="form-label">Введите желаемую сумму</label>
+            <input type="number" class="form-control" name="amount" id="amount">
+            <input type="hidden" name="username" th:value="${username}">
+            <div class="form-check form-check-inline" th:each="currency, iter : ${currencies}">
+              <input class="form-check-input" th:if="${currency.code} == ${account.currency}" type="radio" name="currency" th:id="'currencyDeposit' + ${currency.code}" th:value="${currency.code}" checked>
+              <input class="form-check-input" th:unless="${currency.code} == ${account.currency}" type="radio" name="currency" th:id="'currencyDeposit' + ${currency.code}" th:value="${currency.code}">
+              <label class="form-check-label" th:for="'currencyDeposit' + ${currency.code}" th:text="${currency.value}"></label>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Пополнить</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+       Снятие со счета
+      </button>
+    </h2>
+    <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+      <div class="accordion-body">
+        <form method="post" th:action="@{/account/{number}/withdraw (number = ${account.number})}">
+          <div class="mb-3">
+            <label for="amount" class="form-label">Введите желаемую сумму</label>
+            <input type="number" class="form-control" name="amount" id="amount">
+            <input type="hidden" name="username" th:value="${username}">
+            <div class="form-check form-check-inline" th:each="currency : ${currencies}">
+              <input class="form-check-input" th:if="${currency.code} == ${account.currency}" type="radio" name="currency" th:id="'currencyWithdraw' + ${currency.code}" th:value="${currency.code}" checked>
+              <input class="form-check-input" th:unless="${currency.code} == ${account.currency}" type="radio" name="currency" th:id="'currencyWithdraw' + ${currency.code}" th:value="${currency.code}">
+              <label class="form-check-label" th:for="'currencyWithdraw' + ${currency.code}" th:text="${currency.value}"></label>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Снять</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+       Переводы
+      </button>
+    </h2>
+    <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+      <div class="accordion-body">
+ <form method="post" th:action="@{/transfer}" th:object="${transferDto}">
+   <input type="hidden" name="username" th:value="${username}">
+   <input type="hidden" name="accountFromNumber" th:value="${account.number}">
+  <div class="mb-3">
+    <label for="transferChoice1" class="form-label">По номеру счета</label>
+    <input type="text" class="form-control" th:field="*{accountNumber}">
+  </div>
+    <label for="amount" class="form-label">Сумма</label>
+    <input type="text" class="form-control" th:field="*{amount}">
+    <div class="form-check form-check-inline" th:each="currency : ${currencies}">
+      <input class="form-check-input" type="radio" th:name="currency" th:field="*{currency}" th:id="'currencyTransfer' + ${currency.code}" th:value="${currency.code}">
+      <label class="form-check-label" th:for="'currencyTransfer' + ${currency.code}" th:text="${currency.value}"></label>
+    </div>
+  <button type="submit" class="btn btn-primary">Перевести</button>
+</form>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="panelsStayOpen-headingFour">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
+        История операций
+      </button>
+    </h2>
+    <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFour">
+      <div class="accordion-body">
+        <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</body>
+</html>
